@@ -1,46 +1,58 @@
-# Getting Started with Create React App
+# TravelTips Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Le projet TravelTips est une application web conçue pour offrir des conseils et astuces de voyage aux utilisateurs. Ce README fournit des instructions pour configurer l'environnement de développement et lancer le projet en utilisant Docker et VSCode Dev Containers.
 
-## Available Scripts
+## Prérequis
 
-In the project directory, you can run:
+Avant de commencer, assurez-vous d'avoir installé :
 
-### `npm start`
+- [Docker](https://docs.docker.com/get-docker/)
+- [Visual Studio Code (VSCode)](https://code.visualstudio.com/)
+- [VSCode Remote - Containers extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers)
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Configuration de l'Environnement de Développement
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+1. **Cloner le Projet**
 
-### `npm test`
+   Ouvrez un terminal et clonez le dépôt git en utilisant la commande suivante :
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+   ```bash
+   git clone https://github.com/HugoD66/TravelTips-frontend.git
 
-### `npm run build`
+   ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+2. **Naviguez dans le dossier du projet :**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+cd TravelTips-frontend
+Ouvrir avec VSCode
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Ouvrez le dossier du projet dans VSCode. Vous pouvez le faire depuis le terminal avec :
 
-### `npm run eject`
+code .
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+3. **Lancer le Dev Container**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Avec le projet ouvert dans VSCode, une notification devrait apparaître vous suggérant d'ouvrir le projet dans un conteneur. Sélectionnez "Reopen in Container" pour construire et ouvrir le projet dans le Dev Container. Si la notification n'apparaît pas, vous pouvez ouvrir la commande palette (Cmd+Shift+P sur macOS, Ctrl+Shift+P sur Windows/Linux) et chercher "Remote-Containers: Reopen in Container".
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+4. **Lancer le Projet**
+   Une fois dans le conteneur, vous pouvez lancer l'application en exécutant :
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+npm start
+Votre application devrait maintenant être accessible sur http://localhost:3000.
 
-## Learn More
+## Structure du Projet
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+src/ : Contient le code source de l'application.
+public/ : Contient les fichiers statiques publics, comme le index.html.
+.devcontainer/ : Contient la configuration du Dev Container pour VSCode.
+Dockerfile : Définit l'environnement Docker pour l'application.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Contribuer
+
+Nous accueillons les contributions. N'hésitez pas à soumettre des pull requests ou à ouvrir des issues pour suggérer des améliorations.
+
+## Developpeurs
+
+Mélina MITTERRAND
+Maurane HUGON
+Hugo DESSAUW
