@@ -1,0 +1,18 @@
+{
+    "name": "TravelTips",
+    "build": {
+        "context": "..",
+        "dockerfile": "../Dockerfile"
+    },
+    "forwardPorts": [3000],
+    "extensions": [
+        "dbaeumer.vscode-eslint", // ESLint pour l'analyse de code
+        "ms-vscode.vscode-typescript-tslint-plugin", // Support de TypeScript
+        "eamodio.gitlens", // GitLens pour une meilleure intégration Git
+        "esbenp.prettier-vscode" // Prettier pour le formatage du code
+    ],
+    "postCreateCommand": "npm install",
+    "settings": {
+        "editor.formatOnSave": true
+    }
+}
