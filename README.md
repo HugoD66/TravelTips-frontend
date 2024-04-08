@@ -35,16 +35,21 @@ code .
 Avec le projet ouvert dans VSCode, une notification devrait apparaître vous suggérant d'ouvrir le projet dans un conteneur. Sélectionnez "Reopen in Container" pour construire et ouvrir le projet dans le Dev Container. Si la notification n'apparaît pas, vous pouvez ouvrir la commande palette (Cmd+Shift+P sur macOS, Ctrl+Shift+P sur Windows/Linux) et chercher "Remote-Containers: Reopen in Container".
 
 4. **Lancer le Projet**
-   Une fois dans le conteneur, vous pouvez lancer l'application en exécutant :
+
+Une fois dans le conteneur, vous pouvez lancer l'application en exécutant :
 
 npm start
+
 Votre application devrait maintenant être accessible sur http://localhost:3000.
 
 ## Structure du Projet
 
 src/ : Contient le code source de l'application.
+
 public/ : Contient les fichiers statiques publics, comme le index.html.
+
 .devcontainer/ : Contient la configuration du Dev Container pour VSCode.
+
 Dockerfile : Définit l'environnement Docker pour l'application.
 
 ## Contribuer
@@ -54,5 +59,7 @@ Nous accueillons les contributions. N'hésitez pas à soumettre des pull request
 ## Developpeurs
 
 Mélina MITTERRAND
+
 Maurane HUGON
+
 Hugo DESSAUW
