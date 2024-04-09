@@ -1,0 +1,78 @@
+/* Styles généraux du menu */
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #a6c6c7; /* Couleur principale */
+    padding: 10px;
+  }
+  
+  .nav-logo img {
+    width: 250px; 
+    margin-bottom: 10px;
+  }
+  .nav-profile img {
+    width: 20px;
+    border-radius: 50%;
+  }
+  
+  .burger {
+    display: block;
+    background: none;
+    border: none;
+    color: #315d55;
+    font-size: 24px;
+    cursor: pointer;
+  }
+  
+  .nav-links {
+    width: 100%;
+    display: none;
+  }
+  
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .nav-links a, .nav-profile a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 0;
+  }
+  
+  .nav-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  /* Styles pour les écrans de bureau */
+  @media (min-width: 768px) {
+    .navbar {
+      flex-direction: row;
+      justify-content: space-between;
+    }
+  
+    .burger {
+      display: none;
+    }
+  
+    .nav-links, .nav-profile {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+  
+    .nav-links {
+      justify-content: center;
+      display: flex; /* Annule le display: none; du mobile */
+    }
+  
+    .nav-profile {
+      flex-direction: row;
+    }
+  }
+  
