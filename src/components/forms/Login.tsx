@@ -1,17 +1,22 @@
 import React, {FormEvent, useState} from "react";
+import {loginUser} from "../../services/user";
 
-const Login = ({ goChangeForm, handleError }: { goChangeForm: () => void; handleError: (errorMessage: string) => void }) => {
+const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: () => void; handleError: (errorMessage: string) => void; setIsLoggedTrue: () => void }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
 
   const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Tentative de connexion avec : ", { email, password });
-
-    //Si erreur lors de l'envoi :
-    handleError("Message d'erreur de connexion");
-
-
+    loginUser({email, password}).then((response) => {
+      console.log("Utilisateur connecté avec succès :", response);
+      setEmail("");
+      setPassword("");
+      setIsLoggedTrue();
+    })
+      .catch((error) => {
+        console.error("Erreur lors de la connexion :", error);
+        handleError("Un problème est survenu lors de la connexion. Veuillez réessayer.");
+      });
   }
 
   return (

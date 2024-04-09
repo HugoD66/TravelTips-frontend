@@ -16,6 +16,9 @@ const ProfilePage = () => {
   const goChangeForm = () =>  {
     setIsRegistered(!isRegistered);
   }
+  const setIsLoggedTrue = () => {
+    setIsLogged(true);
+  };
   const handleError = (errorMessage: string) => {
     setError(errorMessage);
   };
@@ -28,10 +31,9 @@ const ProfilePage = () => {
       ) : (
         <>
         {isRegistered ? (
-          <Login goChangeForm={goChangeForm} handleError={handleError}/>
-
+          <Login goChangeForm={goChangeForm} handleError={handleError} setIsLoggedTrue={setIsLoggedTrue}/>
         ) : (
-        <Register goChangeForm={goChangeForm} handleError={handleError}/>
+          <Register goChangeForm={goChangeForm} handleError={handleError}/>
         )}
         </>
       )}

@@ -1,4 +1,5 @@
 import React, {FormEvent, useState} from "react";
+import { registerUser} from "../../services/user";
 
 const Register = ({ goChangeForm, handleError }: { goChangeForm: () => void; handleError: (errorMessage: string) => void }) => {
 
@@ -12,9 +13,19 @@ const Register = ({ goChangeForm, handleError }: { goChangeForm: () => void; han
   const handleRegisterSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log("Tentative de connexion avec : ", {email, password, firstname, lastname, birthday});
-
-    //Si erreur lors de l'envoi :
-    handleError("Message d'erreur de connexion");
+    registerUser({email, password, firstname, lastname, birthday}).then((response) => {
+      console.log("Utilisateur enregistré avec succès :", response);
+      setEmail("");
+      setPassword("");
+      setFirstname("");
+      setLastname("");
+      setBirthday("");
+      goChangeForm();
+    })
+      .catch((error) => {
+        console.error("Erreur lors de l'enregistrement :", error);
+        handleError("Un problème est survenu lors de l'enregistrement. Veuillez réessayer.");
+      });
   }
 
   return (
