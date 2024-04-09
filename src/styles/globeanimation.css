@@ -1,0 +1,28 @@
+@import 'base.css';
+
+.globe-animation {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+  background-color: var(--color-tertiary);
+}
+
+
+.title {
+  font-size: 6em;
+  font-family: "Bad Script", cursive;
+  color: var(--color-dark);
+  border-right: 3px solid var(--color-accent);
+  position: absolute; 
+  top: 50%; 
+  transform: translateY(-50%); 
+  z-index: 1; 
+  background-color: var(--color-accent); 
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.5);
+  padding: 0.2em 2em; 
+  border-radius: 10px; 
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
