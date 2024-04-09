@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Globe from 'react-globe.gl';
+import '../styles/globeanimation.css';
 
 const GlobeAnimation = () => {
   const navigate = useNavigate();
@@ -8,7 +9,7 @@ const GlobeAnimation = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/home');
-    }, 8000); // Supposons une animation combinée de 8 secondes
+    }, 2000); // durée de 8s
 
     return () => clearTimeout(timer);
   }, [navigate]);
@@ -16,12 +17,10 @@ const GlobeAnimation = () => {
   return (
     <div className="globe-animation">
       <div className="title">TravelTips</div>
-      {/* Exemple d'utilisation d'un Globe - ajustez en fonction de l'API de votre bibliothèque */}
       <Globe
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-day.jpg"
         bumpImageUrl="//unpkg.com/three-globe/example/img/earth-topology.png"
         backgroundColor="rgba(0,0,0,0)"
-        animateIn={true}
       />
     </div>
   );
