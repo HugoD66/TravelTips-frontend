@@ -1,7 +1,10 @@
 /* Register USER */
 //TODO Change any to UserModel
-export const registerUser = (formData: any) => {
-  return fetch("http://localhost:4700/api/users/register", {
+import {UserModel} from "../models/UserModel";
+import {UserLoginModel} from "../models/UserLoginModel";
+
+export const registerUser = (formData: UserModel) => {
+  return fetch("http://localhost:4700/users/register", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: {
@@ -22,8 +25,8 @@ export const registerUser = (formData: any) => {
 
 /* Login USER */
 //Todo add localstorage
-export const loginUser = (formData: any) => {
-  return fetch("http://localhost:4700/api/users/login", {
+export const loginUser = (formData: UserLoginModel) => {
+  return fetch("http://localhost:4700/users/login", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: {
@@ -43,7 +46,7 @@ export const loginUser = (formData: any) => {
 };
 // GET USER
 export const getMe = (token: string) => {
-  return fetch("http://localhost:4700/api/users/me", {
+  return fetch("http://localhost:4700/users/me", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -63,7 +66,7 @@ export const getMe = (token: string) => {
 
 // GET USER BY ID
 export const getUserById = (id: string) => {
-  return fetch(`http://localhost:4700/api/users/${id}`, {
+  return fetch(`http://localhost:4700/users/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -80,8 +83,8 @@ export const getUserById = (id: string) => {
 
 // UPDATE ME
 
-export const updateMe = (id: string, formData: any, token: string) => {
-  return fetch(`http://localhost:4700/api/users/${id}`, {
+export const updateMe = (id: string, formData: UserModel, token: string) => {
+  return fetch(`http://localhost:4700/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -104,7 +107,7 @@ export const updateMe = (id: string, formData: any, token: string) => {
 // UPDATE USER
 
 export const updateUser = (id: string, formData: any) => {
-  return fetch(`http://localhost:4700/api/users/${id}`, {
+  return fetch(`http://localhost:4700/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -126,7 +129,7 @@ export const updateUser = (id: string, formData: any) => {
 //REMOVE USER
 
 export const removeUser = (id: string) => {
-  return fetch(`http://localhost:4700/api/users/${id}`, {
+  return fetch(`http://localhost:4700/users/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
