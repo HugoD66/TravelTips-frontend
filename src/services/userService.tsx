@@ -4,7 +4,7 @@ import {UserModel} from "../models/UserModel";
 import {UserLoginModel} from "../models/UserLoginModel";
 
 export const registerUser = (formData: UserModel) => {
-  return fetch("http://localhost:4700/users/register", {
+  return fetch("http://localhost:8080/users/register", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: {
@@ -26,7 +26,7 @@ export const registerUser = (formData: UserModel) => {
 /* Login USER */
 //Todo add localstorage
 export const loginUser = (formData: UserLoginModel) => {
-  return fetch("http://localhost:4700/users/login", {
+  return fetch("http://localhost:5432/users/login", {
     method: "POST",
     body: JSON.stringify(formData),
     headers: {
@@ -46,7 +46,7 @@ export const loginUser = (formData: UserLoginModel) => {
 };
 // GET USER
 export const getMe = (token: string) => {
-  return fetch("http://localhost:4700/users/me", {
+  return fetch("http://localhost:5432/users/me", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ export const getMe = (token: string) => {
 
 // GET USER BY ID
 export const getUserById = (id: string) => {
-  return fetch(`http://localhost:4700/users/${id}`, {
+  return fetch(`http://localhost:5432/users/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -84,7 +84,7 @@ export const getUserById = (id: string) => {
 // UPDATE ME
 
 export const updateMe = (id: string, formData: UserModel, token: string) => {
-  return fetch(`http://localhost:4700/users/${id}`, {
+  return fetch(`http://localhost:5432/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -107,7 +107,7 @@ export const updateMe = (id: string, formData: UserModel, token: string) => {
 // UPDATE USER
 
 export const updateUser = (id: string, formData: any) => {
-  return fetch(`http://localhost:4700/users/${id}`, {
+  return fetch(`http://localhost:5432/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -129,7 +129,7 @@ export const updateUser = (id: string, formData: any) => {
 //REMOVE USER
 
 export const removeUser = (id: string) => {
-  return fetch(`http://localhost:4700/users/${id}`, {
+  return fetch(`http://localhost:5432/users/${id}`, {
     method: "DELETE",
   })
     .then((response) => {

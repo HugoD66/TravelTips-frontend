@@ -1,3 +1,66 @@
-@import 'base.css';
-@import 'navbar.css';
-@import 'media-queries.css';
+@import 'styles/base.css';
+@import 'styles/navbar.css';
+@import 'styles/globeanimation.css';
+
+
+/* Main container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background-color: var(--color-background);
+}
+
+/* Globe background */
+.globe-container {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 0;
+}
+
+/* Login form styling */
+.login-form {
+    z-index: 1;
+    position: relative;
+    margin-top: 10vh;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 300px;
+}
+
+.input-field {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 2px solid var(--color-accent);
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.submit-button, .direct-access-button {
+    padding: 10px 20px;
+    color: white;
+    background-color: var(--color-accent);
+    border: none;
+    border-radius: 5px;
+    margin-top: 10px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    text-align: center;
+}
+
+.direct-access-button {
+    background-color: var(--color-dark);
+    margin-top: 20px;
+}

@@ -1,5 +1,5 @@
 import React, {FormEvent, useState} from "react";
-import {loginUser} from "../../services/user";
+import {loginUser} from "../../services/userService";
 
 const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: () => void; handleError: (errorMessage: string) => void; setIsLoggedTrue: () => void }) => {
   const [email, setEmail] = useState<string>("");

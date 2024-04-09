@@ -1,27 +1,112 @@
-/* Définition des variables de couleurs */
+@import url('https://fonts.googleapis.com/css2?family=Bad+Script&family=Patrick+Hand&family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lugrasimo&family=Shadows+Into+Light&display=swap');
 :root {
-    --color-primary: #d7bfac;
-    --color-secondary: #e7ded3;
-    --color-tertiary: #f5f5f5;
-    --color-accent: #a6c6c7;
-    --color-dark: #315d55;
-    --color-black: #000000;
+  --color-primary: #d7bfac;
+  --color-secondary: #e7ded3;
+  --color-tertiary: #f5f5f5;
+  --color-background: #f2eee5;
+  --color-accent: #a6c6c7;
+  --color-dark: #315d55;
+  --color-black: #000000;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-background); 
+  color: var(--color-dark);
+  font-family: "Quicksand", sans-serif;
+}
+
+a {
+  color: var(--color-accent); 
+  text-decoration: none; 
+}
+
+a:hover {
+  color: var(--color-dark); 
+}
+
+/* Styles de base pour les en-têtes et le texte */
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Lugrasimo", cursive;
+  color: var(--color-accent);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h2 {
+  font-size: 2rem;
+}
+
+
+/* Boutons et liens interactifs */
+button, .button {
+  background-color: var(--color-accent);
+  color: var(--color-tertiary);
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover, .button:hover {
+  background-color: var(--color-primary);
+  color: var(--color-dark);
+}
+
+/* Conteneur principal pour aligner les éléments au centre */
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  min-height: 100vh;
+}
+
+/* Styles spécifiques pour la navigation et le pied de page */
+nav {
+  width: 100%;
+  background-color: var(--color-secondary);
+  padding: 10px 0;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--color-secondary);
+  color: var(--color-dark);
+}
+
+/* Utilisation des polices pour des éléments spécifiques */
+.title {
+  font-family: 'Bad Script', cursive;
+  color: var(--color-primary);
+  margin: 0 0 20px 0;
+}
+
+/* Adaptation pour différents écrans */
+@media screen and (min-width: 768px) {
+  .container {
+    flex-direction: row;
+    padding: 20px;
   }
-  
-  body, html {
-    margin: 0;
-    padding: 0;
-    font-family: 'Catamaran', sans-serif;
-    background-color: var(--color-tertiary); 
-    color: var(--color-black); 
+
+  .title {
+    font-size: 3rem;
   }
-  
-  a {
-    color: var(--color-accent); 
-    text-decoration: none; 
-  }
-  
-  a:hover {
-    color: var(--color-dark); 
-  }
-  
+}

@@ -1,78 +1,96 @@
+@import 'base.css'; 
+
 /* Styles généraux du menu */
 .navbar {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: #a6c6c7; /* Couleur principale */
-    padding: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: var(--color-accent); 
+  padding: 10px;
+  box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* S'assure que la navbar ne dépasse pas la largeur de la vue */
+  box-sizing: border-box; /* Inclut padding dans le calcul de la largeur */
+}
+
+.nav-logo img {
+  width: 250px;
+  margin-left: 10px; 
+}
+
+.nav-profile img {
+  width: 20px; 
+}
+
+.burger {
+  display: block;
+  background: none;
+  border: none;
+  color: var(--color-dark); 
+  font-size: 56px;
+  cursor: pointer;
+}
+
+.nav-links {
+  width: 100%;
+  display: none;
+  font-family: "Quicksand", sans-serif;
+}
+
+.nav-links.open {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.nav-links a:hover {
+  color: var(--color-secondary);
+}
+
+.nav-links a, .nav-profile a {
+  color: var(--color-black); 
+  text-decoration: none;
+  padding: 10px 20px; /* Augmente le padding pour un meilleur espacement */
+}
+
+.nav-profile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ----------- DESKTOP ------------------ */
+@media (min-width: 768px) {
+  .navbar {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 10px 20px; /* Ajuste le padding pour les vues de bureau */
   }
-  
-  .nav-logo img {
-    width: 250px; 
-    margin-bottom: 10px;
-  }
-  .nav-profile img {
-    width: 20px;
-    border-radius: 50%;
-  }
-  
+
   .burger {
-    display: block;
-    background: none;
-    border: none;
-    color: #315d55;
-    font-size: 24px;
-    cursor: pointer;
-  }
-  
-  .nav-links {
-    width: 100%;
     display: none;
   }
-  
-  .nav-links.open {
+
+  .nav-links {
     display: flex;
-    flex-direction: column;
     align-items: center;
+    gap: 20px; 
   }
-  
-  .nav-links a, .nav-profile a {
-    color: white;
-    text-decoration: none;
-    padding: 10px 0;
+
+  .nav-links {
+    justify-content: center;
+    display: flex;
+    font-size: 30px;
   }
-  
+
+  .nav-links a {
+    color: var(--color-dark);
+  }
+
   .nav-profile {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 5px;
+    flex-direction: row; 
   }
   
-  /* Styles pour les écrans de bureau */
-  @media (min-width: 768px) {
-    .navbar {
-      flex-direction: row;
-      justify-content: space-between;
-    }
-  
-    .burger {
-      display: none;
-    }
-  
-    .nav-links, .nav-profile {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-  
-    .nav-links {
-      justify-content: center;
-      display: flex; /* Annule le display: none; du mobile */
-    }
-  
-    .nav-profile {
-      flex-direction: row;
-    }
+  .nav-profile img {
+    width: 30px;
   }
-  
+}
