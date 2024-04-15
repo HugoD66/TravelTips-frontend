@@ -1,0 +1,5 @@
+.map-wrap {
+    position: relative;
+    height: 400px; /* Exemple de hauteur fixe */
+    width: 100%; /* Exemple de largeur */
+}
