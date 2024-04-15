@@ -80,7 +80,22 @@ export const getUserById = (id: string) => {
       throw error;
   });
 };
-
+// GET USERS
+export const getUserList = () => {
+  return fetch(`http://localhost:4700/users`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération de l'utilisateur:", error);
+      throw error;
+    });
+};
 // UPDATE ME
 
 export const updateMe = (id: string, formData: UserModel, token: string) => {
