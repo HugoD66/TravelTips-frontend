@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState} from 'react';
 import GlobeComponent from '../components/GlobeComponent';
 import { Country } from '../models/CountryData';
 import '../styles/homepage.css';
-import { Link } from 'react-router-dom'; 
+import { Link } from 'react-router-dom';
 
 const HomePage = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
