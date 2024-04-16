@@ -20,7 +20,10 @@ const Login = ({
         console.log("Utilisateur connecté avec succès :", response);
         setEmail("");
         setPassword("");
-        localStorage.setItem("token", response);
+        localStorage.setItem("token", response.access_token);
+        console.log("token " + response.access_token);
+        console.log("id" + response.id);
+        localStorage.setItem("id", response.id);
         navigate("/home");
       })
       .catch((error) => {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Login from "../components/forms/Login";
 import Register from "../components/forms/Register";
+import UserMenu from "../components/UserMenu";
 
 const ProfilePage = () => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
@@ -31,11 +32,9 @@ const ProfilePage = () => {
 
   return (
     <div>
-      <h1>Coucou</h1>
       {isLogged ? (
         <>
-          <p>Vous êtes connecté.</p>
-          <button onClick={deco}>Déconnnexion</button>
+          <UserMenu deco={deco}></UserMenu>
         </>
       ) : (
         <>

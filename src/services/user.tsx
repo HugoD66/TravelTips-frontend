@@ -10,7 +10,6 @@ export const registerUser = (
   mail: String,
   password: String
 ) => {
-  console.log("la date est " + birthday);
   return fetch("http://localhost:4000/users/register", {
     method: "POST",
     body: JSON.stringify({
@@ -59,8 +58,8 @@ export const loginUser = (mail: String, password: String) => {
     });
 };
 // GET USER
-export const getMe = (token: string) => {
-  return fetch("http://localhost:8080/users/me", {
+export const getMe = (token: string, id: string) => {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -68,7 +67,7 @@ export const getMe = (token: string) => {
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Réponse réseau non OK");
+        throw new Error("Utilisateur non trouvé");
       }
       return response.json();
     })
@@ -78,25 +77,9 @@ export const getMe = (token: string) => {
     });
 };
 
-// GET USER BY ID
-export const getUserById = (id: string) => {
-  return fetch(`http://localhost:8080/users/${id}`, {
-    method: "GET",
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Réponse réseau non OK");
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la récupération de l'utilisateur:", error);
-      throw error;
-    });
-};
 // GET USERS
 export const getUserList = () => {
-  return fetch(`http://localhost:4700/users`, {
+  return fetch(`http://localhost:4000/users`, {
     method: "GET",
   })
     .then((response) => {
@@ -111,11 +94,24 @@ export const getUserList = () => {
     });
 };
 // UPDATE ME
-
-export const updateMe = (id: string, formData: UserModel, token: string) => {
-  return fetch(`http://localhost:8080/users/${id}`, {
+export const updateMe = (
+  id: string,
+  firstname: String,
+  lastname: String,
+  birthday: String,
+  mail: String,
+  password: String,
+  token: string
+) => {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "PATCH",
-    body: JSON.stringify(formData),
+    body: JSON.stringify({
+      firstName: firstname,
+      lastName: lastname,
+      mail: mail,
+      birthday: birthday,
+      password: password,
+    }),
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`,
