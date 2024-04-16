@@ -1,13 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, {useCallback, useEffect, useRef} from "react";
 import maplibregl from 'maplibre-gl';
 import {addMarker} from "../services/mapService";
 
 interface MapProps {
   lat: number;
   lng: number;
+  onCityFound: (city: any, postcode: any) => void;
 }
 
-const Map: React.FC<MapProps> = ({ lng, lat }) => {
+const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
 
@@ -22,13 +23,13 @@ const Map: React.FC<MapProps> = ({ lng, lat }) => {
     });
     map.current.on('load', () => {
       if (map.current) {
-        addMarker(map.current)
+        addMarker(map.current, handleCityFound);
 
       }
     });
 
     return () => map.current?.remove();
-  }, [lat, lng]);
+  }, [lat, lng, onCityFound]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -37,6 +38,13 @@ const Map: React.FC<MapProps> = ({ lng, lat }) => {
       essential: true
     });
   }, [lat, lng]);
+
+
+  const handleCityFound = useCallback(({ city, postcode }: any) => {
+    console.log(city, postcode)
+    onCityFound(city, postcode);
+  }, [onCityFound]);
+
 
   return (
     <div className="map-wrap">

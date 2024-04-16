@@ -1,15 +1,27 @@
 import {ApiResponse, CountryName} from "../../models/CountryData";
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import axios from "axios";
 import Map from "../Map";
 import Loading from "../Loading";
 import { createTip } from "../../services/tipService";
+import {createCountry} from "../../services/countryService";
+import {addMarker} from "../../services/mapService";
+import {Map as MaplibreMap} from "maplibre-gl";
+import {createCity} from "../../services/cityService";
+import {CountryModel} from "../../models/CountryModel";
+
+interface CityDetails {
+  city: string;
+  postcode: string;
+}
 
 const AddTips = () => {
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [country, setCountry] = useState<string>("");
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<string>("");
+  const [city, setCity] = useState("");
+  const [postcode, setPostCode] = useState("");
 
   useEffect(() => {
     axios.get<ApiResponse[]>('https://restcountries.com/v3.1/all')
@@ -31,9 +43,33 @@ const AddTips = () => {
 
 
 
-  const handleAddTipsSubmit = (event: any) => {
+  const handleAddTipsSubmit = async (event: any) => {
     event.preventDefault();
     console.log("Tips added");
+
+    let countryId;
+    if (selectedCountry) {
+      try {
+        const newCountry = await createCountry({name: selectedCountry.name});
+        countryId = newCountry.id;
+        console.log("Country added with success", newCountry);
+      } catch (error) {
+        console.error("Error during country creation", error);
+      }
+    }
+    console.log("COUNTRY ID " ) ;
+    console.log(countryId) ;
+    let cityId = "";
+    if (city) {
+      try {
+        const newCity = await createCity({ name: city, idCountry: countryId, zipCode: postcode});
+        //cityId = newCity.id;
+        console.log("City added with success", newCity);
+      } catch (error) {
+        console.error("Error during city creation", error);
+      }
+    }
+   /*
     const tips = createTip({
       name: name,
       price: parseInt(price),
@@ -44,6 +80,7 @@ const AddTips = () => {
     }).catch((error) => {
       console.error("Error during tip creation", error);
     });
+    */
   }
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -53,9 +90,26 @@ const AddTips = () => {
   const defaultLat = 51.509865; // Exemple: Latitude pour Londres
   const defaultLng = -0.118092;
 
-/*
-Voir pour numberAdress
- */
+
+  const handleCityFound = useCallback(({ city, postcode }: CityDetails) => {
+    setCity(city);
+    setPostCode(postcode);
+    console.log("City found:", city, "Postcode:", postcode);
+  }, []);
+
+  /**
+   * const handleCityFound = useCallback((cityName: any) => {
+   *     setCity(cityName.address.city);
+   *     setZipCode(cityName.address.postcode);
+   *     console.log("City found:", cityName);
+   *     console.log("City found:", cityName);
+   *     console.log("City found:", cityName);
+   *     console.log("City found:", cityName);
+   *     console.log("City found:", cityName);
+   *   }, []);
+   */
+
+
   return (
       <div>
         <h1>Add Tips</h1>
@@ -87,7 +141,11 @@ Voir pour numberAdress
               </select>
             </label>
             {selectedCountry ? (
-              <Map lng={selectedCountry?.latlgn?.[1] || defaultLng} lat={selectedCountry?.latlgn?.[0] || defaultLat}/>
+              <Map
+                lng={selectedCountry?.latlgn?.[1] || defaultLng}
+                lat={selectedCountry?.latlgn?.[0] || defaultLat}
+                onCityFound={handleCityFound}
+              />
             ) : (
               <Loading width={400} height={400}/>
             )}

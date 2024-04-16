@@ -5,31 +5,29 @@ import axios from 'axios';
 
 
 let currentMarker: Marker | null = null;
-export const addMarker = (map: MaplibreMap) => {
+export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string }) => void) => {
   map.on('click', async (event: maplibregl.MapMouseEvent) => {
     const {lng, lat} = event.lngLat;
-    console.log(lng, lat)
-    // Supprimer le marker précédent s'il existe
     if (currentMarker) {
       currentMarker.remove();
     }
 
-    // Créer et ajouter un nouveau marker
     currentMarker = new Marker({color: '#00FF00'})
       .setLngLat([lng, lat])
       .addTo(map);
 
-    console.log(`Marqueur ajouté à : ${lat}, ${lng}`);
-
     try {
       const cityDetails = await getCity(lat, lng);
-      if (cityDetails && cityDetails.address && cityDetails.address.city) {
-        console.log("City:", cityDetails.address.city);
+      if (cityDetails && cityDetails.address) {
+        const city = cityDetails.address.city || "Ville non spécifiée";
+        const postcode = cityDetails.address.postcode || "Code postal non spécifié";
+        onCityFound({ city, postcode });
       } else {
-        console.log("City not found at this location.");
+        onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié" });
       }
     } catch (error) {
       console.error("Error fetching city details:", error);
+      onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié" });
     }
   });
 }
