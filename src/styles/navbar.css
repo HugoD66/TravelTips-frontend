@@ -8,6 +8,8 @@
   background-color: var(--color-accent); 
   padding: 10px;
   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.1);
+  width: 100%; /* S'assure que la navbar ne dépasse pas la largeur de la vue */
+  box-sizing: border-box; /* Inclut padding dans le calcul de la largeur */
 }
 
 .nav-logo img {
@@ -47,7 +49,7 @@
 .nav-links a, .nav-profile a {
   color: var(--color-black); 
   text-decoration: none;
-  padding: 0px 20px;
+  padding: 10px 20px; /* Augmente le padding pour un meilleur espacement */
 }
 
 .nav-profile {
@@ -61,6 +63,7 @@
   .navbar {
     flex-direction: row;
     justify-content: space-between;
+    padding: 10px 20px; /* Ajuste le padding pour les vues de bureau */
   }
 
   .burger {
@@ -86,6 +89,7 @@
   .nav-profile {
     flex-direction: row; 
   }
+  
   .nav-profile img {
     width: 30px;
   }

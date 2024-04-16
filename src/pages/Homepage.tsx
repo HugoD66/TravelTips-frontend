@@ -29,7 +29,7 @@ const HomePage = () => {
               <p className="countryCardDetail">Latitude: {selectedCountry.latlng[0]}</p>
               <p className="countryCardDetail">Longitude: {selectedCountry.latlng[1]}</p>
               <div className="button-container">
-                <Link to={`/destinations/${selectedCountry.name.replace(/\s+/g, '-')}`}>Voir la destination</Link>
+                <Link to={`/country/${selectedCountry.name.replace(/\s+/g, '-')}`}>Voir la destination</Link>
                 <button onClick={() => alert('Ajouter un tip')}>Ajouter un tip</button>
                 <button onClick={() => alert('Créer un itinéraire')}>Créer un itinéraire</button>
               </div>
