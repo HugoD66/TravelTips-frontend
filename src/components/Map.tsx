@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import maplibregl from 'maplibre-gl';
-import {addMarker, getCity} from "../services/mapService";
+import {addMarker} from "../services/mapService";
 
 interface MapProps {
   lat: number;
@@ -46,3 +46,4 @@ const Map: React.FC<MapProps> = ({ lng, lat }) => {
 };
 
 export default Map;
+
