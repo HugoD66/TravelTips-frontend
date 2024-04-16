@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import { getTipListUser } from "../services/tip";
+import { getTipListUser } from "../services/tipService";
 import { TipModel } from "../models/TipModel";
 
 const UserTips = () => {
