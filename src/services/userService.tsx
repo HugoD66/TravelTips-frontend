@@ -140,7 +140,7 @@ export const updateMe = (
 // UPDATE USER
 
 export const updateUser = (id: string, formData: any) => {
-  return fetch(`http://localhost:8080/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -162,7 +162,7 @@ export const updateUser = (id: string, formData: any) => {
 //REMOVE USER
 
 export const removeUser = (id: string) => {
-  return fetch(`http://localhost:8080/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "DELETE",
   })
     .then((response) => {

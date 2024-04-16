@@ -4,14 +4,20 @@ import "../styles/navbar.css";
 import UserMenu from "./UserMenu";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import AdminMenu from "./AdminMenu";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>();
-  const token = localStorage.getItem("token");
+  const [userRole, setUserRole] = useState<string>(
+    localStorage.getItem("role") || ""
+  );
+  const [token, setToken] = useState<string>(
+    localStorage.getItem("token") || ""
+  );
 
   useEffect(() => {
-    if (token !== null) {
+    if (token !== "") {
       setIsLoggedIn(true);
     } else {
       setIsLoggedIn(false);
@@ -20,10 +26,12 @@ const NavBar = () => {
 
   const deco = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("idUser");
+    localStorage.removeItem("role");
     setIsLoggedIn(false);
     toast.success("Déconnexion réussie", {
       position: "top-center",
-      autoClose: 4000,
+      autoClose: 3000,
     });
   };
   return (
@@ -41,7 +49,11 @@ const NavBar = () => {
         <Link to="/destinations">Destinations</Link>
         <Link to="/itinerary">Mon itinéraire</Link>
         {isLoggedIn ? (
-          <UserMenu deco={deco}></UserMenu>
+          userRole === "Admin" ? (
+            <AdminMenu deco={deco} />
+          ) : (
+            userRole === "User" && <UserMenu deco={deco} />
+          )
         ) : (
           <div className="nav-profile">
             <Link to="/profile">Profile</Link>

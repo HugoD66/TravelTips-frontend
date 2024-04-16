@@ -31,6 +31,7 @@ const Login = ({ goChangeForm }: { goChangeForm: () => void }) => {
         setPassword("");
         localStorage.setItem("token", response.access_token);
         localStorage.setItem("id", response.id);
+        localStorage.setItem("role", response.role);
         navigate("/home");
       })
       .catch((error) => {

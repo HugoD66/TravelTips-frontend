@@ -79,9 +79,10 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
         setBirthday("");
         goChangeForm();
       })
+
       .catch((error) => {
-        console.error("Erreur lors de l'enregistrement :", error);
-        setError(new Error("Erreur lors de l'enregistrement :", error));
+        console.error("Erreur lors de l'enregistrement : ", error);
+        setError(new Error("Erreur lors de l'enregistrement : ", error));
       });
   };
 
@@ -142,7 +143,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
           </label>
           <input type="submit" value="Envoyer" />
         </form>
-        <p onClick={() => goChangeForm()}>Déjà enregistré? </p>
+        <p onClick={() => goChangeForm()}>Déjà enregistré ? </p>
         <>{error && <p className="error-message">{error.message}</p>}</>
       </>
     </div>

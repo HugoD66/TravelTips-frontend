@@ -10,11 +10,11 @@ const UserTips = () => {
     if (idUser !== null) {
       getTipListUser(idUser)
         .then((response) => {
-          console.log("Tips récupérés avec succès :", response);
+          console.log("Tips récupérés avec succès : ", response);
           setTips(response);
         })
         .catch((error) => {
-          console.error("Erreur lors de la récupératio :", error);
+          console.error("Erreur lors de la récupération :", error);
         });
     }
   }, []);

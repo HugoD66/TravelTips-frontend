@@ -1,25 +1,18 @@
-import React, { useEffect, useState} from 'react';
-import Login from '../components/forms/Login';
-import Register from '../components/forms/Register';
-import UserMenu from "../components/UserMenu";
+import React, { useEffect, useState } from "react";
+import Login from "../components/forms/Login";
+import Register from "../components/forms/Register";
 import { useLocation } from "react-router-dom";
 import UserInfo from "../components/UserInfo";
 import UserForm from "../components/forms/UserForm";
 import UserTips from "../components/UserTips";
 import { getMe, updateMe } from "../services/userService";
-// import {getTipList} from "../services/tip";
-// import {getUserList} from "../services/userService";
-// import {getCountryList} from "../services/country";
-// import {getCategoryList} from "../services/category";
-// import {getCityList} from "../services/city";
-// import {getDayInItineraryList} from "../services/dayInierary";
-// import {getItineraryList} from "../services/itinerary";
 
 const ProfilePage = () => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const idUser = localStorage.getItem("id");
+  const role = localStorage.getItem("role");
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [selectedComponent, setSelectedComponent] = useState<string>(
@@ -32,17 +25,6 @@ const ProfilePage = () => {
     birthday: "",
     password: "",
   });
-
-  //TODO Temporaire
-  // useEffect(() => {
-  //   getTipList().then((data) => console.log(data));
-  //   getUserList().then((data) => console.log(data));
-  //   getCountryList().then((data) => console.log(data));
-  //   getCategoryList().then((data) => console.log(data));
-  //   getCityList().then((data) => console.log(data));
-  //   getDayInItineraryList().then((data) => console.log(data));
-  //   getItineraryList().then((data) => console.log(data));
-  // }, []);
 
   useEffect(() => {
     setSelectedComponent(params.get("parametre") || "");
