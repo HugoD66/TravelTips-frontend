@@ -13,8 +13,9 @@ export class TipModel {
   price!: number;
   idUser?: UserModel | string;
   idCity?: CityModel | string;
-  rate?: RateModel[];
-  comment?: CommentModel[];
   dayItinerary?: DayItineraryModel[];
   picture?: PictureModel[];
+
+  rate?: RateModel[];
+  comment?: CommentModel[];
 }

@@ -1,13 +1,13 @@
 import React, { useEffect, useState} from 'react';
 import Login from '../components/forms/Login';
 import Register from '../components/forms/Register';
-import {getTipList} from "../services/tip";
-import {getUserList} from "../services/user";
-import {getCountryList} from "../services/country";
-import {getCategoryList} from "../services/category";
-import {getCityList} from "../services/city";
-import {getDayInItineraryList} from "../services/dayInierary";
-import {getItineraryList} from "../services/itinerary";
+import {getTipList} from "../services/tipService";
+import {getUserList} from "../services/userService";
+import {getCountryList} from "../services/countryService";
+import {getCategoryList} from "../services/categoryService";
+import {getCityList} from "../services/cityService";
+import {getDayInItineraryList} from "../services/dayInieraryService";
+import {getItineraryList} from "../services/itineraryService";
 
 const ProfilePage = () => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
