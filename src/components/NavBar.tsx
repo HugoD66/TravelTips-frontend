@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "../styles/navbar.css";
 import UserMenu from "./UserMenu";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,6 +21,10 @@ const NavBar = () => {
   const deco = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
+    toast.success("Déconnexion réussie", {
+      position: "top-center", // Utilisation de la chaîne de caractères directement
+      autoClose: 2000, // Fermer automatiquement après 2 secondes
+    });
   };
   return (
     <nav className="navbar">
