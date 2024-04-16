@@ -1,9 +1,9 @@
-import {TipModel} from "../models/TipModel";
+import {CityModel} from "../models/CityModel";
 
-export const createTip = (tip: TipModel) => {
-  return fetch("http://localhost:4000/tips", {
+export const createCity = (city: CityModel) => {
+  return fetch(`http://localhost:4000/city`, {
     method: "POST",
-    body: JSON.stringify(tip),
+    body: JSON.stringify(city),
     headers: {
       "Content-Type": "application/json",
     },
@@ -15,14 +15,13 @@ export const createTip = (tip: TipModel) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la création du tip:", error);
+      console.error("Erreur lors de la création de la ville:", error);
       throw error;
   });
-
 }
 
-export const getTipList = () => {
-  return fetch(`http://localhost:4000/tips`, {
+export const getCityList = () => {
+  return fetch(`http://localhost:4000/city`, {
     method: "GET",
   })
     .then((response) => {
@@ -32,13 +31,13 @@ export const getTipList = () => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des tips:", error);
+      console.error("Erreur lors de la récupération des villes:", error);
       throw error;
   });
 }
 
-export const getTipById = (id: string) => {
-  return fetch(`http://localhost:4700/tips/${id}`, {
+export const getCityById = (id: string) => {
+  return fetch(`http://localhost:4000/city/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -48,15 +47,15 @@ export const getTipById = (id: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération du tip:", error);
+      console.error("Erreur lors de la récupération de la ville:", error);
       throw error;
   });
 }
 
-export const updateTip = (tip: TipModel) => {
-  return fetch(`http://localhost:4000/tips/${tip.id}`, {
+export const updateCity = (city: CityModel) => {
+  return fetch(`http://localhost:4000/city/${city.id}`, {
     method: "PUT",
-    body: JSON.stringify(tip),
+    body: JSON.stringify(city),
     headers: {
       "Content-Type": "application/json",
     },
@@ -68,13 +67,13 @@ export const updateTip = (tip: TipModel) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la modification du tip:", error);
+      console.error("Erreur lors de la modification de la ville:", error);
       throw error;
   });
 }
 
-export const deleteTip = (id: string) => {
-  return fetch(`http://localhost:4000/tips/${id}`, {
+export const deleteCity = (id: string) => {
+  return fetch(`http://localhost:4000/city/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -84,7 +83,7 @@ export const deleteTip = (id: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la suppression du tip:", error);
+      console.error("Erreur lors de la suppression de la ville:", error);
       throw error;
   });
 }

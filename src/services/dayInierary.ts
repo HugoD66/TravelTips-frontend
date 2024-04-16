@@ -1,9 +1,10 @@
-import {TipModel} from "../models/TipModel";
+import {ItineraryModel} from "../models/ItineraryModel";
+import {DayItineraryModel} from "../models/DayItineraryModel";
 
-export const createTip = (tip: TipModel) => {
-  return fetch("http://localhost:4000/tips", {
+export const createDayInItinerary = (dayInItinerary: DayItineraryModel) => {
+  return fetch(`http://localhost:4000/day-itinerary`, {
     method: "POST",
-    body: JSON.stringify(tip),
+    body: JSON.stringify(dayInItinerary),
     headers: {
       "Content-Type": "application/json",
     },
@@ -15,14 +16,13 @@ export const createTip = (tip: TipModel) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la création du tip:", error);
+      console.error("Erreur lors de la création du dayInItinerary:", error);
       throw error;
   });
-
 }
 
-export const getTipList = () => {
-  return fetch(`http://localhost:4000/tips`, {
+export const getDayInItineraryList = () => {
+  return fetch(`http://localhost:4000/day-itinerary`, {
     method: "GET",
   })
     .then((response) => {
@@ -32,13 +32,13 @@ export const getTipList = () => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des tips:", error);
+      console.error("Erreur lors de la récupération des dayInItinerary:", error);
       throw error;
   });
 }
 
-export const getTipById = (id: string) => {
-  return fetch(`http://localhost:4700/tips/${id}`, {
+export const getDayInItineraryById = (id: string) => {
+  return fetch(`http://localhost:4000/day-itinerary/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -48,15 +48,15 @@ export const getTipById = (id: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération du tip:", error);
+      console.error("Erreur lors de la récupération du dayInItinerary:", error);
       throw error;
   });
 }
 
-export const updateTip = (tip: TipModel) => {
-  return fetch(`http://localhost:4000/tips/${tip.id}`, {
+export const updateDayInItinerary = (dayInItinerary: DayItineraryModel) => {
+  return fetch(`http://localhost:4000/day-itinerary/${dayInItinerary.id}`, {
     method: "PUT",
-    body: JSON.stringify(tip),
+    body: JSON.stringify(dayInItinerary),
     headers: {
       "Content-Type": "application/json",
     },
@@ -68,13 +68,13 @@ export const updateTip = (tip: TipModel) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la modification du tip:", error);
+      console.error("Erreur lors de la mise à jour du dayInItinerary:", error);
       throw error;
   });
 }
 
-export const deleteTip = (id: string) => {
-  return fetch(`http://localhost:4000/tips/${id}`, {
+export const deleteDayInItinerary = (id: string) => {
+  return fetch(`http://localhost:4000/day-itinerary/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -84,7 +84,7 @@ export const deleteTip = (id: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la suppression du tip:", error);
+      console.error("Erreur lors de la suppression du dayInItinerary:", error);
       throw error;
   });
 }

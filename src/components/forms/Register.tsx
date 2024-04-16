@@ -1,5 +1,5 @@
 import React, { FormEvent, useState } from "react";
-import { registerUser } from "../../services/user";
+import { registerUser } from "../../services/userService";
 
 const Register = ({
   goChangeForm,
@@ -66,7 +66,7 @@ const Register = ({
               onChange={(e) => setLastname(e.target.value)}
             />
           </label>
-          <label htmlFor="email">
+          <label htmlFor="mail">
             Adresse mail :
             <input
               id="mail"

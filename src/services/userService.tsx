@@ -1,8 +1,4 @@
 /* Register USER */
-//TODO Change any to UserModel
-import { UserModel } from "../models/UserModel";
-import { UserLoginModel } from "../models/UserLoginModel";
-
 export const registerUser = (
   firstname: String,
   lastname: String,

@@ -1,0 +1,189 @@
+@import 'base.css';
+
+/* Main container */
+.destination-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    overflow: auto;
+    background-color: var(--color-background);
+}
+
+.title-banner {
+    width: 100%;
+    height: 300px;
+    background-image: url('https://fastly.picsum.photos/id/177/2515/1830.jpg?hmac=G8-2Q3-YPB2TreOK-4ofcmS-z5F6chIA0GHYAe5yzDY');
+    background-size: cover;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 2.5rem;
+    padding: 20px; 
+    font-family: 'Bad Script', cursive;
+    text-align: center;
+}
+
+.title-banner h1 {
+    margin-bottom: 10px; 
+}
+
+.title-banner p {
+    font-size: 1.6rem; 
+    max-width: 80%; 
+    text-align: center;
+    color: var(--color-dark);
+}
+
+
+/* Region list container */
+.regions-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background: var(--color-secondary);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    margin: 20px 10px 0 10px;
+}
+
+/* Individual region and subregion items */
+.region-item, .subregion-item {
+    padding: 10px 20px;
+    cursor: pointer;
+    border-bottom: 1px solid #ccc;
+}
+
+.region-item:last-child, .subregion-item:last-child {
+    border-bottom: none;
+}
+
+.region-item span, .subregion-item span {
+    display: block;
+    color: var(--color-dark);
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Dropdown for countries in subregions */
+.countries-dropdown {
+    display: none;
+    position: absolute;
+    background: white;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    min-width: 250px;
+    z-index: 10;
+    overflow: auto;
+    max-height: 400px;
+}
+
+.subregion-item.active .countries-dropdown {
+    display: block;
+}
+
+.subregion-item:hover .countries-dropdown {
+    display: block;
+}
+
+.countries-dropdown div {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+    background-color: #f9f9f9;
+    white-space: nowrap;
+}
+
+.countries-dropdown div:last-child {
+    border-bottom: none;
+}
+
+.subregion-item {
+    background-color: #e9ecef;
+}
+
+/* Autocomplete results styling */
+.autocomplete-results {
+    position: absolute;
+    background-color: white;
+    width: auto;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    border-radius: 8px;
+    overflow: auto;
+    max-height: 300px;
+    z-index: 5;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Search bar container */
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 20px;
+}
+/* Search bar input styling */
+.search-bar {
+    width: 60%;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 8px;
+    border: 2px solid var(--color-dark);
+}
+
+/* Search button styling */
+.search-button {
+    padding: 10px 20px;
+    background-color: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.close-button {
+    align-self: center;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: #ccc;
+    font-size: 10px;
+}
+
+/* Ensure that the close button does not affect the layout of the links */
+.close-button {
+    background: transparent;
+    border: none;
+    color: var(--color-dark);
+    cursor: pointer;
+    margin-bottom: 10px;
+}
+
+/* Simple horizontal scrolling container for tips and itineraries */
+.tips-carousel, .itineraries-carousel {
+    display: flex;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    gap: 20px;
+}
+
+.tip-card, .itinerary-card {
+    flex: 0 0 auto;
+    width: 300px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.h2-section {
+    color: var(--color-dark);
+    padding: 20px;
+    text-align: center;
+}

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getMe, updateMe } from "../services/user";
+import { getMe, updateMe } from "../services/userService";
 import UserInfo from "./UserInfo";
 import UserForm from "./forms/UserForm";
 import "../styles/BurgerMenu.css";
