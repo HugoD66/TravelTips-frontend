@@ -6,6 +6,7 @@ import ItineraryPage from '../pages/ItineraryPage';
 import ProfilePage from '../pages/ProfilePage';
 import LoginPage from '../pages/ProfilePage';
 import NavBar from '../components/NavBar';
+import AddTips from '../components/forms/AddTips';
 
 const AppContent = () => {
   const location = useLocation();
@@ -19,6 +20,7 @@ const AppContent = () => {
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/add-tips" element={<AddTips />} />
       </Routes>
     </>
   );

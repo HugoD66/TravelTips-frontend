@@ -19,3 +19,9 @@ export interface Country {
   subregion: string;
   flag: string;
 }
+
+export interface CountryName {
+  name: string;
+  alpha3Code: string;
+  latlgn: [number, number];
+}

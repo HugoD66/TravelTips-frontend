@@ -1,21 +1,54 @@
-/*
-import maplibregl, {Marker} from "maplibre-gl";
-import React from "react";
+import { Marker, Map as MaplibreMap  } from "maplibre-gl";
+import axios from 'axios';
 
-export const setMarkerByCoordinates = (x: number, y: number, map: maplibregl.Map, currentMarkerRef: React.MutableRefObject<Marker | null>) => {
-  console.log("Ajout du marqueur à", { x, y });
-  if (map) {
-    if (currentMarkerRef.current) {
-      console.log("Suppression du marqueur précédent");
-      currentMarkerRef.current.remove();
+
+
+
+let currentMarker: Marker | null = null;
+export const addMarker = (map: MaplibreMap) => {
+  map.on('click', async (event: maplibregl.MapMouseEvent) => {
+    const {lng, lat} = event.lngLat;
+    console.log(lng, lat)
+    // Supprimer le marker précédent s'il existe
+    if (currentMarker) {
+      currentMarker.remove();
     }
-    console.log("Création d'un nouveau marqueur");
-    currentMarkerRef.current = new Marker({ color: `#FF0000` })
-      .setLngLat([x, y])
+
+    // Créer et ajouter un nouveau marker
+    currentMarker = new Marker({color: '#00FF00'})
+      .setLngLat([lng, lat])
       .addTo(map);
+
+    console.log(`Marqueur ajouté à : ${lat}, ${lng}`);
+
+    try {
+      const cityDetails = await getCity(lat, lng);
+      if (cityDetails && cityDetails.address && cityDetails.address.city) {
+        console.log("City:", cityDetails.address.city);
+      } else {
+        console.log("City not found at this location.");
+      }
+    } catch (error) {
+      console.error("Error fetching city details:", error);
+    }
+  });
+}
+
+
+export const getCity = async (lat: number, lng: number) => {
+  try {
+    const response = await axios.get(`https://nominatim.openstreetmap.org/reverse`, {
+      params: {
+        format: 'json',
+        lat: lat,
+        lon: lng,
+        addressdetails: 1
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error during reverse geocoding:', error);
+    return null;
   }
 };
 
- */
-
-export {}
