@@ -30,7 +30,7 @@ const UserForm = ({
         <input
           type="email"
           name="email"
-          value={userData.email}
+          value={userData.mail}
           onChange={handleChange}
           placeholder="Email"
           required
