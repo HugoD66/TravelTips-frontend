@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../styles/BurgerMenu.css";
+import "../../styles/BurgerMenu.css";
 import { useNavigate } from "react-router-dom";
 
 const AdminMenu = ({ deco }: { deco: () => void }) => {
@@ -18,6 +18,10 @@ const AdminMenu = ({ deco }: { deco: () => void }) => {
     navigation(`/panelAdmin?parametre=${"AdminTips"}`);
   };
 
+  const handleUserItineraryClick = () => {
+    navigation(`/panelAdmin?parametre=${"AdminTips"}`);
+  };
+
   return (
     <div className="burger-menu">
       <div
@@ -29,10 +33,11 @@ const AdminMenu = ({ deco }: { deco: () => void }) => {
         <div className="bar3"></div>
       </div>
       <div className={`menu ${isOpen ? "open" : ""}`}>
-        <button onClick={handleUserInfoClick}>Mes informations</button>
-        <button>Gérer les tips</button>
-        <button onClick={handleUserTipsClick}>Gérer les itinéraires</button>
-        <button onClick={handleUserTipsClick}>Gérer les utilisateurs</button>
+        <button onClick={handleUserTipsClick}>Gérer les tips</button>
+        <button onClick={handleUserItineraryClick}>
+          Gérer les itinéraires
+        </button>
+        <button onClick={handleUserInfoClick}>Gérer les utilisateurs</button>
         <button onClick={deco}>Déconnexion</button>
       </div>
     </div>

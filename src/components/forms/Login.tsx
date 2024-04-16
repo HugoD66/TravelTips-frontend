@@ -2,7 +2,13 @@ import React, { FormEvent, useState } from "react";
 import { loginUser } from "../../services/userService";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const Login = ({ goChangeForm }: { goChangeForm: () => void }) => {
+const Login = ({
+  goChangeForm,
+  handleLogin,
+}: {
+  goChangeForm: () => void;
+  handleLogin: (status: boolean) => void;
+}) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
@@ -32,6 +38,8 @@ const Login = ({ goChangeForm }: { goChangeForm: () => void }) => {
         localStorage.setItem("token", response.access_token);
         localStorage.setItem("id", response.id);
         localStorage.setItem("role", response.role);
+        console.log("ici le role est : ", localStorage.getItem("role"));
+        handleLogin(true);
         navigate("/home");
       })
       .catch((error) => {

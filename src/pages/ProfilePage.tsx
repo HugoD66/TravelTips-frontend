@@ -7,12 +7,15 @@ import UserForm from "../components/forms/UserForm";
 import UserTips from "../components/UserTips";
 import { getMe, updateMe } from "../services/userService";
 
-const ProfilePage = () => {
+const ProfilePage = ({
+  handleLogin,
+}: {
+  handleLogin: (status: boolean) => void;
+}) => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(true);
   const token = localStorage.getItem("token");
   const idUser = localStorage.getItem("id");
-  const role = localStorage.getItem("role");
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [selectedComponent, setSelectedComponent] = useState<string>(
@@ -89,7 +92,7 @@ const ProfilePage = () => {
       ) : (
         <>
           {isRegistered ? (
-            <Login goChangeForm={goChangeForm} />
+            <Login goChangeForm={goChangeForm} handleLogin={handleLogin} />
           ) : (
             <Register goChangeForm={goChangeForm} />
           )}
