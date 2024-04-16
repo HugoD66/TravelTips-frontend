@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import Login from "../components/forms/Login";
-import Register from "../components/forms/Register";
+import React, { useEffect, useState} from 'react';
+import Login from '../components/forms/Login';
+import Register from '../components/forms/Register';
 import UserMenu from "../components/UserMenu";
 import { useLocation } from "react-router-dom";
 import UserInfo from "../components/UserInfo";

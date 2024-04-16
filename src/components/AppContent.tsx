@@ -1,3 +1,4 @@
+import AddTips from '../components/forms/AddTips';
 import React from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import HomePage from "../pages/Homepage";
@@ -19,6 +20,7 @@ const AppContent = () => {
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/add-tips" element={<AddTips />} />
       </Routes>
     </>
   );

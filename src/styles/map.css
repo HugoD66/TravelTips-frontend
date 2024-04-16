@@ -1,5 +1,10 @@
+.map-content {
+    height: 300px;
+    width: 300px;
+}
 .map-wrap {
     position: relative;
-    height: 400px; /* Exemple de hauteur fixe */
-    width: 100%; /* Exemple de largeur */
+    width: 80%;
+    height: calc(100% - 77px);
 }
+
