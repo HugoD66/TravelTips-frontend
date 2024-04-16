@@ -22,8 +22,8 @@ const NavBar = () => {
     localStorage.removeItem("token");
     setIsLoggedIn(false);
     toast.success("Déconnexion réussie", {
-      position: "top-center", // Utilisation de la chaîne de caractères directement
-      autoClose: 2000, // Fermer automatiquement après 2 secondes
+      position: "top-center",
+      autoClose: 4000,
     });
   };
   return (

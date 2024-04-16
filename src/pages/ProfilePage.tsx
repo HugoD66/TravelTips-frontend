@@ -18,7 +18,6 @@ import { getMe, updateMe } from "../services/userService";
 const ProfilePage = () => {
   const [isLogged, setIsLogged] = useState<boolean>(false);
   const [isRegistered, setIsRegistered] = useState<boolean>(true);
-  const [error, setError] = useState<string>("");
   const token = localStorage.getItem("token");
   const idUser = localStorage.getItem("id");
   const location = useLocation();
@@ -68,10 +67,6 @@ const ProfilePage = () => {
     });
   };
 
-  const handleError = (errorMessage: string) => {
-    setError(errorMessage);
-  };
-
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (idUser !== null && token !== null) {
@@ -112,9 +107,9 @@ const ProfilePage = () => {
       ) : (
         <>
           {isRegistered ? (
-            <Login goChangeForm={goChangeForm} handleError={handleError} />
+            <Login goChangeForm={goChangeForm} />
           ) : (
-            <Register goChangeForm={goChangeForm} handleError={handleError} />
+            <Register goChangeForm={goChangeForm} />
           )}
         </>
       )}

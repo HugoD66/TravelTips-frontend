@@ -2,35 +2,40 @@ import React, { FormEvent, useState } from "react";
 import { loginUser } from "../../services/userService";
 import { Navigate, useNavigate } from "react-router-dom";
 
-const Login = ({
-  goChangeForm,
-  handleError,
-}: {
-  goChangeForm: () => void;
-  handleError: (errorMessage: string) => void;
-}) => {
+const Login = ({ goChangeForm }: { goChangeForm: () => void }) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const navigate = useNavigate();
+  const [error, setError] = useState<Error | null>(null);
 
   const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    // Vérification de l'adresse e-mail avec une regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError(new Error("Veuillez saisir une adresse e-mail valide"));
+      return;
+    }
+
+    // Vérification de la longueur du mot de passe
+    if (password.length < 8) {
+      setError(
+        new Error("Le mot de passe doit contenir au moins 8 caractères")
+      );
+      return;
+    }
     loginUser(email, password)
       .then((response) => {
         console.log("Utilisateur connecté avec succès :", response);
         setEmail("");
         setPassword("");
         localStorage.setItem("token", response.access_token);
-        console.log("token " + response.access_token);
-        console.log("id" + response.id);
         localStorage.setItem("id", response.id);
         navigate("/home");
       })
       .catch((error) => {
-        console.error("Erreur lors de la connexion :", error);
-        handleError(
-          "Un problème est survenu lors de la connexion. Veuillez réessayer."
-        );
+        console.error(error.message);
+        setError(new Error(error.message));
       });
   };
 
@@ -61,6 +66,7 @@ const Login = ({
         <input type="submit" value="Envoyer" />
       </form>
       <p onClick={() => goChangeForm()}>Vous n'avez pas de compte ? </p>
+      <>{error && <p className="error-message">{error.message}</p>}</>
     </div>
   );
 };
