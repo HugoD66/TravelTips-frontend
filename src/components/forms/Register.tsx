@@ -1,5 +1,5 @@
 import React, {FormEvent, useState} from "react";
-import { registerUser} from "../../services/user";
+import { registerUser} from "../../services/userService";
 
 const Register = ({ goChangeForm, handleError }: { goChangeForm: () => void; handleError: (errorMessage: string) => void }) => {
 
