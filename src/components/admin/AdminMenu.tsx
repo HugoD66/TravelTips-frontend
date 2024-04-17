@@ -11,15 +11,15 @@ const AdminMenu = ({ deco }: { deco: () => void }) => {
   };
 
   const handleUserInfoClick = () => {
-    navigation(`/panelAdmin?parametre=${"adminUserInfo"}`);
+    navigation(`/AdminPage?parametre=${"adminUserInfo"}`);
   };
 
   const handleUserTipsClick = () => {
-    navigation(`/panelAdmin?parametre=${"AdminTips"}`);
+    navigation(`/AdminPage?parametre=${"AdminTips"}`);
   };
 
   const handleUserItineraryClick = () => {
-    navigation(`/panelAdmin?parametre=${"AdminTips"}`);
+    navigation(`/AdminPage?parametre=${"AdminItinerary"}`);
   };
 
   return (

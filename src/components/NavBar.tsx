@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
 import UserMenu from "./UserMenu";
 import { toast } from "react-toastify";
@@ -20,6 +20,7 @@ const NavBar = ({
   const [token, setToken] = useState<string>(
     localStorage.getItem("token") || ""
   );
+  const navigation = useNavigate();
 
   useEffect(() => {
     setToken(localStorage.getItem("token") || "");
@@ -40,7 +41,7 @@ const NavBar = ({
       position: "top-center",
       autoClose: 3000,
     });
-    console.log("ici le role est (déco): ", localStorage.getItem("role"));
+    navigation("/home");
   };
   return (
     <nav className="navbar">

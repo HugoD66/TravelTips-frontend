@@ -86,13 +86,16 @@ export const getMe = (token: string, id: string) => {
 };
 
 // GET USERS
-export const getUserList = () => {
+export const getUserList = (token: string) => {
   return fetch(`http://localhost:4000/users`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Réponse réseau non OK");
+        throw new Error("PTN PK CA MARCHE PAS JV CABLER");
       }
       return response.json();
     })
@@ -161,9 +164,12 @@ export const updateUser = (id: string, formData: any) => {
 
 //REMOVE USER
 
-export const removeUser = (id: string) => {
+export const removeUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/users/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

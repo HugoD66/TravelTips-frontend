@@ -1,7 +1,7 @@
-import {PictureModel} from "./PictureModel";
-import {CityModel} from "./CityModel";
-import {RateModel} from "./RateModel";
-import {CommentModel} from "./CommentModel";
+import { PictureModel } from "./PictureModel";
+import { CityModel } from "./CityModel";
+import { RateModel } from "./RateModel";
+import { CommentModel } from "./CommentModel";
 
 export class TipModel {
   id?: string;
@@ -16,4 +16,5 @@ export class TipModel {
 
   rate?: RateModel[];
   comment?: CommentModel[];
+  approvate?: boolean;
 }

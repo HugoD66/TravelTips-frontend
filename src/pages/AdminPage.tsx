@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import AdminUserInfo from "../components/admin/AdminUserInfo";
 
 const AdminPage = () => {
   const location = useLocation();
@@ -16,9 +17,9 @@ const AdminPage = () => {
 
   return (
     <div>
-      {selectedComponent === "userInfo" && (
+      {selectedComponent === "adminUserInfo" && (
         <div className="user-info-container">
-          {/* Contenu du composant UserInfo */}
+          <AdminUserInfo></AdminUserInfo>
         </div>
       )}
       {selectedComponent === "AdminTips" && (
