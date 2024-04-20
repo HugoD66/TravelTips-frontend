@@ -1,7 +1,7 @@
 import {PictureModel} from "../models/PictureModel";
 
-export const createPicture = async (picture: PictureModel, userId: string, tipsId: string) => {
-  return fetch(`http://localhost:4000/upload-file/${userId}/${tipsId}`, {
+export const createPicture = async (picture: PictureModel) => {
+  return fetch(`http://localhost:4000/picture/upload-file/${picture.createdBy}/${picture.tipsId}`, {
     method: "POST",
     body: JSON.stringify(picture),
     headers: {
@@ -10,12 +10,12 @@ export const createPicture = async (picture: PictureModel, userId: string, tipsI
   })
     .then((response) => {
       if (!response.ok) {
-        throw new Error("Réponse réseau non OK");
+        throw new Error("Network response was not OK");
       }
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la création du tip:", error);
+      console.error("Error while creating picture:", error);
       throw error;
     });
 }

@@ -1,24 +1,20 @@
-import {ApiResponse, CountryName} from "../../models/CountryData";
-import React, {ChangeEvent, useCallback, useContext, useEffect, useState} from "react";
-import axios from "axios";
+import { CountryName} from "../../models/CountryData";
+import React, { useEffect, useState} from "react";
 import Map from "../Map";
 import Loading from "../Loading";
 import {createCountry, fetchCountryList} from "../../services/countryService";
 import {createCity} from "../../services/cityService";
 import {useCity} from "../../context/CityProvider";
 import {createTip} from "../../services/tipService";
-import {PictureModel} from "../../models/PictureModel";
-import {createPicture} from "../../services/pictureService";
 import {TipModel} from "../../models/TipModel";
 
 const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
-  const [countryId, setCountryId] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
-  const [pictureFiles, setPictureFiles] = useState<File[]>([]); // Corrected state
+  const [pictureFiles, setPictureFiles] = useState<File[]>([]);
 
   useEffect(  () => {
     const fetchData = async () => {
@@ -44,7 +40,6 @@ const AddTips = () => {
 
   const handleAddTipsSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("form start")
     try {
       const selectedCountry = countriesList.find(c => c.name === country);
       const newCountry = await createCountry({name: selectedCountry!.name});
@@ -53,10 +48,6 @@ const AddTips = () => {
         idCountry: newCountry.id,
         zipCode: cityDetails.postcode
       });
-      console.log("form step 1")
-
-
-      console.log("form step 2")
       const tips : TipModel = {
         name: name,
         price: price,
@@ -64,25 +55,35 @@ const AddTips = () => {
         adress: "123 rue du test",
         approvate: false,
         public: true,
-        idUser: "29457f7c-2156-400f-98e2-7b03d68c031e"
+        idUser: "4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3"
       }
-      console.log("form step 3")
       console.log(tips)
       const tipsResponse = await createTip(tips);
       if (tipsResponse && tipsResponse.id) {
         console.log("Tip added with success", tipsResponse);
+        for (const file of pictureFiles) {
+
+        const formData = new FormData();
+          formData.append('file', file);
+
+        const uploadUrl = `http://localhost:4000/picture/upload-file/4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3/${tipsResponse.id}`;
+        const responsePicture = await fetch(uploadUrl, {
+          method: "POST",
+          body: formData,
+          headers: {
+          },
+        });
+
+        if (!responsePicture.ok) {
+          throw new Error("Network response was not OK");
+        }
+        //const pictureData = await responsePicture.json();
+        }
+        console.log("Pictures uploaded with success");
+
       } else {
         console.error("No tip ID returned, check the creation process", tipsResponse);
       }
-
-      /*const uploadedPictures = await Promise.all(
-        pictureFiles.map(file =>
-          createPicture({
-            url: URL.createObjectURL(file),
-            createdBy: '29457f7c-2156-400f-98e2-7b03d68c031e'
-          })
-        )
-      );*/
     } catch (error) {
       console.error("Error during the creation process", error);
     }
@@ -92,13 +93,18 @@ const AddTips = () => {
     setCountry(event.target.value);
   };
   const selectedCountry = countriesList.find(c => c.name === country);
-  const defaultLat = 51.509865; // Exemple: Latitude pour Londres
-  const defaultLng = -0.118092;
+  const defaultLat = 46.5681;
+  const defaultLng = 3.3349;
+
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
+      console.log(event.target.files)
+
       setPictureFiles(Array.from(event.target.files));
+      console.log(pictureFiles)
     }
+    console.log(pictureFiles)
   };
 
   return (
