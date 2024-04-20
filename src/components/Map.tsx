@@ -1,6 +1,8 @@
 import React, {useCallback, useEffect, useRef} from "react";
 import maplibregl from 'maplibre-gl';
 import {addMarker} from "../services/mapService";
+import {useCity} from "../context/CityProvider";
+
 
 interface MapProps {
   lat: number;
@@ -9,8 +11,10 @@ interface MapProps {
 }
 
 const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
+  const { cityDetails, setCityDetails } = useCity();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
+
 
   useEffect(() => {
     if (!lat || !lng || !mapContainer.current) return;
@@ -19,12 +23,11 @@ const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=1bYmKrc8pg0FSu8GXalV`,
       center: [lng, lat],
-      zoom: 5
+      zoom: 8,
     });
     map.current.on('load', () => {
       if (map.current) {
         addMarker(map.current, handleCityFound);
-
       }
     });
 
@@ -41,14 +44,17 @@ const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
 
 
   const handleCityFound = useCallback(({ city, postcode }: any) => {
-    console.log(city, postcode)
+    setCityDetails({ city, postcode });
     onCityFound(city, postcode);
-  }, [onCityFound]);
+  }, [setCityDetails, onCityFound]);
+
+
+
 
 
   return (
     <div className="map-wrap">
-      <div ref={mapContainer} className="map" style={{position: 'absolute',    width: '100%', height: '100%' }} />
+      <div ref={mapContainer} className="map" />
     </div>
   );
 };

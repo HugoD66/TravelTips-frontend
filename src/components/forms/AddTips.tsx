@@ -1,14 +1,12 @@
 import {ApiResponse, CountryName} from "../../models/CountryData";
-import React, {useCallback, useEffect, useState} from "react";
+import React, {useCallback, useContext, useEffect, useState} from "react";
 import axios from "axios";
 import Map from "../Map";
 import Loading from "../Loading";
-import { createTip } from "../../services/tipService";
 import {createCountry} from "../../services/countryService";
-import {addMarker} from "../../services/mapService";
-import {Map as MaplibreMap} from "maplibre-gl";
 import {createCity} from "../../services/cityService";
-import {CountryModel} from "../../models/CountryModel";
+import {useCity} from "../../context/CityProvider";
+import {createTip} from "../../services/tipService";
 
 interface CityDetails {
   city: string;
@@ -16,6 +14,8 @@ interface CityDetails {
 }
 
 const AddTips = () => {
+  const { cityDetails, setCityDetails } = useCity();
+
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [country, setCountry] = useState<string>("");
   const [name, setName] = useState<string>("");
@@ -41,7 +41,9 @@ const AddTips = () => {
     console.log("Country selected:", country);
   }, [country]);
 
-
+  useEffect(() => {
+    console.log("Updated cityDetails:", cityDetails);
+  }, [cityDetails]);
 
   const handleAddTipsSubmit = async (event: any) => {
     event.preventDefault();
@@ -57,30 +59,26 @@ const AddTips = () => {
         console.error("Error during country creation", error);
       }
     }
-    console.log("COUNTRY ID " ) ;
-    console.log(countryId) ;
-    let cityId = "";
-    if (city) {
+    let newCity
+    if (cityDetails.city && cityDetails.postcode && countryId) {
       try {
-        const newCity = await createCity({ name: city, idCountry: countryId, zipCode: postcode});
-        //cityId = newCity.id;
-        console.log("City added with success", newCity);
+        newCity = await createCity({ name: cityDetails.city, idCountry: countryId, zipCode: cityDetails.postcode});
       } catch (error) {
         console.error("Error during city creation", error);
       }
     }
-   /*
+
     const tips = createTip({
       name: name,
       price: parseInt(price),
-      idCity: country,
+      idCity: newCity.id,
       adress: "",
     }).then((response) => {
       console.log("Tip added with success", response);
     }).catch((error) => {
       console.error("Error during tip creation", error);
     });
-    */
+
   }
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -111,10 +109,11 @@ const AddTips = () => {
 
 
   return (
-      <div>
-        <h1>Add Tips</h1>
-        <div className="add-tips-form">
-          <form onSubmit={handleAddTipsSubmit}>
+    <div>
+      <h1>Add Tips</h1>
+      <div className="add-tips-form">
+        <form onSubmit={handleAddTipsSubmit}>
+          <div className="form-group">
             <label htmlFor="name">
               Title:
               <input id="name" type="text" name="name" value={name} onChange={(e) => setName(e.target.value)}/>
@@ -130,10 +129,15 @@ const AddTips = () => {
                      step="1"
               />
             </label>
-            <button type="submit" value="Envoyer">Envoyer</button>
-
-            <label htmlFor="country">
-              Country:
+            <button
+              type="submit"
+              value="Envoyer"
+              className="submit-button-form"
+            >Envoyer</button>
+          </div>
+          <div className="map-content">
+            <label htmlFor="country" className="country-input">
+              Choisissez un pays
               <select id="country" name="country" onChange={handleCountryChange} value={country}>
                 {countriesList.map((country, index) =>
                   <option key={index} value={country.name}>{country.name}</option>
@@ -149,10 +153,11 @@ const AddTips = () => {
             ) : (
               <Loading width={400} height={400}/>
             )}
+          </div>
 
-          </form>
-        </div>
+        </form>
       </div>
+    </div>
   )
 }
 

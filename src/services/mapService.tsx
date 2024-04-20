@@ -8,6 +8,7 @@ let currentMarker: Marker | null = null;
 export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string }) => void) => {
   map.on('click', async (event: maplibregl.MapMouseEvent) => {
     const {lng, lat} = event.lngLat;
+
     if (currentMarker) {
       currentMarker.remove();
     }

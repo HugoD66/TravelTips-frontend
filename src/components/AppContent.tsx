@@ -7,6 +7,8 @@ import ProfilePage from "../pages/ProfilePage";
 import LoginPage from "../pages/ProfilePage";
 import NavBar from "../components/NavBar";
 import AdminPage from "../pages/AdminPage";
+import AddTips from "./forms/AddTips";
+import CityProvider from "../context/CityProvider";
 
 const AppContent = () => {
   const location = useLocation();
@@ -24,10 +26,15 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<LoginPage handleLogin={handleLogin} />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/destinations" element={<DestinationsPage />} />
+        <Route path="/add-tips" element={<AddTips />} />
+        {/*<Route path="/add-tips" element={
+          <CityProvider>
+            <AddTips />
+          </CityProvider>
+        } />*/}
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/adminPage" element={<AdminPage />} />
-
+        <Route path="/destinations" element={<DestinationsPage />} />
         <Route
           path="/profile"
           element={<ProfilePage handleLogin={handleLogin} />}

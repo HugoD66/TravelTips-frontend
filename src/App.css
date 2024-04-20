@@ -1,7 +1,8 @@
 @import 'styles/base.css';
 @import 'styles/navbar.css';
 @import 'styles/globeanimation.css';
-
+@import 'styles/map.css';
+@import 'styles/add-tips.css';
 
 /* Main container */
 .app-container {
@@ -64,3 +65,4 @@
     background-color: var(--color-dark);
     margin-top: 20px;
 }
+
