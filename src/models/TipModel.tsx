@@ -10,9 +10,8 @@ export class TipModel {
 
   idCity?: CityModel | string;
 
-  numberAdress?: number;
   adress?: string;
-  picture?: PictureModel[];
+  pictures?: PictureModel[];
 
   rate?: RateModel[];
   comment?: CommentModel[];

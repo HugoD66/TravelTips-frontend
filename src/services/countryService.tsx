@@ -1,3 +1,6 @@
+import {ApiResponse} from "../models/CountryData";
+import axios from "axios";
+
 export const createCountry = (country: any) => {
   return fetch(`http://localhost:4000/country`, {
     method: "POST",
@@ -85,3 +88,21 @@ export const deleteCountry = (id: string) => {
       throw error;
   });
 }
+
+
+
+export const fetchCountryList = async () => {
+  try {
+    const response = await axios.get<ApiResponse[]>('https://restcountries.com/v3.1/all');
+    const fetchedCountries = response.data.map(country => ({
+      name: country.name.common,
+      alpha3Code: country.cca3,
+      latlgn: country.latlng
+    }));
+    return fetchedCountries;
+    /*setCountriesList(fetchedCountries);*/
+  } catch (error) {
+    console.error("Fetching countries data failed", error);
+    throw error;
+  }
+};

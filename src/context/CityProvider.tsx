@@ -14,7 +14,7 @@ interface CityContextType {
 
 const CityContext = createContext<CityContextType>({
   cityDetails: { city: "", postcode: "" },
-  setCityDetails: () => {} // Dummy function
+  setCityDetails: () => {}
 });
 
 export const useCity = () => useContext(CityContext);

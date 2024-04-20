@@ -7,10 +7,9 @@ import {useCity} from "../context/CityProvider";
 interface MapProps {
   lat: number;
   lng: number;
-  onCityFound: (city: any, postcode: any) => void;
 }
 
-const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
+const Map: React.FC<MapProps> = ({ lng, lat}) => {
   const { cityDetails, setCityDetails } = useCity();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -32,7 +31,7 @@ const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
     });
 
     return () => map.current?.remove();
-  }, [lat, lng, onCityFound]);
+  }, [lat, lng]);
 
   useEffect(() => {
     if (!map.current) return;
@@ -45,11 +44,7 @@ const Map: React.FC<MapProps> = ({ lng, lat, onCityFound }) => {
 
   const handleCityFound = useCallback(({ city, postcode }: any) => {
     setCityDetails({ city, postcode });
-    onCityFound(city, postcode);
-  }, [setCityDetails, onCityFound]);
-
-
-
+  }, [setCityDetails]);
 
 
   return (
