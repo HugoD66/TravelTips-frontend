@@ -9,13 +9,15 @@ import {useCity} from "../../context/CityProvider";
 import {createTip} from "../../services/tipService";
 import {PictureModel} from "../../models/PictureModel";
 import {createPicture} from "../../services/pictureService";
+import {TipModel} from "../../models/TipModel";
 
 const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
+  const [countryId, setCountryId] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]); // Corrected state
 
   useEffect(  () => {
@@ -30,10 +32,9 @@ const AddTips = () => {
     fetchData();
   }, []);
 
-
   useEffect(() => {
     console.log("Country selected:", country);
-  }, [country]);
+  }, [country, setCountry]);
 
   useEffect(() => {
     console.log("Updated cityDetails:", cityDetails);
@@ -41,54 +42,51 @@ const AddTips = () => {
 
 
 
-  const handleAddTipsSubmit = async (event: any) => {
+  const handleAddTipsSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    console.log("form start")
+    try {
+      const selectedCountry = countriesList.find(c => c.name === country);
+      const newCountry = await createCountry({name: selectedCountry!.name});
+      const newCity = await createCity({
+        name: cityDetails.city,
+        idCountry: newCountry.id,
+        zipCode: cityDetails.postcode
+      });
+      console.log("form step 1")
 
-    let countryId;
-    if (selectedCountry) {
-      try {
-        const newCountry = await createCountry({name: selectedCountry.name});
-        countryId = newCountry.id;
-        console.log("Country added with success", newCountry);
-      } catch (error) {
-        console.error("Error during country creation", error);
+
+      console.log("form step 2")
+      const tips : TipModel = {
+        name: name,
+        price: price,
+        idCity: newCity.id,
+        adress: "123 rue du test",
+        approvate: false,
+        public: true,
+        idUser: "29457f7c-2156-400f-98e2-7b03d68c031e"
       }
-    }
-    let newCity
-    if (cityDetails.city && cityDetails.postcode && countryId) {
-      try {
-        newCity = await createCity({ name: cityDetails.city, idCountry: countryId, zipCode: cityDetails.postcode});
-      } catch (error) {
-        console.error("Error during city creation", error);
+      console.log("form step 3")
+      console.log(tips)
+      const tipsResponse = await createTip(tips);
+      if (tipsResponse && tipsResponse.id) {
+        console.log("Tip added with success", tipsResponse);
+      } else {
+        console.error("No tip ID returned, check the creation process", tipsResponse);
       }
-    }
-    let pictureList: PictureModel[] = [];
-    if (newCity) {
-      pictureList = await Promise.all(
-        pictureList.map((picture: PictureModel) => {
-          return createPicture({
-            url: picture.url,
-            createdBy: '4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3'
-          });
-        })
-      );
-    }
 
-    const tips = createTip({
-      name: name,
-      price: parseInt(price),
-      idCity: newCity.id,
-      adress: "",
-      approvate: false,
-      pictures: pictureList
-    })
-      .then((response) => {
-      console.log("Tip added with success", response);
-    }).catch((error) => {
-      console.error("Error during tip creation", error);
-    });
-
-  }
+      /*const uploadedPictures = await Promise.all(
+        pictureFiles.map(file =>
+          createPicture({
+            url: URL.createObjectURL(file),
+            createdBy: '29457f7c-2156-400f-98e2-7b03d68c031e'
+          })
+        )
+      );*/
+    } catch (error) {
+      console.error("Error during the creation process", error);
+    }
+  };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCountry(event.target.value);
@@ -97,11 +95,8 @@ const AddTips = () => {
   const defaultLat = 51.509865; // Exemple: Latitude pour Londres
   const defaultLng = -0.118092;
 
-
-
-  const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      console.log("Files selected:", event.target.files);
       setPictureFiles(Array.from(event.target.files));
     }
   };
@@ -122,7 +117,7 @@ const AddTips = () => {
                      type="range"
                      name="price"
                      value={price}
-                     onChange={(e) => setPrice(e.target.value)}
+                     onChange={(e) => setPrice(parseInt(e.target.value, 10))} // Convertit la valeur en nombre
                      min="0" max="5"
                      step="1"
               />

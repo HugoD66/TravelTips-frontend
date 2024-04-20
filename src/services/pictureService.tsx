@@ -1,7 +1,7 @@
 import {PictureModel} from "../models/PictureModel";
 
-export const createPicture = async (picture: PictureModel) => {
-  return fetch("http://localhost:4000/tips", {
+export const createPicture = async (picture: PictureModel, userId: string, tipsId: string) => {
+  return fetch(`http://localhost:4000/upload-file/${userId}/${tipsId}`, {
     method: "POST",
     body: JSON.stringify(picture),
     headers: {
