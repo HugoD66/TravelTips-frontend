@@ -1,15 +1,17 @@
 import React, {useCallback, useEffect, useRef} from "react";
 import maplibregl from 'maplibre-gl';
-import {addMarker} from "../services/mapService";
+import {addCountryMarkers, addMarker} from "../services/mapService";
 import {useCity} from "../context/CityProvider";
 
 
 interface MapProps {
   lat: number;
   lng: number;
+  zoom?: number;
+  geoList?: { lat: string, lng: string }[];
 }
 
-const Map: React.FC<MapProps> = ({ lng, lat}) => {
+const Map: React.FC<MapProps> = ({ lng, lat, zoom, geoList}) => {
   const { cityDetails, setCityDetails } = useCity();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
@@ -22,16 +24,19 @@ const Map: React.FC<MapProps> = ({ lng, lat}) => {
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=1bYmKrc8pg0FSu8GXalV`,
       center: [lng, lat],
-      zoom: 8,
+      zoom: zoom === undefined ? 7 : zoom,
     });
     map.current.on('load', () => {
       if (map.current) {
         addMarker(map.current, handleCityFound);
+        if (geoList) {
+          addCountryMarkers(map.current, geoList);
+        }
       }
     });
 
     return () => map.current?.remove();
-  }, [lat, lng]);
+  }, [lat, lng, geoList]);
 
   useEffect(() => {
     if (!map.current) return;
