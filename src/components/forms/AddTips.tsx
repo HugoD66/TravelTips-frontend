@@ -48,16 +48,21 @@ const AddTips = () => {
         idCountry: newCountry.id,
         zipCode: cityDetails.postcode
       });
+      const userId =  localStorage.getItem("id")
+      if(!userId) {
+        console.warn('Il faut etre connecté pour ajouter un tip')
+        return;
+      }
       const tips : TipModel = {
         name: name,
         price: price,
         idCity: newCity.id,
-        adress: "123 rue du test",
+        adress: cityDetails.adress,
         approvate: false,
         public: true,
-        idUser: "4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3"
+        idUser: userId,
       }
-      console.log(tips)
+
       const tipsResponse = await createTip(tips);
       if (tipsResponse && tipsResponse.id) {
         console.log("Tip added with success", tipsResponse);

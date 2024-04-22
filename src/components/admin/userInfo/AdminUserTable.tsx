@@ -18,7 +18,6 @@ const UserTable: React.FC<UserTableProps> = ({
           <th>First Name</th>
           <th>Last Name</th>
           <th>Email</th>
-          <th>Password</th>
           <th>Birthday</th>
           <th>Role</th>
           <th>Action</th>
@@ -30,7 +29,6 @@ const UserTable: React.FC<UserTableProps> = ({
             <td>{user.firstName}</td>
             <td>{user.lastName}</td>
             <td>{user.mail}</td>
-            <td>{user.password}</td>
             <td>{user.birthday.toString()}</td>
             <td>{user.role}</td>
             <td>
