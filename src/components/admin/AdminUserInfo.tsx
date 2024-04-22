@@ -33,7 +33,7 @@ const AdminUserInfo: React.FC = () => {
 
   const deleteUser = async (id: string) => {
     const confirmDelete = window.confirm(
-      `Etes-vous sûr de vouloir supprimer l'utilisateur ${id}?`
+      `Etes-vous sûr de vouloir supprimer l'utilisateur ${id} et toutes ses données ?`
     );
     if (confirmDelete) {
       if (token) {

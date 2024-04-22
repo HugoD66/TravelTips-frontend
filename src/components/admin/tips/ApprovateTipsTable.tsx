@@ -4,6 +4,7 @@ import { TipModel } from "../../../models/TipModel";
 
 const ApprovedTipsTable: React.FC = () => {
   const [approvedTips, setApprovedTips] = useState<TipModel[]>([]);
+  const token = localStorage.getItem("token") || null;
 
   useEffect(() => {
     fetchApprovedTips();
@@ -11,8 +12,11 @@ const ApprovedTipsTable: React.FC = () => {
 
   const fetchApprovedTips = async () => {
     try {
-      const tips = await getApproveTips();
-      setApprovedTips(tips);
+      if (token !== null) {
+        const tips = await getApproveTips(token);
+
+        setApprovedTips(tips);
+      }
     } catch (error) {
       console.error("Error fetching approved tips:", error);
     }
@@ -26,6 +30,9 @@ const ApprovedTipsTable: React.FC = () => {
           <tr>
             <th>Nom</th>
             <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postal</th>
+            <th>Pays</th>
             <th>Prix</th>
           </tr>
         </thead>
@@ -36,6 +43,17 @@ const ApprovedTipsTable: React.FC = () => {
               <tr key={tip.id}>
                 <td>{tip.name}</td>
                 <td>{tip.adress}</td>
+                <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+                <td>
+                  {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+                </td>
+                <td>
+                  {tip.idCity &&
+                    typeof tip.idCity === "object" &&
+                    tip.idCity.idCountry &&
+                    typeof tip.idCity.idCountry === "object" &&
+                    tip.idCity.idCountry.name}
+                </td>
                 <td>{tip.price}</td>
               </tr>
             );

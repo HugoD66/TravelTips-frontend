@@ -18,6 +18,7 @@ const AddTips = () => {
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -53,7 +54,7 @@ const AddTips = () => {
         price: price,
         idCity: newCity.id,
         adress: cityDetails.adress,
-        approvate: false,
+        approvate: "false",
         idUser: userId,
         lng: cityDetails.lng,
         lat: cityDetails.lat,
@@ -63,14 +64,11 @@ const AddTips = () => {
         setError("Vous devez remplir tous les champs");
         return;
       }
-
-      const token = localStorage.getItem("token");
       if (!token) {
         setError("Erreur token");
         return;
       }
       const tipsResponse = await createTip(tips, token);
-
       if(!tipsResponse || !tipsResponse.id) {
         setError("Erreur pendant la création du tips");
         return;

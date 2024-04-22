@@ -1,6 +1,7 @@
 import { TipModel } from "../models/TipModel";
 
-export const createTip = (tip: TipModel, token: string ) => {
+
+export const createTip = (tip: TipModel, token: string) => {
   return fetch("http://localhost:4000/tips", {
     method: "POST",
     body: JSON.stringify(tip),
@@ -8,7 +9,6 @@ export const createTip = (tip: TipModel, token: string ) => {
       "Content-Type": "application/json",
       "Authorization": `Bearer ${token}`,
     },
-
   })
     .then((response) => {
       if (!response.ok) {
@@ -38,9 +38,12 @@ export const getTipList = () => {
     });
 };
 
-export const getTipListUser = (id: string) => {
+export const getTipListUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/myTips/${id}`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -69,9 +72,12 @@ export const getTipsByCityId = (id: string) => {
     });
 
 }
-export const getTipById = (id: string) => {
+export const getTipById = (id: string, token: string) => {
   return fetch(`http://localhost:4700/tips/${id}`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -85,12 +91,13 @@ export const getTipById = (id: string) => {
     });
 };
 
-export const updateTip = (tip: TipModel) => {
+export const updateTip = (tip: TipModel, token: string) => {
   return fetch(`http://localhost:4000/tips/${tip.id}`, {
     method: "PUT",
     body: JSON.stringify(tip),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
@@ -105,9 +112,12 @@ export const updateTip = (tip: TipModel) => {
     });
 };
 
-export const deleteTip = (id: string) => {
+export const deleteTip = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -121,9 +131,12 @@ export const deleteTip = (id: string) => {
     });
 };
 
-export const approveTip = (id: string) => {
+export const approveTip = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/approvate/${id}`, {
     method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -137,9 +150,12 @@ export const approveTip = (id: string) => {
     });
 };
 
-export const disapproveTip = (id: string) => {
+export const disapproveTip = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/disapprove/${id}`, {
     method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -153,9 +169,12 @@ export const disapproveTip = (id: string) => {
     });
 };
 
-export const getPendingTips = () => {
+export const getPendingTips = (token: string) => {
   return fetch(`http://localhost:4000/tips/pendingTips`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -169,9 +188,12 @@ export const getPendingTips = () => {
     });
 };
 
-export const getApproveTips = () => {
+export const getApproveTips = (token: string) => {
   return fetch(`http://localhost:4000/tips/approvateTips`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -184,9 +206,31 @@ export const getApproveTips = () => {
       throw error;
     });
 };
-export const getDisapproveTips = () => {
+export const getDisapproveTips = (token: string) => {
   return fetch(`http://localhost:4000/tips/disapproveTips`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+
+export const getTipsUser = (id: string, token: string) => {
+  return fetch(`http://localhost:4000/tips/users/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

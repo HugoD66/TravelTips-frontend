@@ -15,11 +15,11 @@ const UserTable: React.FC<UserTableProps> = ({
     <table>
       <thead>
         <tr>
-          <th>First Name</th>
-          <th>Last Name</th>
+          <th>Prénom</th>
+          <th>Nom de famille</th>
           <th>Email</th>
-          <th>Birthday</th>
-          <th>Role</th>
+          <th>Date de naissance</th>
+          <th>Rôle</th>
           <th>Action</th>
         </tr>
       </thead>
