@@ -36,7 +36,45 @@ export const registerUser = (
       throw error;
     });
 };
-
+export const registerUserAdmin = (
+  firstname: String,
+  lastname: String,
+  birthday: String,
+  mail: String,
+  password: String,
+  role: String
+) => {
+  return fetch("http://localhost:4000/users/register", {
+    method: "POST",
+    body: JSON.stringify({
+      firstName: firstname,
+      lastName: lastname,
+      mail: mail,
+      birthday: birthday,
+      password: password,
+      role: role,
+    }),
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("L'inscription a échoué");
+      }
+      if (response.status === 400) {
+        // Gérer l'erreur "BdRequets"
+        throw new Error(
+          "Vérifier que les champs sont bien remplis ou contacter l'utilisateur."
+        );
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de l'inscription:", error);
+      throw error;
+    });
+};
 /* Login USER */
 export const loginUser = async (mail: String, password: String) => {
   try {
@@ -111,7 +149,7 @@ export const updateMe = (
   lastname: String,
   birthday: String,
   mail: String,
-  password: String,
+  password: string,
   token: string
 ) => {
   return fetch(`http://localhost:4000/users/${id}`, {

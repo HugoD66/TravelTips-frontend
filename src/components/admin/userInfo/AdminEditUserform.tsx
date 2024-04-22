@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { User } from "../../../models/UserData";
 import { updateMe } from "../../../services/userService";
 
@@ -10,16 +10,30 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, updateUser }) => {
   const [updatedUser, setUpdatedUser] = useState<Partial<User>>(user);
   const [token, setToken] = useState(localStorage.getItem("token" || ""));
 
+  useEffect(() => {
+    // Met à jour l'état local lorsque l'utilisateur prop change
+    setUpdatedUser({ ...user });
+  }, [user]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (user.id !== null && token !== null) {
+    if (
+      updatedUser.id !== undefined &&
+      token !== null &&
+      updatedUser.firstName &&
+      updatedUser.lastName &&
+      updatedUser.birthday &&
+      updatedUser.mail &&
+      updatedUser.password &&
+      updatedUser.role
+    ) {
       updateMe(
-        user.id,
-        user.firstName,
-        user.lastName,
-        user.birthday,
-        user.mail,
-        user.password,
+        updatedUser.id,
+        updatedUser.firstName,
+        updatedUser.lastName,
+        updatedUser.birthday,
+        updatedUser.mail,
+        updatedUser.password,
         token
       )
         .then((response) => {
@@ -31,8 +45,14 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, updateUser }) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUpdatedUser({ ...updatedUser, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setUpdatedUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
 
   return (
@@ -72,13 +92,10 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, updateUser }) => {
         value={updatedUser.birthday}
         onChange={handleChange}
       />
-      <input
-        type="text"
-        name="role"
-        placeholder="Role"
-        value={updatedUser.role}
-        onChange={handleChange}
-      />
+      <select name="role" value={updatedUser.role} onChange={handleChange}>
+        <option value="User">Utilisateur</option>
+        <option value="Admin">Admin</option>
+      </select>
       <button type="submit">Update</button>
     </form>
   );

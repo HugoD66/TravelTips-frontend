@@ -1,12 +1,11 @@
-import { useState } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 import { User } from "../../../models/UserData";
-import { registerUser } from "../../../services/userService";
+import { registerUserAdmin } from "../../../services/userService";
 
-const AddUserForm: React.FC<{ addUser: (newUser: Partial<User>) => void }> = ({
-  addUser,
+const AddUserForm: React.FC<{ onUserAdded: (user: User) => void }> = ({
+  onUserAdded,
 }) => {
   const [user, setUser] = useState<Partial<User>>({
-    id: "",
     firstName: "",
     lastName: "",
     mail: "",
@@ -27,15 +26,17 @@ const AddUserForm: React.FC<{ addUser: (newUser: Partial<User>) => void }> = ({
     )
       return;
 
-    registerUser(
+    registerUserAdmin(
       user.firstName,
       user.lastName,
       user.birthday,
       user.mail,
-      user.password
+      user.password,
+      user.role
     )
       .then((response) => {
         console.log("Utilisateur enregistré avec succès :", response);
+        onUserAdded(response);
       })
 
       .catch((error) => {
@@ -43,8 +44,14 @@ const AddUserForm: React.FC<{ addUser: (newUser: Partial<User>) => void }> = ({
       });
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
+  const handleChange = (
+    e: ChangeEvent<HTMLSelectElement | HTMLInputElement>
+  ) => {
+    const { name, value } = e.target;
+    setUser((prevUser) => ({
+      ...prevUser,
+      [name]: value,
+    }));
   };
 
   return (
@@ -84,14 +91,12 @@ const AddUserForm: React.FC<{ addUser: (newUser: Partial<User>) => void }> = ({
         value={user.birthday}
         onChange={handleChange}
       />
-      <input
-        type="text"
-        name="role"
-        placeholder="Role"
-        value={user.role}
-        onChange={handleChange}
-      />
-      <button type="submit">Add</button>
+      <select name="role" value={user.role} onChange={handleChange}>
+        <option value="">Choisissez un rôle</option>
+        <option value="User">Utilisateur</option>
+        <option value="Admin">Admin</option>
+      </select>
+      <button type="submit">Ajouter</button>
     </form>
   );
 };

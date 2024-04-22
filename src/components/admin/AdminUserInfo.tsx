@@ -9,6 +9,7 @@ const AdminUserInfo: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [editUser, setEditUser] = useState<string | null>(null);
   const [token, setToken] = useState(localStorage.getItem("token" || ""));
+  const [addUser, setAddUser] = useState(false);
 
   useEffect(() => {
     if (token) {
@@ -19,10 +20,15 @@ const AdminUserInfo: React.FC = () => {
         })
         .catch((error) => {});
     }
-  }, []);
+  }, [token]);
 
-  const addUser = (newUser: Partial<User>) => {
-    setUsers([...users, newUser as User]);
+  const handleAddUser = () => {
+    setAddUser(true);
+    setEditUser(null);
+  };
+  const handleUserAdded = (newUser: User) => {
+    setUsers([...users, newUser]);
+    setAddUser(false);
   };
 
   const deleteUser = async (id: string) => {
@@ -50,21 +56,24 @@ const AdminUserInfo: React.FC = () => {
     setEditUser(null);
   };
 
+  const handleEdit = (id: string) => {
+    setAddUser(false);
+    setEditUser(id);
+  };
   return (
     <div>
       <h2>Liste des utilisateurs</h2>
-      <UserTable
-        users={users}
-        deleteUser={deleteUser}
-        editUser={(id: string) => setEditUser(id)}
-      />
+      <UserTable users={users} deleteUser={deleteUser} editUser={handleEdit} />
       {editUser !== null ? (
         <EditUserForm
           user={users.find((user) => user.id === editUser)!}
           updateUser={updateUser}
         />
+      ) : null}
+      {addUser === false ? (
+        <button onClick={handleAddUser}>Ajouter un utilisateur</button>
       ) : (
-        <AddUserForm addUser={addUser} />
+        <AddUserForm onUserAdded={handleUserAdded} />
       )}
     </div>
   );
