@@ -188,6 +188,7 @@ const DestinationPage = () => {
             )}
             <div className="carousel-container">
             <h2>Derniers Tips</h2>
+            <Link to="/add-tips" className="add-tip-button">Ajouter un Tips</Link>
             <div className="tips-carousel">
                 {tips.map(tip => (
                     <Link key={tip.id} to={`/tips/${tip.id}`}>

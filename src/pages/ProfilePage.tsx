@@ -6,6 +6,7 @@ import UserInfo from "../components/UserInfo";
 import UserForm from "../components/forms/UserForm";
 import UserTips from "../components/UserTips";
 import { getMe, updateMe } from "../services/userService";
+import '../styles/profilepage.css';
 
 const ProfilePage = ({
   handleLogin,
@@ -70,7 +71,7 @@ const ProfilePage = ({
   };
 
   return (
-    <div>
+    <div className='user-container'>
       {isLogged ? (
         <div>
           {selectedComponent === "userInfo" && (

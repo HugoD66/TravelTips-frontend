@@ -39,17 +39,17 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
       return;
     }
 
-    // Validation de la date de naissance
-    const birthdateRegex =
-      /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19[2-9]\d|200[0-9]|201[0-5])$/;
-    if (!birthdateRegex.test(birthday)) {
-      setError(
-        new Error(
-          "La date de naissance doit être au format jj/mm/aaaa et comprise entre 1920 et 2015"
-        )
-      );
-      return;
-    }
+    // // Validation de la date de naissance
+    // const birthdateRegex =
+    //   /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19[2-9]\d|200[0-9]|201[0-5])$/;
+    // if (!birthdateRegex.test(birthday)) {
+    //   setError(
+    //     new Error(
+    //       "La date de naissance doit être au format jj/mm/aaaa et comprise entre 1920 et 2015"
+    //     )
+    //   );
+    //   return;
+    // }
 
     // Validation de l'adresse e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -103,7 +103,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
             />
           </label>
           <label htmlFor="lastname">
-            Prénom :
+            Nom :
             <input
               id="lastname"
               type="text"
@@ -130,6 +130,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
               name="birthday"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
+              className="birthday-input"
             />
           </label>
           <label htmlFor="password">
@@ -145,7 +146,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
           <input type="submit" value="Envoyer" />
         </form>
         <p onClick={() => goChangeForm()}>Déjà inscrit ? </p>
-        <>{error && <p className="error-message">{error.message}</p>}</>
+        <>{error && <span className="error-message">{error.message}</span>}</>
       </>
     </div>
   );
