@@ -1,12 +1,8 @@
-import {PictureModel} from "../models/PictureModel";
 
-export const createPicture = async (picture: PictureModel) => {
-  return fetch(`http://localhost:4000/picture/upload-file/${picture.createdBy}/${picture.tipsId}`, {
+export const createPicture = async (formData: FormData, userId: string, tipsId: string) => {
+  return fetch(`http://localhost:4000/picture/upload-file/${userId}/${tipsId}`, {
     method: "POST",
-    body: JSON.stringify(picture),
-    headers: {
-      "Content-Type": "application/json",
-    },
+    body: formData,
   })
     .then((response) => {
       if (!response.ok) {

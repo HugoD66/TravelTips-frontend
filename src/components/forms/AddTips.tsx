@@ -7,6 +7,7 @@ import { createCity } from "../../services/cityService";
 import { useCity } from "../../context/CityProvider";
 import { createTip } from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
+import {createPicture} from "../../services/pictureService";
 
 const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
@@ -15,6 +16,7 @@ const AddTips = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
+  const [error, setError] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +38,11 @@ const AddTips = () => {
     console.log("Updated cityDetails:", cityDetails);
   }, [cityDetails]);
 
+
+
+
+
+
   const handleAddTipsSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
@@ -50,9 +57,10 @@ const AddTips = () => {
       });
       const userId = localStorage.getItem("id");
       if (!userId) {
-        console.warn("Il faut etre connecté pour ajouter un tip");
+        setError("Il faut etre connecté pour ajouter un tip");
         return;
       }
+
       const tips: TipModel = {
         name: name,
         price: price,
@@ -62,34 +70,25 @@ const AddTips = () => {
         idUser: userId,
       };
 
-      const tipsResponse = await createTip(tips);
-      if (tipsResponse && tipsResponse.id) {
-        console.log("Tip added with success", tipsResponse);
-        for (const file of pictureFiles) {
-          const formData = new FormData();
-          formData.append("file", file);
-
-          const uploadUrl = `http://localhost:4000/picture/upload-file/4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3/${tipsResponse.id}`;
-          const responsePicture = await fetch(uploadUrl, {
-            method: "POST",
-            body: formData,
-            headers: {},
-          });
-
-          if (!responsePicture.ok) {
-            throw new Error("Network response was not OK");
-          }
-          //const pictureData = await responsePicture.json();
-        }
-        console.log("Pictures uploaded with success");
-      } else {
-        console.error(
-          "No tip ID returned, check the creation process",
-          tipsResponse
-        );
+      if(!tips.name || !tips.idCity || !tips.adress) {
+        setError("Vous devez remplir tous les champs");
+        return;
       }
+
+      const tipsResponse = await createTip(tips);
+      if(!tipsResponse || !tipsResponse.id) {
+        setError("Erreur pendant la création du tips");
+        return;
+      }
+
+      for (const file of pictureFiles) {
+        const formData: FormData = new FormData();
+        formData.append("file", file);
+         await createPicture(formData, userId, tipsResponse.id);
+      }
+
     } catch (error) {
-      console.error("Error during the creation process", error);
+      setError("Vous devez choisir un pays pour ajouter un tips");
     }
   };
 
@@ -194,6 +193,7 @@ const AddTips = () => {
           </div>
         </form>
       </div>
+      { error && <div className="error">{error}</div> }
     </div>
   );
 };

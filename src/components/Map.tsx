@@ -2,6 +2,7 @@ import React, {useCallback, useEffect, useRef} from "react";
 import maplibregl from 'maplibre-gl';
 import {addCountryMarkers, addMarker} from "../services/mapService";
 import {useCity} from "../context/CityProvider";
+import 'maplibre-gl/dist/maplibre-gl.css';
 
 
 interface MapProps {
