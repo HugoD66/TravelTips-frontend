@@ -1,7 +1,6 @@
 @import 'base.css';
 
 
-/* loginpage.css */
 .container-form {
     display: flex;
     flex-direction: column;
@@ -11,18 +10,19 @@
     backdrop-filter: blur(10px);
     padding: 20px;
     border-radius: 12px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.319);
     text-align: center;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     width: 80%;
     max-width: 400px;
     margin: auto;
+    margin-top: 30px;
     font-family: 'Poppins', sans-serif;
   }
   
   .container-form h2 {
     margin-bottom: 20px;
-    color: var(--color-tertiary);
+    color: var(--color-accent);
     font-family: 'Poppins', sans-serif;
     text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   }
@@ -31,7 +31,7 @@
     display: block;
     text-align: left;
     margin-top: 20px;
-    color: var(--color-tertiary);
+    color: var(--color-accent);
     font-size: 1.3rem;
   }
   
@@ -65,7 +65,15 @@
   }
 
   .container-form p:hover {
-    text-decoration: underline;
-    color: var(--color-dark);
+    text-decoration: none;
+    color: var(--color-accent);
+  }
+  
+  .birthday-input {
+    color: var(--color-accent);
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
   }
   

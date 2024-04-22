@@ -112,52 +112,9 @@ const AddTips = () => {
 
   return (
     <div>
-      <h1>Add Tips</h1>
+      <h1>Ajouter un Tips</h1>
       <div className="add-tips-form">
         <form onSubmit={handleAddTipsSubmit}>
-          <div className="form-group">
-            <label htmlFor="name">
-              Title:
-              <input
-                id="name"
-                type="text"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
-            <label htmlFor="price">
-              Prix:
-              <input
-                id="price"
-                type="range"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(parseInt(e.target.value, 10))} // Convertit la valeur en nombre
-                min="0"
-                max="5"
-                step="1"
-              />
-            </label>
-
-            <label htmlFor="pictureList">Photos:</label>
-            <input
-              id="pictureList"
-              type="file"
-              name="pictureList"
-              multiple
-              onChange={handleFileChange}
-            />
-
-            <button
-              type="submit"
-              value="Envoyer"
-              className="submit-button-form"
-            >
-              Envoyer
-            </button>
-          </div>
-
           <div className="map-content">
             <label htmlFor="country" className="country-input">
               Choisissez un pays
@@ -182,6 +139,58 @@ const AddTips = () => {
             ) : (
               <Loading width={400} height={400} />
             )}
+          </div>
+          <div className="city-content">
+            <label>
+              Ville:
+              <input type="text" value={cityDetails.city} readOnly />
+            </label>
+            <label>
+              Code postal:
+              <input type="text" value={cityDetails.postcode} readOnly />
+            </label>
+          </div>
+          <div className="form-group">
+            <label htmlFor="name">
+              Nom du tips:
+              <input
+                id="name"
+                type="text"
+                name="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label htmlFor="price">
+              Fourchette de prix:
+              <input
+                id="price"
+                type="range"
+                name="price"
+                value={price}
+                onChange={(e) => setPrice(parseInt(e.target.value, 10))}
+                min="0"
+                max="5"
+                step="1"
+              />
+            </label>
+
+            <label htmlFor="pictureList">Photos:</label>
+            <input
+              id="pictureList"
+              type="file"
+              name="pictureList"
+              multiple
+              onChange={handleFileChange}
+            />
+
+            <button
+              type="submit"
+              value="Envoyer"
+              className="submit-button-form"
+            >
+              Envoyer
+            </button>
           </div>
         </form>
       </div>

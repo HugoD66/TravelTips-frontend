@@ -53,6 +53,7 @@ const NavBar = ({
       <button className="burger" onClick={() => setIsOpen(!isOpen)}>
         ☰
       </button>
+      
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <Link to="/home">Accueil</Link>
         <Link to="/destinations">Destinations</Link>
@@ -65,9 +66,6 @@ const NavBar = ({
         ) : (
           <div className="nav-profile">
             <Link to="/profile">Se connecter</Link>
-            <Link to="/profile">
-              <img src="/images/traveller.png" alt="Profile" />
-            </Link>
           </div>
         )}
       </div>

@@ -103,7 +103,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
             />
           </label>
           <label htmlFor="lastname">
-            Prénom :
+            Nom :
             <input
               id="lastname"
               type="text"
@@ -130,6 +130,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
               name="birthday"
               value={birthday}
               onChange={(e) => setBirthday(e.target.value)}
+              className="birthday-input"
             />
           </label>
           <label htmlFor="password">
@@ -145,7 +146,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
           <input type="submit" value="Envoyer" />
         </form>
         <p onClick={() => goChangeForm()}>Déjà inscrit ? </p>
-        <>{error && <p className="error-message">{error.message}</p>}</>
+        <>{error && <span className="error-message">{error.message}</span>}</>
       </>
     </div>
   );

@@ -1,71 +1,162 @@
-import {useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {fetchCountryByName, getCountryByName} from "../services/countryService";
-import {CountryModel} from "../models/CountryModel";
-import {CityModel} from "../models/CityModel";
+import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
 import Map from "../components/Map";
+import Modal from "../components/Modal";
+import AddTips from "../components/forms/AddTips";
+import "../styles/countrypage.css";
+import axios from 'axios';
+
+interface Country {
+  name: {
+    common: string;
+  };
+  capital: string;
+  region: string;
+  subregion: string;
+  flags: {
+    svg: string;
+  };
+  latlng: number[];
+  alpha3Code: string;
+  currency: string[];
+  backgroundImageUrl: string; 
+}
+
+interface WeatherInfo {
+  temp_c: number;
+  condition: {
+    text: string;
+  };
+}
+
+interface ForecastDay {
+  date: string;
+  day: {
+    maxtemp_c: number;
+    mintemp_c: number;
+    condition: {
+      text: string;
+    };
+  };
+}
+
+interface Weather {
+  current: WeatherInfo;
+  forecast: {
+    forecastday: ForecastDay[];
+  };
+}
 
 const CountryPage = () => {
-  const { countryName } = useParams();
-  const [country, setCountry] = useState<any>();
-  const [countryDb, setCountryDb] = useState<CountryModel>();
-  const defaultLat = 46.5681;
-  const defaultLng = 3.3349;
+  const { countryName } = useParams<{ countryName: string }>();
+  const [country, setCountry] = useState<Country | null>(null);
+  const [weather, setWeather] = useState<Weather | null>(null);
+  const [showModal, setShowModal] = useState(false);
+
   useEffect(() => {
     if (countryName) {
-    const fetchData = async () => {
-        try {
-          const fetchedCountry = await fetchCountryByName(countryName);
-          setCountry(fetchedCountry);
-
-        } catch (error) {
-          console.error("Error fetching country:", error);
-        }
-      }
-    const fetchCountryDb = async () => {
-      try {
-        const fetchedCountryDb = await getCountryByName(countryName);
-        setCountryDb(fetchedCountryDb );
-        console.log(fetchedCountryDb)
-      } catch (error) {
-        console.error("Error fetching country:", error);
-      }
-    }
-
-    fetchData();
-    fetchCountryDb()
+      fetchCountryDetails(countryName);
+      fetchWeather(countryName);
     }
   }, [countryName]);
-  console.log('country');
-  console.log(country);
-  console.log('countryDb');
-  console.log(countryDb);
+
+  const fetchWeather = async (capital: string) => {
+    const apiKey = "b09f1e16de6744c1b9195639241604";
+    try {
+      const url = `https://api.weatherapi.com/v1/forecast.json?key=${apiKey}&q=${capital}&days=3`;
+      const response = await axios.get<Weather>(url);
+      setWeather(response.data);
+    } catch (error) {
+      console.error("Error fetching weather data:", error);
+      setWeather(null);
+    }
+  };
+
+  const fetchCountryDetails = async (name: string) => {
+    try {
+      const { data } = await axios.get(`https://restcountries.com/v3.1/name/${name}`);
+      const formattedData = data.map((country: any) => ({
+        name: { common: country.name.common },
+        capital: country.capital[0],
+        region: country.region,
+        subregion: country.subregion,
+        flags: { svg: country.flags.svg },
+        latlng: country.latlng,
+        alpha3Code: country.cca3,
+        currency: country.currencies ? Object.keys(country.currencies) : [],
+        backgroundImageUrl: `https://source.unsplash.com/1600x900/?${country.name.common}` 
+      }));
+      setCountry(formattedData[0]);
+    } catch (error) {
+      console.error("Error fetching country:", error);
+    }
+  };
+
   return (
-    <div>
-      <h1>Country Page</h1>
+    <div className="country-page">
       {country ? (
-        <div>
-          <p>Name: {country.name}</p>
-          <p>Code: {country.alpha3Code}</p>
-          <p>Coordinates: {country.latlng.join(", ")}</p>
-          {countryDb ? (
-            <>
-              <div>
-                <p>Nos villes enregistrées déjà enregistrées :</p>
-                {countryDb.city && countryDb.city.map((city: CityModel, index) => (
-                  <p key={index}>{city.name}</p>
-                ))}
+        <>
+          <div className="country-title" style={{ backgroundImage: `url(${country?.backgroundImageUrl})`, backgroundSize: 'no-repeat center center/cover' }}>
+            <h1>{country.name.common}</h1>
+          </div>
+            <div className="country-details">
+              <h2>Informations</h2>
+              <div className="country-cards">
+                <div className="informations">
+                  <p>Capital: {country.capital}</p>
+                  <p>Region: {country.region}</p>
+                  <p>Subregion: {country.subregion}</p>
+                  <p>Currency: {country.currency.join(', ')}</p>
+                </div>
+                <div className="flag">              
+                  <img src={country.flags.svg} alt={`${country.name.common} flag`} />
+                </div>
               </div>
-              <Map lat={country.latlng[0] || defaultLat} lng={country.latlng[1] || defaultLng} zoom={4} geoList={countryDb.geoCoords} />
-            </>
-          ) : (
-            <div>Toujours pas de villes enregistrées</div>
-          )}
-        </div>
+            </div>
+            <div className="weather-details">
+            <h2>Météo</h2>
+              {weather && (
+                <>
+                  <div className="weather-info">
+                    <h3>Météo actuelle {country.capital}</h3>
+                    <div className="weather-cat">
+                      <p>Temperature: {weather.current.temp_c} °C</p>
+                      <p>Condition: {weather.current.condition.text}</p>
+                    </div>
+                  </div>
+                  
+                  <div className="forecast-info">
+                    <h3>Météo à venir</h3>
+                    <div className="forecast-cat">
+                    {weather.forecast.forecastday.map((day, index) => (
+                      <div key={index}>
+                        <p>{day.date}</p>
+                        <p>Max temp: {day.day.maxtemp_c} °C</p>
+                        <p>Min temp: {day.day.mintemp_c} °C</p>
+                        <p>Condition: {day.day.condition.text}</p>
+                      </div>  
+                    ))}
+                    </div>
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="map-details">
+              <h2>Carte</h2>
+              <Map lat={country.latlng[0]} lng={country.latlng[1]} zoom={5} />
+            </div>
+            <div className="country-tips">
+              <h2>Les bons tips</h2>
+              <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
+                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}
+            </div>
+            
+        </>
       ) : (
-        <p>Chargement des informations sur le pays...</p>
+        <p>Loading country information...</p>
       )}
     </div>
   );
-}
+};
+
 export default CountryPage;

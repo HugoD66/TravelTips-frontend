@@ -1,45 +1,31 @@
 .add-tips-form {
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     width: 80%;
     margin: auto;
-    height: 66vh;
-}
-form {
+    max-height: 400px; 
+    overflow-y: auto; 
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  
+  form {
     display: flex;
-    flex-direction: row;
-    align-items: start;
-    justify-content: space-around;
-    width: 100%;
-    margin: auto;
-    height: 100%;
-}
-.form-group {
-    display: flex;
-    flex-direction: column;
-    margin: auto;
-    align-items: start;
-    justify-content: space-around;
-    width: 60%;
-    height: 100%;
-}
-.submit-button-form {
-    width: 130px;
-}
-
-.map-content {
-    width: 40%;
-    margin: auto;
-    height: 80%;
-}
-
-.country-input {
+    flex-direction: column; 
+    gap: 15px; 
+  }
+  
+  .form-group {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    margin: 15px;
-}
+    width: 100%; 
+  }
+  
+  .submit-button-form {
+    width: auto; 
+    padding: 10px 20px; 
+    margin-top: 10px; 
+  }
 
-
-.loading {
-    background-color: #470000;
-}
+  
