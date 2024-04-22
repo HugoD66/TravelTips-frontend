@@ -5,6 +5,9 @@ import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
 import "../styles/countrypage.css";
 import axios from 'axios';
+import {getCountryByName} from "../services/countryService";
+import {getCityByName} from "../services/cityService";
+import {getTipsByCityId} from "../services/tipService";
 
 interface Country {
   name: {
@@ -52,11 +55,14 @@ const CountryPage = () => {
   const [country, setCountry] = useState<Country | null>(null);
   const [weather, setWeather] = useState<Weather | null>(null);
   const [showModal, setShowModal] = useState(false);
-
+  const [tipsLocations, setTipsLocations] = useState<{ lat: string; lng: string }[]>([]);
+  const [geoTips, setGeoTips] = useState<{ lat: string; lng: string }[]>([]);
   useEffect(() => {
     if (countryName) {
       fetchCountryDetails(countryName);
       fetchWeather(countryName);
+      getTipsByName(countryName);
+
     }
   }, [countryName]);
 
@@ -91,6 +97,29 @@ const CountryPage = () => {
       console.error("Error fetching country:", error);
     }
   };
+
+  const getTipsByName = async (countryName: string) => {
+    try {
+
+      const response = await getCountryByName(countryName);
+
+      if (response && response.city) {
+        const tipsList = response.city.map(async (city: any) => {
+          return await getTipsByCityId(city.id);
+        });
+
+        const citiesWithTips = await Promise.all(tipsList);
+        console.log(citiesWithTips)
+        const tipsLocations = citiesWithTips.map((city: any) => ({ lat: city.lat, lng: city.lng }));
+        setGeoTips(tipsLocations);
+      } else {
+        console.log("No cities found for the given country name:", countryName);
+      }
+    } catch (error) {
+      console.error("Error fetching tips by country name:", error);
+    }
+  }
+  console.log(geoTips);
 
   return (
     <div className="country-page">
@@ -143,7 +172,11 @@ const CountryPage = () => {
             </div>
             <div className="map-details">
               <h2>Carte</h2>
-              <Map lat={country.latlng[0]} lng={country.latlng[1]} zoom={5} />
+              <Map
+                isInteractive={false}
+                initialPosition={{ lat: country.latlng[0], lng: country.latlng[1] }}
+                markers={geoTips}
+              />
             </div>
             <div className="country-tips">
               <h2>Les bons tips</h2>

@@ -36,6 +36,22 @@ export const getCityList = () => {
   });
 }
 
+export const getCityByName = (cityName: string) => {
+  return fetch(`http://localhost:4000/city/by-name/${cityName}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération de la ville:", error);
+      throw error;
+    });
+}
+
 export const getCityById = (id: string) => {
   return fetch(`http://localhost:4000/city/${id}`, {
     method: "GET",

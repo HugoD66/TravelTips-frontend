@@ -2,7 +2,7 @@ import { Marker, Map as MaplibreMap  } from "maplibre-gl";
 import axios from 'axios';
 
 let currentMarker: Marker | null = null;
-export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string; adress: string }) => void) => {
+export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string; adress: string; lat: string; lng: string }) => void) => {
   map.on('click', async (event: maplibregl.MapMouseEvent) => {
     const {lng, lat} = event.lngLat;
     if (currentMarker) {
@@ -18,20 +18,25 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
         const city = cityDetails.address.city || "Ville non spécifiée";
         const postcode = cityDetails.address.postcode || "Code postal non spécifié";
         const adress = cityDetails.address.road || "Rue non spécifiée";
-        onCityFound({ city, postcode, adress });
+        const lat = cityDetails.lat;
+        const lng = cityDetails.lon;
+        onCityFound({ city, postcode, adress, lat, lng});
       } else {
-        onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée"});
+        onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée", lat: "", lng: ""});
       }
     } catch (error) {
       console.error("Error fetching city details:", error);
-      onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée"});
+      onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée", lat: "", lng: ""});
     }
   });
 }
-export const addCountryMarkers = (map: MaplibreMap, geoList: { lat: string; lng: string }[]) => {
-  geoList.forEach(geo => {
+
+export const setCountryMarkersOnMap = (map: MaplibreMap, markers: { lat: string; lng: string }[]) => {
+
+  markers.forEach(geo => {
+
     const { lat, lng } = geo;
-    const marker = new Marker({ color: '#FF6347' })
+    new Marker({ color: '#FF6347' })
       .setLngLat([parseFloat(lng), parseFloat(lat)])
       .addTo(map);
   });

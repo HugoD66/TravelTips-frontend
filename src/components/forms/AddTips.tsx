@@ -17,6 +17,7 @@ const AddTips = () => {
   const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>('');
+  const [success, setSuccess] = useState<string>('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -29,19 +30,6 @@ const AddTips = () => {
     };
     fetchData();
   }, []);
-
-  useEffect(() => {
-    console.log("Country selected:", country);
-  }, [country, setCountry]);
-
-  useEffect(() => {
-    console.log("Updated cityDetails:", cityDetails);
-  }, [cityDetails]);
-
-
-
-
-
 
   const handleAddTipsSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -60,7 +48,6 @@ const AddTips = () => {
         setError("Il faut etre connecté pour ajouter un tip");
         return;
       }
-
       const tips: TipModel = {
         name: name,
         price: price,
@@ -68,6 +55,8 @@ const AddTips = () => {
         adress: cityDetails.adress,
         approvate: false,
         idUser: userId,
+        lng: cityDetails.lng,
+        lat: cityDetails.lat,
       };
 
       if(!tips.name || !tips.idCity || !tips.adress) {
@@ -75,7 +64,13 @@ const AddTips = () => {
         return;
       }
 
-      const tipsResponse = await createTip(tips);
+      const token = localStorage.getItem("token");
+      if (!token) {
+        setError("Erreur token");
+        return;
+      }
+      const tipsResponse = await createTip(tips, token);
+
       if(!tipsResponse || !tipsResponse.id) {
         setError("Erreur pendant la création du tips");
         return;
@@ -86,7 +81,7 @@ const AddTips = () => {
         formData.append("file", file);
          await createPicture(formData, userId, tipsResponse.id);
       }
-
+      setSuccess("Tips ajouté avec succès !");
     } catch (error) {
       setError("Vous devez choisir un pays pour ajouter un tips");
     }
@@ -96,8 +91,6 @@ const AddTips = () => {
     setCountry(event.target.value);
   };
   const selectedCountry = countriesList.find((c) => c.name === country);
-  const defaultLat = 46.5681;
-  const defaultLng = 3.3349;
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
@@ -132,8 +125,12 @@ const AddTips = () => {
             </label>
             {selectedCountry ? (
               <Map
-                lng={selectedCountry?.latlgn?.[1] || defaultLng}
-                lat={selectedCountry?.latlgn?.[0] || defaultLat}
+                isInteractive={true}
+                initialPosition={{ lat: selectedCountry?.latlgn?.[0], lng: selectedCountry?.latlgn?.[1] }}
+                onLocationSelect={(location) => {
+                  console.log("Nouvelle position sélectionnée:", location);
+                  // Logique pour ajouter un marqueur ou mettre à jour le state
+                }}
               />
             ) : (
               <Loading width={400} height={400} />
@@ -194,6 +191,7 @@ const AddTips = () => {
         </form>
       </div>
       { error && <div className="error">{error}</div> }
+      { success && <div className="success">{success}</div> }
     </div>
   );
 };

@@ -1,12 +1,14 @@
 import { TipModel } from "../models/TipModel";
 
-export const createTip = (tip: TipModel) => {
+export const createTip = (tip: TipModel, token: string ) => {
   return fetch("http://localhost:4000/tips", {
     method: "POST",
     body: JSON.stringify(tip),
     headers: {
       "Content-Type": "application/json",
+      "Authorization": `Bearer ${token}`,
     },
+
   })
     .then((response) => {
       if (!response.ok) {
@@ -51,6 +53,22 @@ export const getTipListUser = (id: string) => {
       throw error;
     });
 };
+export const getTipsByCityId = (id: string) => {
+  return fetch(`http://localhost:4000/tips/by-city/${id}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+
+}
 export const getTipById = (id: string) => {
   return fetch(`http://localhost:4700/tips/${id}`, {
     method: "GET",

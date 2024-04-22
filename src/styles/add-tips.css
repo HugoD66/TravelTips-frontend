@@ -35,3 +35,11 @@
     width: 100%;
     text-align: center;
   }
+
+  .success {
+    margin-top: 3px;
+    color: green;
+    font-size: 0.8rem;
+    width: 100%;
+    text-align: center;
+  }

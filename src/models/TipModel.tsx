@@ -1,8 +1,4 @@
-import { PictureModel } from "./PictureModel";
 import { CityModel } from "./CityModel";
-import { RateModel } from "./RateModel";
-import { CommentModel } from "./CommentModel";
-import { GeoModel } from "./GeoModel";
 import { User } from "./UserData";
 
 export class TipModel {
@@ -13,5 +9,6 @@ export class TipModel {
   public adress?: string;
   public idUser?: User | string;
   public approvate?: boolean;
-  public geo?: GeoModel;
+  public lng!: string;
+  public lat!: string;
 }
