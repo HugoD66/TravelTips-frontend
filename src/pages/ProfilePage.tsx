@@ -1,13 +1,6 @@
 import React, { useEffect, useState} from 'react';
 import Login from '../components/forms/Login';
 import Register from '../components/forms/Register';
-import {getTipList} from "../services/tip";
-import {getUserList} from "../services/userService";
-import {getCountryList} from "../services/country";
-import {getCategoryList} from "../services/category";
-import {getCityList} from "../services/city";
-import {getDayInItineraryList} from "../services/dayInierary";
-import {getItineraryList} from "../services/itinerary";
 import { useLocation } from "react-router-dom";
 import UserInfo from "../components/UserInfo";
 import UserForm from "../components/forms/UserForm";
