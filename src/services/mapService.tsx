@@ -1,11 +1,8 @@
 import { Marker, Map as MaplibreMap  } from "maplibre-gl";
 import axios from 'axios';
 
-
-
-
 let currentMarker: Marker | null = null;
-export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string }) => void) => {
+export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string; adress: string }) => void) => {
   map.on('click', async (event: maplibregl.MapMouseEvent) => {
     const {lng, lat} = event.lngLat;
     if (currentMarker) {
@@ -16,16 +13,18 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
       .addTo(map);
     try {
       const cityDetails = await getCity(lat, lng);
+      console.log(cityDetails);
       if (cityDetails && cityDetails.address) {
         const city = cityDetails.address.city || "Ville non spécifiée";
         const postcode = cityDetails.address.postcode || "Code postal non spécifié";
-        onCityFound({ city, postcode });
+        const adress = cityDetails.address.road || "Rue non spécifiée";
+        onCityFound({ city, postcode, adress });
       } else {
-        onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié" });
+        onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée"});
       }
     } catch (error) {
       console.error("Error fetching city details:", error);
-      onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié" });
+      onCityFound({ city: "Ville non spécifiée", postcode: "Code postal non spécifié", adress: "Rue non spécifiée"});
     }
   });
 }

@@ -39,6 +39,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
     }
 
     // Validation de la date de naissance
+   /*
     const birthdateRegex =
       /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19[2-9]\d|200[0-9]|201[0-5])$/;
     if (!birthdateRegex.test(birthday)) {
@@ -49,6 +50,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
       );
       return;
     }
+    */
 
     // Validation de l'adresse e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
