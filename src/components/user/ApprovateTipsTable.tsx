@@ -16,6 +16,7 @@ const UserTipsTable: React.FC = () => {
       if (token && userId) {
         const userTips = await getTipsUser(userId, token);
         setTips(userTips);
+        console.log(userTips);
       }
     } catch (error) {
       console.error("Error fetching user tips:", error);
@@ -34,6 +35,9 @@ const UserTipsTable: React.FC = () => {
           <tr>
             <th>Nom</th>
             <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postale</th>
+            <th>Pays</th>
             <th>Prix</th>
           </tr>
         </thead>
@@ -42,6 +46,17 @@ const UserTipsTable: React.FC = () => {
             <tr key={tip.id}>
               <td>{tip.name}</td>
               <td>{tip.adress}</td>
+              <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+              <td>
+                {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+              </td>
+              <td>
+                {tip.idCity &&
+                  typeof tip.idCity === "object" &&
+                  tip.idCity.idCountry &&
+                  typeof tip.idCity.idCountry === "object" &&
+                  tip.idCity.idCountry.name}
+              </td>
               <td>{tip.price}</td>
             </tr>
           ))}
@@ -52,9 +67,12 @@ const UserTipsTable: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Price</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postale</th>
+            <th>Pays</th>
+            <th>Prix</th>
           </tr>
         </thead>
         <tbody>
@@ -62,18 +80,32 @@ const UserTipsTable: React.FC = () => {
             <tr key={tip.id}>
               <td>{tip.name}</td>
               <td>{tip.adress}</td>
+              <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+              <td>
+                {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+              </td>
+              <td>
+                {tip.idCity &&
+                  typeof tip.idCity === "object" &&
+                  tip.idCity.idCountry &&
+                  typeof tip.idCity.idCountry === "object" &&
+                  tip.idCity.idCountry.name}
+              </td>
               <td>{tip.price}</td>
             </tr>
           ))}
         </tbody>
       </table>
 
-      <h2>Mes tips rejetées</h2>
+      <h2>Mes tips rejetés</h2>
       <table>
         <thead>
           <tr>
             <th>Nom</th>
             <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postal</th>
+            <th>Pays</th>
             <th>Prix</th>
           </tr>
         </thead>
@@ -82,6 +114,17 @@ const UserTipsTable: React.FC = () => {
             <tr key={tip.id}>
               <td>{tip.name}</td>
               <td>{tip.adress}</td>
+              <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+              <td>
+                {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+              </td>
+              <td>
+                {tip.idCity &&
+                  typeof tip.idCity === "object" &&
+                  tip.idCity.idCountry &&
+                  typeof tip.idCity.idCountry === "object" &&
+                  tip.idCity.idCountry.name}
+              </td>
               <td>{tip.price}</td>
             </tr>
           ))}

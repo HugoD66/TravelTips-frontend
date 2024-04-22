@@ -55,6 +55,9 @@ const PendingTipsTable: React.FC = () => {
           <tr>
             <th>Nom</th>
             <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postal</th>
+            <th>Pays</th>
             <th>Prix</th>
             <th>Actions</th>
           </tr>
@@ -66,6 +69,17 @@ const PendingTipsTable: React.FC = () => {
               <tr key={tip.id}>
                 <td>{tip.name}</td>
                 <td>{tip.adress}</td>
+                <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+                <td>
+                  {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+                </td>
+                <td>
+                  {tip.idCity &&
+                    typeof tip.idCity === "object" &&
+                    tip.idCity.idCountry &&
+                    typeof tip.idCity.idCountry === "object" &&
+                    tip.idCity.idCountry.name}
+                </td>
                 <td>{tip.price}</td>
                 <td>
                   <button
