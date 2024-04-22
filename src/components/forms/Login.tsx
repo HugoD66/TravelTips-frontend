@@ -1,5 +1,6 @@
-import React, { FormEvent, useState } from "react";
-import { loginUser } from "../../services/userService";
+import React, {FormEvent, useState} from "react";
+import {loginUser} from "../../services/userService";
+import '../../styles/form.css';
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = ({
@@ -49,11 +50,11 @@ const Login = ({
   };
 
   return (
-    <div className="login-form">
+    <div className="container-form">
       <h2>Formulaire de connexion</h2>
       <form onSubmit={handleLoginSubmit}>
         <label htmlFor="email">
-          Adresse mail :
+          E-mail :
           <input
             id="email"
             type="text"

@@ -1,0 +1,71 @@
+@import 'base.css';
+
+
+/* loginpage.css */
+.container-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 400px;
+    margin: auto;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .container-form h2 {
+    margin-bottom: 20px;
+    color: var(--color-tertiary);
+    font-family: 'Poppins', sans-serif;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .container-form label {
+    display: block;
+    text-align: left;
+    margin-top: 20px;
+    color: var(--color-tertiary);
+    font-size: 1.3rem;
+  }
+  
+  .container-form input[type="text"],
+  .container-form input[type="password"],
+  .container-form input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    margin-top: 8px;
+    border: none;
+    border-radius: 5px;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.2);
+  }
+  
+  .container-form input[type="submit"] {
+    background-color: var(--color-accent);
+    color: var(--color-tertiary);
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+  }
+  
+  .container-form input[type="submit"]:hover {
+    background-color: var(--color-primary);
+  }
+  
+  .container-form p {
+    cursor: pointer;
+    color: var(--color-secondary);
+    margin-top: 20px;
+  }
+
+  .container-form p:hover {
+    text-decoration: underline;
+    color: var(--color-dark);
+  }
+  
