@@ -1,5 +1,7 @@
 import React, {FormEvent, useState} from "react";
 import {loginUser} from "../../services/userService";
+import '../../styles/form.css';
+
 
 const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: () => void; handleError: (errorMessage: string) => void; setIsLoggedTrue: () => void }) => {
   const [email, setEmail] = useState<string>("");
@@ -20,11 +22,11 @@ const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: (
   }
 
   return (
-    <div className="login-form">
+    <div className="container-form">
       <h2>Formulaire de connexion</h2>
       <form onSubmit={handleLoginSubmit}>
         <label htmlFor="email">
-          Nom :
+          E-mail :
           <input
             id="email"
             type="text"
@@ -34,7 +36,7 @@ const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: (
           />
         </label>
         <label htmlFor="password">
-          Nom :
+          Mot de passe :
           <input
             id="password"
             type="text"
@@ -44,7 +46,7 @@ const Login = ({ goChangeForm, handleError, setIsLoggedTrue }: { goChangeForm: (
         </label>
         <input type="submit" value="Envoyer"/>
       </form>
-      <p onClick={() => goChangeForm()}>Déjà enregistré ? </p>
+      <p onClick={() => goChangeForm()}>Pas encore inscrit ? </p>
 </div>
 )
 }

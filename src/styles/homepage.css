@@ -10,139 +10,112 @@
   --link-icon-opacity: 0;
 }
 
-@keyframes float {
-    0% { transform: translateY(0); }
-    50% { transform: translateY(-10px); }
-    100% { transform: translateY(0); }
-  }
-
-/* Styles globaux pour la page */
 .containerHomepage {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: flex-start;
-    min-height: auto;
-    padding: 20px;
-    overflow-x: hidden;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+  overflow-x: hidden;
 }
 
 .titleHomepage {
-    margin-top: 20px;
-    margin-bottom: 2rem;
-    color: var(--color-dark);
-    text-align: center;
-    font-size: 4rem;
+  margin-top: 20px;
+  color: var(--color-accent);
+  text-align: center;
+  font-size: 3rem;
 }
 
 .globeAndInfo {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-    width: 100%;
-    position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  width: 100%;
 }
 
 .globeContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 60%; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50%; 
 }
 
-/* Styles spécifiques pour la fiche d'information */
 .countryCard {
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    flex-wrap: wrap;
-    background: var(--color-accent);
-    box-shadow: 0.65rem 0.65rem 1rem var(--color-dark);
-    border-radius: 0.8rem;
-    border: 0.5rem solid;
-    position: relative;
-    border-radius: 16px;
-    background: var(--color-tertiary);
-    transition: all 0.4s ease-in-out, transform 0.3s ease;
-    z-index: 2;
-    margin: 20px;
-    width: 100%;
-}
-.countryCard:hover {
-    transform: scale(var(--img-scale));
-    z-index: 3;
-    box-shadow: 0.65rem 0.65rem var(--color-accent);
-    transform: scale(1.03);
+  display: flex;
+  flex-direction: row;  
+  align-items: center;  
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 15px;
+  padding: 20px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+  margin-top: 20px;
+  width: 80%;
 }
 
-.countryCard img {
-    width: 100%;
-    flex: 1 1 300px;
-    outline: 0.3rem solid;
-    animation: float 6s ease-in-out infinite;
+.info-country {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.countryCard h2 {
-    text-align: center;
-    margin: 0.1em 0;
-    font-size: 3rem;
-}
-.countryCardText .countryCardDetail {
-  margin: 0.5em 0; 
-  padding: 0.5em;
-  transition: background-color 0.3s ease;
+.country-details, .weather-details {
+  margin: 10px;
 }
 
-.countryCardText .countryCardDetail:hover {
-  background-color: #f0f0f0;
-}
-
-.countryCardText > * + * {
-  margin: min(1rem, 2.5vw) 0 0 0;
+.weather-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .button-container {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 20px; 
+  display: flex;
+  flex-direction: column; 
+  align-items: center;
+  gap: 10px; 
+  width: 100%; 
+  margin-top: 30px;
+}
+
+.countryCard img {
+  width: 100px; 
+  border-radius: 10px;
+}
+
+.countryCard h2, .weather-details h3 {
+  color: var(--color-dark);
+  font-weight: bold;
+}
+
+.countryCard p, .weather-details p {
+  font-size: 16px;
+  color: var(--color-dark);
+}
+
+.button-container a, .button-container button {
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 10px;
+  text-align: center;
+  color: white;
+  background-color: var(--color-accent);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+.button-container a:hover, .button-container button:hover {
+  background-color: var(--color-primary);
 }
 
 .countryCard a, .countryCard button {
-    background: var(--color-accent);
-    color: var(--color-dark);
-    text-align: center;
-    padding: 10px;
-    border-radius: 8px;
-    border: 2px solid var(--color-dark); 
-    font-family: 'Fira Sans', sans-serif;
-    text-decoration: none;
-    cursor: pointer;
-    font-size: 1em;
+  width: 80%;
+  padding: 15px 20px;
 }
 .countryCard a:hover, .countryCard button:hover {
-    background: var(--color-primary);
-    color: var(--color-tertiary);
+  transform: scale(1.1); 
 }
-
-@media screen and (max-width: 960px) {
-  .globeAndInfo {
-    flex-direction: column;
-  }
-
-  .countryCard {
-    width: 100%;
-  }
-
-  .countryCard img {
-    width: auto;
-  }
-}
-
-
-
-
-

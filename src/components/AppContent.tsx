@@ -4,7 +4,6 @@ import HomePage from '../pages/Homepage';
 import DestinationsPage from '../pages/DestinationPage';
 import ItineraryPage from '../pages/ItineraryPage';
 import ProfilePage from '../pages/ProfilePage';
-import LoginPage from '../pages/ProfilePage';
 import NavBar from '../components/NavBar';
 
 const AppContent = () => {
@@ -12,9 +11,9 @@ const AppContent = () => {
 
   return (
     <>
-      {location.pathname !== "/" && <NavBar />}
+      <NavBar />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
