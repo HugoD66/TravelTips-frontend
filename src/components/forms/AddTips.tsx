@@ -58,7 +58,7 @@ const AddTips = () => {
         price: price,
         idCity: newCity.id,
         adress: cityDetails.adress,
-        approvate: false,
+        approvate: "false",
         idUser: userId,
       };
 

@@ -8,6 +8,7 @@ import { TipModel } from "../../../models/TipModel";
 
 const PendingTipsTable: React.FC = () => {
   const [pendingTips, setPendingTips] = useState<TipModel[]>([]);
+  const token = localStorage.getItem("token") || null;
 
   useEffect(() => {
     fetchPendingTips();
@@ -15,8 +16,10 @@ const PendingTipsTable: React.FC = () => {
 
   const fetchPendingTips = async () => {
     try {
-      const tips = await getPendingTips();
-      setPendingTips(tips);
+      if (token !== null) {
+        const tips = await getPendingTips(token);
+        setPendingTips(tips);
+      }
     } catch (error) {
       console.error("Error fetching pending tips:", error);
     }
@@ -24,8 +27,10 @@ const PendingTipsTable: React.FC = () => {
 
   const handleApprove = async (tipId: string) => {
     try {
-      await approveTip(tipId);
-      fetchPendingTips();
+      if (token !== null) {
+        await approveTip(tipId, token);
+        fetchPendingTips();
+      }
     } catch (error) {
       console.error("Error approving tip:", error);
     }
@@ -33,8 +38,10 @@ const PendingTipsTable: React.FC = () => {
 
   const handleDisapprove = async (tipId: string) => {
     try {
-      await disapproveTip(tipId);
-      fetchPendingTips();
+      if (token !== null) {
+        await disapproveTip(tipId, token);
+        fetchPendingTips();
+      }
     } catch (error) {
       console.error("Error disapproving tip:", error);
     }
@@ -46,9 +53,9 @@ const PendingTipsTable: React.FC = () => {
       <table>
         <thead>
           <tr>
-            <th>Name</th>
-            <th>Address</th>
-            <th>Price</th>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Prix</th>
             <th>Actions</th>
           </tr>
         </thead>

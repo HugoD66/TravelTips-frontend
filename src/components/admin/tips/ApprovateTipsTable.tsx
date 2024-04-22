@@ -4,6 +4,7 @@ import { TipModel } from "../../../models/TipModel";
 
 const ApprovedTipsTable: React.FC = () => {
   const [approvedTips, setApprovedTips] = useState<TipModel[]>([]);
+  const token = localStorage.getItem("token") || null;
 
   useEffect(() => {
     fetchApprovedTips();
@@ -11,8 +12,11 @@ const ApprovedTipsTable: React.FC = () => {
 
   const fetchApprovedTips = async () => {
     try {
-      const tips = await getApproveTips();
-      setApprovedTips(tips);
+      if (token !== null) {
+        const tips = await getApproveTips(token);
+
+        setApprovedTips(tips);
+      }
     } catch (error) {
       console.error("Error fetching approved tips:", error);
     }

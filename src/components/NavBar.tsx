@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
-import UserMenu from "./UserMenu";
+import UserMenu from "./user/UserMenu";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AdminMenu from "./admin/AdminMenu";
@@ -53,7 +53,7 @@ const NavBar = ({
       <button className="burger" onClick={() => setIsOpen(!isOpen)}>
         ☰
       </button>
-      
+
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <Link to="/home">Accueil</Link>
         <Link to="/destinations">Destinations</Link>

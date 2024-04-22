@@ -11,7 +11,6 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, updateUser }) => {
   const [token, setToken] = useState(localStorage.getItem("token" || ""));
 
   useEffect(() => {
-    // Met à jour l'état local lorsque l'utilisateur prop change
     setUpdatedUser({ ...user });
   }, [user]);
 

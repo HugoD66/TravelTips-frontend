@@ -4,14 +4,17 @@ import { TipModel } from "../../../models/TipModel";
 
 const OtherTipsTable: React.FC = () => {
   const [otherTips, setOtherTips] = useState<TipModel[]>([]);
+  const token = localStorage.getItem("token") || null;
 
   useEffect(() => {
-    fetchOtherTips();
+    if (token !== null) {
+      fetchOtherTips(token);
+    }
   }, []);
 
-  const fetchOtherTips = async () => {
+  const fetchOtherTips = async (token: string) => {
     try {
-      const tips = await getDisapproveTips();
+      const tips = await getDisapproveTips(token);
       setOtherTips(tips);
     } catch (error) {
       console.error("Error fetching other tips:", error);

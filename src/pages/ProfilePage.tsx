@@ -1,12 +1,12 @@
-import React, { useEffect, useState} from 'react';
-import Login from '../components/forms/Login';
-import Register from '../components/forms/Register';
+import React, { useEffect, useState } from "react";
+import Login from "../components/forms/Login";
+import Register from "../components/forms/Register";
 import { useLocation } from "react-router-dom";
-import UserInfo from "../components/UserInfo";
+import UserInfo from "../components/user/UserInfo";
 import UserForm from "../components/forms/UserForm";
-import UserTips from "../components/UserTips";
 import { getMe, updateMe } from "../services/userService";
-import '../styles/profilepage.css';
+import "../styles/profilepage.css";
+import ApprovedTipsTable from "../components/user/ApprovateTipsTable";
 
 const ProfilePage = ({
   handleLogin,
@@ -71,7 +71,7 @@ const ProfilePage = ({
   };
 
   return (
-    <div className='user-container'>
+    <div className="user-container">
       {isLogged ? (
         <div>
           {selectedComponent === "userInfo" && (
@@ -86,7 +86,7 @@ const ProfilePage = ({
           )}
           {selectedComponent === "userTips" && (
             <div className="user-info-container">
-              <UserTips></UserTips>
+              <ApprovedTipsTable></ApprovedTipsTable>
             </div>
           )}
         </div>

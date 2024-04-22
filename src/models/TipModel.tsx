@@ -12,6 +12,6 @@ export class TipModel {
   public idCity?: CityModel | string;
   public adress?: string;
   public idUser?: User | string;
-  public approvate?: boolean;
+  public approvate?: string;
   public geo?: GeoModel;
 }
