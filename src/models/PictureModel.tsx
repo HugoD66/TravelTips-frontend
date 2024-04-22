@@ -1,5 +1,6 @@
 export class PictureModel {
-  id: string | undefined;
-  pictureOne: string | undefined;
-  pictureTwo: string | undefined;
+  public id?: string | undefined;
+  public url: string | undefined | File;
+  public createdBy: string | undefined;
+  public tipsId: string | undefined;
 }

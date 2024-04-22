@@ -5,6 +5,7 @@ import { Country, ApiResponse } from '../models/CountryData';
 
 const GlobeComponent: React.FC<{ onCountryClick: (country: Country) => void }> = ({ onCountryClick }) => {
     const [countries, setCountries] = useState<Country[]>([]);
+
     useEffect(() => {
         axios.get<ApiResponse[]>('https://restcountries.com/v3.1/all')
           .then(response => {

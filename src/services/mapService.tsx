@@ -11,11 +11,9 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
     if (currentMarker) {
       currentMarker.remove();
     }
-
     currentMarker = new Marker({color: '#00FF00'})
       .setLngLat([lng, lat])
       .addTo(map);
-
     try {
       const cityDetails = await getCity(lat, lng);
       if (cityDetails && cityDetails.address) {
@@ -31,7 +29,14 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
     }
   });
 }
-
+export const addCountryMarkers = (map: MaplibreMap, geoList: { lat: string; lng: string }[]) => {
+  geoList.forEach(geo => {
+    const { lat, lng } = geo;
+    const marker = new Marker({ color: '#FF6347' })
+      .setLngLat([parseFloat(lng), parseFloat(lat)])
+      .addTo(map);
+  });
+}
 
 export const getCity = async (lat: number, lng: number) => {
   try {

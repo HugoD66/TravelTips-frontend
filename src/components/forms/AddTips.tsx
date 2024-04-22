@@ -1,120 +1,118 @@
-import {ApiResponse, CountryName} from "../../models/CountryData";
-import React, {useCallback, useEffect, useState} from "react";
-import axios from "axios";
+import { CountryName} from "../../models/CountryData";
+import React, { useEffect, useState} from "react";
 import Map from "../Map";
 import Loading from "../Loading";
-import { createTip } from "../../services/tipService";
-import {createCountry} from "../../services/countryService";
-import {addMarker} from "../../services/mapService";
-import {Map as MaplibreMap} from "maplibre-gl";
+import {createCountry, fetchCountryList} from "../../services/countryService";
 import {createCity} from "../../services/cityService";
-import {CountryModel} from "../../models/CountryModel";
-
-interface CityDetails {
-  city: string;
-  postcode: string;
-}
+import {useCity} from "../../context/CityProvider";
+import {createTip} from "../../services/tipService";
+import {TipModel} from "../../models/TipModel";
 
 const AddTips = () => {
-  const [countriesList, setCountriesList] = useState<CountryName[]>([]);
+  const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
+  const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<string>("");
-  const [city, setCity] = useState("");
-  const [postcode, setPostCode] = useState("");
+  const [price, setPrice] = useState<number>(0);
+  const [pictureFiles, setPictureFiles] = useState<File[]>([]);
 
-  useEffect(() => {
-    axios.get<ApiResponse[]>('https://restcountries.com/v3.1/all')
-      .then(response => {
-        const fetchedCountries = response.data.map((country): CountryName => ({
-          name: country.name.common,
-          alpha3Code: country.cca3,
-          latlgn: country.latlng
-        }));
+  useEffect(  () => {
+    const fetchData = async () => {
+      try {
+        const fetchedCountries = await fetchCountryList();
         setCountriesList(fetchedCountries);
-      })
-      .then(() => console.log("Countries fetched", countriesList))
-      .catch(error => console.error("Fetching countries data failed", error));
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+    fetchData();
   }, []);
 
   useEffect(() => {
     console.log("Country selected:", country);
-  }, [country]);
+  }, [country, setCountry]);
+
+  useEffect(() => {
+    console.log("Updated cityDetails:", cityDetails);
+  }, [cityDetails]);
 
 
 
-  const handleAddTipsSubmit = async (event: any) => {
+  const handleAddTipsSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Tips added");
+    try {
+      const selectedCountry = countriesList.find(c => c.name === country);
+      const newCountry = await createCountry({name: selectedCountry!.name});
+      const newCity = await createCity({
+        name: cityDetails.city,
+        idCountry: newCountry.id,
+        zipCode: cityDetails.postcode
+      });
+      const tips : TipModel = {
+        name: name,
+        price: price,
+        idCity: newCity.id,
+        adress: "123 rue du test",
+        approvate: false,
+        public: true,
+        idUser: "4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3"
+      }
+      console.log(tips)
+      const tipsResponse = await createTip(tips);
+      if (tipsResponse && tipsResponse.id) {
+        console.log("Tip added with success", tipsResponse);
+        for (const file of pictureFiles) {
 
-    let countryId;
-    if (selectedCountry) {
-      try {
-        const newCountry = await createCountry({name: selectedCountry.name});
-        countryId = newCountry.id;
-        console.log("Country added with success", newCountry);
-      } catch (error) {
-        console.error("Error during country creation", error);
+        const formData = new FormData();
+          formData.append('file', file);
+
+        const uploadUrl = `http://localhost:4000/picture/upload-file/4e0f31e0-aaf3-4f17-b3b5-04e14f4a1dc3/${tipsResponse.id}`;
+        const responsePicture = await fetch(uploadUrl, {
+          method: "POST",
+          body: formData,
+          headers: {
+          },
+        });
+
+        if (!responsePicture.ok) {
+          throw new Error("Network response was not OK");
+        }
+        //const pictureData = await responsePicture.json();
+        }
+        console.log("Pictures uploaded with success");
+
+      } else {
+        console.error("No tip ID returned, check the creation process", tipsResponse);
       }
+    } catch (error) {
+      console.error("Error during the creation process", error);
     }
-    console.log("COUNTRY ID " ) ;
-    console.log(countryId) ;
-    let cityId = "";
-    if (city) {
-      try {
-        const newCity = await createCity({ name: city, idCountry: countryId, zipCode: postcode});
-        //cityId = newCity.id;
-        console.log("City added with success", newCity);
-      } catch (error) {
-        console.error("Error during city creation", error);
-      }
-    }
-   /*
-    const tips = createTip({
-      name: name,
-      price: parseInt(price),
-      idCity: country,
-      adress: "",
-    }).then((response) => {
-      console.log("Tip added with success", response);
-    }).catch((error) => {
-      console.error("Error during tip creation", error);
-    });
-    */
-  }
+  };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCountry(event.target.value);
   };
   const selectedCountry = countriesList.find(c => c.name === country);
-  const defaultLat = 51.509865; // Exemple: Latitude pour Londres
-  const defaultLng = -0.118092;
+  const defaultLat = 46.5681;
+  const defaultLng = 3.3349;
 
 
-  const handleCityFound = useCallback(({ city, postcode }: CityDetails) => {
-    setCity(city);
-    setPostCode(postcode);
-    console.log("City found:", city, "Postcode:", postcode);
-  }, []);
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files) {
+      console.log(event.target.files)
 
-  /**
-   * const handleCityFound = useCallback((cityName: any) => {
-   *     setCity(cityName.address.city);
-   *     setZipCode(cityName.address.postcode);
-   *     console.log("City found:", cityName);
-   *     console.log("City found:", cityName);
-   *     console.log("City found:", cityName);
-   *     console.log("City found:", cityName);
-   *     console.log("City found:", cityName);
-   *   }, []);
-   */
-
+      setPictureFiles(Array.from(event.target.files));
+      console.log(pictureFiles)
+    }
+    console.log(pictureFiles)
+  };
 
   return (
-      <div>
-        <h1>Add Tips</h1>
-        <div className="add-tips-form">
-          <form onSubmit={handleAddTipsSubmit}>
+    <div>
+      <h1>Add Tips</h1>
+      <div className="add-tips-form">
+        <form onSubmit={handleAddTipsSubmit}>
+          <div className="form-group">
             <label htmlFor="name">
               Title:
               <input id="name" type="text" name="name" value={name} onChange={(e) => setName(e.target.value)}/>
@@ -125,15 +123,26 @@ const AddTips = () => {
                      type="range"
                      name="price"
                      value={price}
-                     onChange={(e) => setPrice(e.target.value)}
+                     onChange={(e) => setPrice(parseInt(e.target.value, 10))} // Convertit la valeur en nombre
                      min="0" max="5"
                      step="1"
               />
             </label>
-            <button type="submit" value="Envoyer">Envoyer</button>
 
-            <label htmlFor="country">
-              Country:
+            <label htmlFor="pictureList">Photos:</label>
+            <input id="pictureList" type="file" name="pictureList" multiple onChange={handleFileChange}/>
+
+            <button
+              type="submit"
+              value="Envoyer"
+              className="submit-button-form"
+            >Envoyer
+            </button>
+          </div>
+
+          <div className="map-content">
+            <label htmlFor="country" className="country-input">
+              Choisissez un pays
               <select id="country" name="country" onChange={handleCountryChange} value={country}>
                 {countriesList.map((country, index) =>
                   <option key={index} value={country.name}>{country.name}</option>
@@ -144,15 +153,15 @@ const AddTips = () => {
               <Map
                 lng={selectedCountry?.latlgn?.[1] || defaultLng}
                 lat={selectedCountry?.latlgn?.[0] || defaultLat}
-                onCityFound={handleCityFound}
               />
             ) : (
               <Loading width={400} height={400}/>
             )}
+          </div>
 
-          </form>
-        </div>
+        </form>
       </div>
+    </div>
   )
 }
 

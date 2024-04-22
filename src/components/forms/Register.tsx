@@ -1,5 +1,6 @@
-import React, { FormEvent, useState } from "react";
-import { registerUser } from "../../services/userService";
+import React, {FormEvent, useState} from "react";
+import { registerUser} from "../../services/userService";
+import '../../styles/form.css';
 
 const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
   const [mail, setMail] = useState<string>("");
@@ -87,12 +88,12 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
   };
 
   return (
-    <div className="register-form">
+    <div className="container-form">
       <>
         <h2>Formulaire d'enregistrement</h2>
         <form onSubmit={handleRegisterSubmit}>
           <label htmlFor="firstname">
-            Nom :
+            Prénom :
             <input
               id="firstname"
               type="text"
@@ -111,8 +112,8 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
               onChange={(e) => setLastname(e.target.value)}
             />
           </label>
-          <label htmlFor="mail">
-            Adresse mail :
+          <label htmlFor="email">
+            E-mail :
             <input
               id="mail"
               type="text"
@@ -143,7 +144,7 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
           </label>
           <input type="submit" value="Envoyer" />
         </form>
-        <p onClick={() => goChangeForm()}>Déjà enregistré ? </p>
+        <p onClick={() => goChangeForm()}>Déjà inscrit ? </p>
         <>{error && <p className="error-message">{error.message}</p>}</>
       </>
     </div>

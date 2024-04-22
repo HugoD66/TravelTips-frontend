@@ -1,10 +1,29 @@
-.map-content {
-    height: 300px;
-    width: 300px;
-}
+
 .map-wrap {
+    margin: auto;
     position: relative;
-    width: 80%;
-    height: calc(100% - 77px);
+    width: 400px;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
+}
+.map {
+    position: absolute;
+    /*top: 0;*/
+    width: 400px;
+    /*left: 0*/;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
 }
 
+/*
+.maplibregl-canvas-container, .maplibregl-interactive, .maplibregl-touch-drag-pan, .maplibregl-touch-zoom-rotate {
+    position: absolute;
+    !*top: 0;*!
+    width: 400px;
+    !*left: 0*!;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
+}*/

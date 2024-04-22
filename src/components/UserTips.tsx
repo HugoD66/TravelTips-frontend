@@ -25,7 +25,7 @@ const UserTips = () => {
         <div key={index} className="tip-card">
           <h3>{tip.name}</h3>
           <p>
-            Adresse: {tip.adress}, {tip.numberAdress}
+            Adresse: {tip.adress}
           </p>
           <p>Prix: {tip.price}/5</p>
         </div>
