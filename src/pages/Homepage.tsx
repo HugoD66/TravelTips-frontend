@@ -4,6 +4,9 @@ import { Country } from '../models/CountryData';
 import '../styles/homepage.css';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import Modal from "../components/Modal";
+import AddTips from "../components/forms/AddTips";
 
 type WeatherInfo = {
   temp_c: number;
@@ -26,9 +29,13 @@ type Weather = {
   };
 };
 
+
 const HomePage = () => {
   const [selectedCountry, setSelectedCountry] = useState<Country | null>(null);
   const [weather, setWeather] = useState<Weather | null>(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (selectedCountry?.capital) {
@@ -48,6 +55,10 @@ const HomePage = () => {
     }
   };
 
+  const handleCreateItinerary = () => {
+    navigate('/itinerary');  
+  };
+
   return (
     <div className="containerHomepage">
       <h1 className="titleHomepage">Bienvenue voyageur</h1>
@@ -57,9 +68,9 @@ const HomePage = () => {
         </div>
         {selectedCountry && (
           <div className="countryCard">
-            <div className="info-country">
+            <div className="infocountry">
               <img src={selectedCountry.flag} alt={`Flag of ${selectedCountry.name}`} className="country-flag" />
-              <div className="country-details">
+              <div className="countrydetails">
                 <h2>{selectedCountry.name}</h2>
                 <p>Capitale: {selectedCountry.capital}</p>
                 <p>Région: {selectedCountry.region}</p>
@@ -70,27 +81,19 @@ const HomePage = () => {
                 <p>Longitude: {selectedCountry.latlng[1]}</p>
               </div>
             </div>
-            <div className="weather-details">
+            <div className="weatherdetails">
               {weather && (
                 <>
                   <h3>Météo actuelle à {selectedCountry.capital}</h3>
                   <p>Température: {weather.current.temp_c} °C</p>
                   <p>Condition: {weather.current.condition.text}</p>
-                  {/* <h4>Prévisions:</h4>
-                  {weather.forecast.forecastday.map((day, index) => (
-                    <div key={index}>
-                      <p>{day.date}</p>
-                      <p>Max temp: {day.day.maxtemp_c} °C</p>
-                      <p>Min temp: {day.day.mintemp_c} °C</p>
-                      <p>Condition: {day.day.condition.text}</p>
-                    </div>
-                  ))} */}
                 </>
               )}
-              <div className="button-container">
+              <div className="buttoncontainer">
                 <Link to={`/country/${selectedCountry.name.replace(/\s+/g, '-')}`}>Voir la destination</Link>
-                <button onClick={() => alert('Ajouter un tip')}>Ajouter un tip</button>
-                <button onClick={() => alert('Créer un itinéraire')}>Créer un itinéraire</button>
+                <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
+                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}                
+                <button onClick={handleCreateItinerary}>Créer un itinéraire</button>
               </div>
             </div>
           </div>

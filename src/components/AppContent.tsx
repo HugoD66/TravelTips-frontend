@@ -4,14 +4,12 @@ import HomePage from "../pages/Homepage";
 import DestinationsPage from "../pages/DestinationPage";
 import ItineraryPage from "../pages/ItineraryPage";
 import ProfilePage from "../pages/ProfilePage";
-import LoginPage from "../pages/ProfilePage";
 import NavBar from "../components/NavBar";
 import AdminPage from "../pages/AdminPage";
 import AddTips from "./forms/AddTips";
 import CountryPage from "../pages/CountryPage";
 
 const AppContent = () => {
-  const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleLogin = (status: boolean) => {
