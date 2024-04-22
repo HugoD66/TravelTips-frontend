@@ -2,7 +2,8 @@ import { PictureModel } from "./PictureModel";
 import { CityModel } from "./CityModel";
 import { RateModel } from "./RateModel";
 import { CommentModel } from "./CommentModel";
-import {GeoModel} from "./GeoModel";
+import { GeoModel } from "./GeoModel";
+import { User } from "./UserData";
 
 export class TipModel {
   public id?: string;
@@ -10,11 +11,7 @@ export class TipModel {
   public price!: number;
   public idCity?: CityModel | string;
   public adress?: string;
-  public pictures?: PictureModel[];
-  public idUser?: string;
-  public rate?: RateModel[];
-  public comment?: CommentModel[];
+  public idUser?: User | string;
   public approvate?: boolean;
-  public public?: boolean;
   public geo?: GeoModel;
 }

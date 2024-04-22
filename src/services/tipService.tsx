@@ -102,3 +102,82 @@ export const deleteTip = (id: string) => {
       throw error;
     });
 };
+
+export const approveTip = (id: string) => {
+  return fetch(`http://localhost:4000/tips/approvate/${id}`, {
+    method: "PATCH",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+
+export const disapproveTip = (id: string) => {
+  return fetch(`http://localhost:4000/tips/disapprove/${id}`, {
+    method: "PATCH",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+
+export const getPendingTips = () => {
+  return fetch(`http://localhost:4000/tips/pendingTips`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+
+export const getApproveTips = () => {
+  return fetch(`http://localhost:4000/tips/approvateTips`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+export const getDisapproveTips = () => {
+  return fetch(`http://localhost:4000/tips/disapproveTips`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
