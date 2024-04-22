@@ -1,8 +1,8 @@
 export class UserModel {
-  id?: string;
+  // id?: string;
   firstname!: string;
   lastname!: string;
-  email!: string;
+  mail!: string;
   birthday!: string;
   password?: string; //TODO Voir si on peut empecher le retour du password
 }

@@ -2,9 +2,9 @@ import {TipModel} from "./TipModel";
 import {CountryModel} from "./CountryModel";
 
 export class CityModel {
-  id!: string;
+  id?: string;
   name!: string;
-  zipCode!: number;
+  zipCode?: string;
   idCountry?: CountryModel | null;
-  tips: TipModel[] | string[] = [];
+  tips?: TipModel[] | string[] = [];
 }

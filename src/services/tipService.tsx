@@ -1,4 +1,4 @@
-import {TipModel} from "../models/TipModel";
+import { TipModel } from "../models/TipModel";
 
 export const createTip = (tip: TipModel) => {
   return fetch("http://localhost:4000/tips", {
@@ -17,9 +17,8 @@ export const createTip = (tip: TipModel) => {
     .catch((error) => {
       console.error("Erreur lors de la création du tip:", error);
       throw error;
-  });
-
-}
+    });
+};
 
 export const getTipList = () => {
   return fetch(`http://localhost:4000/tips`, {
@@ -34,9 +33,24 @@ export const getTipList = () => {
     .catch((error) => {
       console.error("Erreur lors de la récupération des tips:", error);
       throw error;
-  });
-}
+    });
+};
 
+export const getTipListUser = (id: string) => {
+  return fetch(`http://localhost:4000/tips/myTips/${id}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
 export const getTipById = (id: string) => {
   return fetch(`http://localhost:4700/tips/${id}`, {
     method: "GET",
@@ -50,8 +64,8 @@ export const getTipById = (id: string) => {
     .catch((error) => {
       console.error("Erreur lors de la récupération du tip:", error);
       throw error;
-  });
-}
+    });
+};
 
 export const updateTip = (tip: TipModel) => {
   return fetch(`http://localhost:4000/tips/${tip.id}`, {
@@ -70,8 +84,8 @@ export const updateTip = (tip: TipModel) => {
     .catch((error) => {
       console.error("Erreur lors de la modification du tip:", error);
       throw error;
-  });
-}
+    });
+};
 
 export const deleteTip = (id: string) => {
   return fetch(`http://localhost:4000/tips/${id}`, {
@@ -86,5 +100,5 @@ export const deleteTip = (id: string) => {
     .catch((error) => {
       console.error("Erreur lors de la suppression du tip:", error);
       throw error;
-  });
-}
+    });
+};

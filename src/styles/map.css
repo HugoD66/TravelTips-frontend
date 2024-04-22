@@ -1,5 +1,29 @@
+
 .map-wrap {
+    margin: auto;
     position: relative;
-    height: 400px; /* Exemple de hauteur fixe */
-    width: 100%; /* Exemple de largeur */
+    width: 400px;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
 }
+.map {
+    position: absolute;
+    /*top: 0;*/
+    width: 400px;
+    /*left: 0*/;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
+}
+
+/*
+.maplibregl-canvas-container, .maplibregl-interactive, .maplibregl-touch-drag-pan, .maplibregl-touch-zoom-rotate {
+    position: absolute;
+    !*top: 0;*!
+    width: 400px;
+    !*left: 0*!;
+    height: 400px;
+    max-width: 400px;
+    max-height: 400px;
+}*/
