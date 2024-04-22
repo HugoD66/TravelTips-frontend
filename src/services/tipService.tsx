@@ -1,11 +1,12 @@
 import { TipModel } from "../models/TipModel";
 
-export const createTip = (tip: TipModel) => {
+export const createTip = (tip: TipModel, token: string) => {
   return fetch("http://localhost:4000/tips", {
     method: "POST",
     body: JSON.stringify(tip),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {

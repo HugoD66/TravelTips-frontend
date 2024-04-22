@@ -15,6 +15,7 @@ const AddTips = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,8 +62,10 @@ const AddTips = () => {
         approvate: "false",
         idUser: userId,
       };
-
-      const tipsResponse = await createTip(tips);
+      if (token == null) {
+        return;
+      }
+      const tipsResponse = await createTip(tips, token);
       if (tipsResponse && tipsResponse.id) {
         console.log("Tip added with success", tipsResponse);
         for (const file of pictureFiles) {
