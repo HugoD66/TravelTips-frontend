@@ -20,11 +20,9 @@ const AppContent = () => {
 
   return (
     <>
-      {location.pathname !== "/" && (
-        <NavBar isLoggedIn={isLoggedIn} handleLogin={handleLogin} />
-      )}
+      <NavBar isLoggedIn={isLoggedIn} handleLogin={handleLogin} />
       <Routes>
-        <Route path="/" element={<LoginPage handleLogin={handleLogin} />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/add-tips" element={<AddTips />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
