@@ -92,12 +92,8 @@ const AddTips = () => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      console.log(event.target.files);
-
       setPictureFiles(Array.from(event.target.files));
-      console.log(pictureFiles);
     }
-    console.log(pictureFiles);
   };
 
   return (

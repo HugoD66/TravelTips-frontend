@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import '../styles/destination.css';
+import {getTipList} from "../services/tipService";
 
 interface Country {
     cca3: string;
@@ -37,7 +38,7 @@ const DestinationPage = () => {
     const [activeSubregion, setActiveSubregion] = useState<string | null>(null);
     const [tips, setTips] = useState<Tip[]>([]);
     const [itineraries, setItineraries] = useState<Itinerary[]>([]);
-
+    const token = localStorage.getItem('token');
     useEffect(() => {
         fetchAllCountries();
         fetchTips();
@@ -81,9 +82,12 @@ const DestinationPage = () => {
 
     const fetchTips = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/tips');
-            if (Array.isArray(response.data)) {
-                setTips(response.data);
+            if(!token) {
+                return;
+            }
+            const response = await getTipList(token)
+            if (Array.isArray(response)) {
+                setTips(response);
             } else {
                 console.error('Expected an array of tips, but received:', response.data);
             }
