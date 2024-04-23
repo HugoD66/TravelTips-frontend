@@ -3,19 +3,19 @@ import { addMarker, setCountryMarkersOnMap } from "../services/mapService";
 import { useCity } from "../context/CityProvider";
 import maplibregl from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
+import {TipModel} from "../models/TipModel";
 
 interface MapProps {
-  isInteractive: boolean; //Pour AddTips
-  initialPosition: { lat: number; lng: number }; //Pour AddTips
-  markers?: { lat: string; lng: string }[]; //Pour CountryPage
+  isInteractive: boolean;
+  initialPosition: { lat: number; lng: number };
+  markers?: TipLocation[];
   onLocationSelect?: (location: { lat: number; lng: number }) => void;
-
-  /*
-  lat?: number;
-  lng?: number;
-  zoom?: number;  //Pour AddTips au moment se la séléction du pays
-  geoList?: { lat: string, lng: string }[]; //Pour CountryPage
-  */
+  onMarkerClick?: (tip: TipModel) => void;
+}
+export interface TipLocation {
+  lat: string;
+  lng: string;
+  tipSelected: string;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -23,11 +23,12 @@ const Map: React.FC<MapProps> = ({
   onLocationSelect,
   initialPosition,
   markers,
+ onMarkerClick,
 }) => {
   const { cityDetails, setCityDetails } = useCity();
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
-
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (!mapContainer.current) return;
 
@@ -55,19 +56,15 @@ const Map: React.FC<MapProps> = ({
         // Vérifie si le style de la carte est chargé
         setCountryMarkersOnMap(
           map.current,
-          markers.map((marker) => ({
-            lat: marker.lat.toString(),
-            lng: marker.lng.toString(),
-          }))
+          markers,
+          handleMarkerClick
         );
       } else {
         map.current.on("load", () => {
           setCountryMarkersOnMap(
             map.current!,
-            markers.map((marker) => ({
-              lat: marker.lat.toString(),
-              lng: marker.lng.toString(),
-            }))
+            markers,
+            handleMarkerClick
           );
         });
       }
@@ -81,6 +78,15 @@ const Map: React.FC<MapProps> = ({
       essential: true,
     });
   }, [initialPosition.lat, initialPosition.lng]);
+
+  const handleMarkerClick = (marker: TipLocation) => {
+    if (onMarkerClick) {
+      getTipByName(marker.tipSelected, token).then((tip) => {
+        onMarkerClick(tip);
+      });
+      //onMarkerClick(marker.tipSelected);
+    }
+  };
 
   const handleCityFound = useCallback(
     ({ city, postcode, address, lat, lng }: any) => {
