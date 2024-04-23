@@ -1,13 +1,12 @@
 import { TipModel } from "../models/TipModel";
 
-
 export const createTip = (tip: TipModel, token: string) => {
   return fetch("http://localhost:4000/tips", {
     method: "POST",
     body: JSON.stringify(tip),
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${token}`,
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
@@ -70,8 +69,7 @@ export const getTipsByCityId = (id: string) => {
       console.error("Erreur lors de la récupération des tips:", error);
       throw error;
     });
-
-}
+};
 export const getTipById = (id: string, token: string) => {
   return fetch(`http://localhost:4700/tips/${id}`, {
     method: "GET",
@@ -93,7 +91,7 @@ export const getTipById = (id: string, token: string) => {
 
 export const updateTip = (tip: TipModel, token: string) => {
   return fetch(`http://localhost:4000/tips/${tip.id}`, {
-    method: "PUT",
+    method: "PATCH",
     body: JSON.stringify(tip),
     headers: {
       "Content-Type": "application/json",

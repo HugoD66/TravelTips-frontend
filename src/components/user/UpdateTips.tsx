@@ -9,12 +9,22 @@ import { createTip } from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 
-const AddTips = () => {
+interface AddTipsProps {
+  selectedTips: TipModel | null; // Le type peut être TipModel ou null
+}
+
+const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const { cityDetails, setCityDetails } = useCity();
-  const [country, setCountry] = useState<string>("");
+  const [country, setCountry] = useState<string>(
+    typeof selectedTips === "object" &&
+      selectedTips?.hasOwnProperty("idCity") &&
+      typeof selectedTips?.idCity === "object"
+      ? selectedTips?.idCity.idCountry?.name || ""
+      : ""
+  );
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
-  const [name, setName] = useState<string>("");
-  const [price, setPrice] = useState<number>(0);
+  const [name, setName] = useState<string>(selectedTips?.name || "");
+  const [price, setPrice] = useState<number>(selectedTips?.price || 0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -103,7 +113,7 @@ const AddTips = () => {
 
   return (
     <div>
-      <h1>Ajouter un Tips</h1>
+      <h1>Modifier un Tips</h1>
       <div className="add-tips-form">
         <form onSubmit={handleAddTipsSubmit}>
           <div className="map-content">
@@ -187,7 +197,7 @@ const AddTips = () => {
               value="Envoyer"
               className="submit-button-form"
             >
-              Envoyer
+              Modifier
             </button>
           </div>
         </form>
@@ -198,4 +208,4 @@ const AddTips = () => {
   );
 };
 
-export default AddTips;
+export default UpdateTips;

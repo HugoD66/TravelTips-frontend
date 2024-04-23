@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { TipModel } from "../../models/TipModel";
 import { getTipsUser } from "../../services/tipService";
+import UpdateTips from "./UpdateTips";
 
 const UserTipsTable: React.FC = () => {
   const [tips, setTips] = useState<TipModel[]>([]);
   const token: string | null = localStorage.getItem("token");
   const userId: string | null = localStorage.getItem("id");
+  const [selectedTip, setSelectedTip] = useState<TipModel | null>(null); // État pour stocker le tip sélectionné pour la modification
 
   useEffect(() => {
     fetchTips();
-  }, []);
+  }, [token]);
 
   const fetchTips = async () => {
     try {
@@ -22,11 +24,39 @@ const UserTipsTable: React.FC = () => {
       console.error("Error fetching user tips:", error);
     }
   };
+  const handleModify = (tipId: string) => {
+    const selected = tips.find((tip) => tip.id === tipId);
+    setSelectedTip(selected || null);
+  };
 
+  const renderTipForm = () => {
+    if (selectedTip) {
+      return <UpdateTips selectedTips={selectedTip} />;
+    }
+    return null;
+  };
   const filterTipsByApprovate = (approvateStatus: string) => {
     return tips.filter((tip) => tip.approvate === approvateStatus);
   };
 
+  const filterTipsNoModify = (approvateStatus: string, nbApprovate: number) => {
+    const tipsNoModify = tips.filter(
+      (tip) =>
+        tip.approvate === approvateStatus && tip.nbApprobation === nbApprovate
+    );
+    const tipsTest = tipsNoModify.filter(
+      (tip) => tip.nbApprobation === nbApprovate
+    );
+    return tipsTest;
+  };
+
+  const filterTipsModify = (approvateStatus: string, nbApprovate: number) => {
+    const tipsModify = tips.filter(
+      (tip) =>
+        tip.approvate === approvateStatus && tip.nbApprobation > nbApprovate
+    );
+    return tipsModify;
+  };
   return (
     <div>
       <h2>Mes tips en attente de validation</h2>
@@ -97,7 +127,7 @@ const UserTipsTable: React.FC = () => {
         </tbody>
       </table>
 
-      <h2>Mes tips rejetés</h2>
+      <h2>Mes tips rejetés modifiables</h2>
       <table>
         <thead>
           <tr>
@@ -110,7 +140,48 @@ const UserTipsTable: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {filterTipsByApprovate("false").map((tip) => (
+          {filterTipsModify("false", 0).map((tip) => (
+            <tr key={tip.id}>
+              <td>{tip.name}</td>
+              <td>{tip.adress}</td>
+              <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
+              <td>
+                {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
+              </td>
+              <td>
+                {tip.idCity &&
+                  typeof tip.idCity === "object" &&
+                  tip.idCity.idCountry &&
+                  typeof tip.idCity.idCountry === "object" &&
+                  tip.idCity.idCountry.name}
+              </td>
+              <td>{tip.price}</td>
+              <td>
+                {" "}
+                <button onClick={() => tip.id && handleModify(tip.id)}>
+                  Modifier
+                </button>
+                {renderTipForm()}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+
+      <h2>Mes tips rejetés non modifiables</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nom</th>
+            <th>Adresse</th>
+            <th>Ville</th>
+            <th>Code Postal</th>
+            <th>Pays</th>
+            <th>Prix</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filterTipsNoModify("false", 0).map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
               <td>{tip.adress}</td>

@@ -11,4 +11,5 @@ export class TipModel {
   public adress!: string;
   public idUser!: User | string;
   public approvate!: string;
+  public nbApprobation!: number;
 }
