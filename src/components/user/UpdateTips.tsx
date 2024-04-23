@@ -16,7 +16,7 @@ interface AddTipsProps {
 const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
-  const [countriesList, setCountriesList] = useState<CountryName[]>([]);
+  const [countriesList, setCountriesList] = useState<{ name: string }[]>([]);
   const [name, setName] = useState<string>(selectedTips?.name || "");
   const [city, setCity] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
@@ -31,13 +31,10 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
     const fetchData = async () => {
       try {
         const fetchedCountries = await fetchCountryList();
-        const convertedCountries = fetchedCountries.map((country) => ({
-          code: null,
+        const countryName = fetchedCountries.map((country) => ({
           name: country.name,
-          alpha3Code: country.alpha3Code,
-          latlgn: country.latlgn,
         }));
-        setCountriesList(convertedCountries);
+        setCountriesList(countryName);
       } catch (error) {
         console.error("Error fetching countries:", error);
       }
@@ -47,37 +44,15 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
 
   useEffect(() => {
     if (selectedTips) {
-      setCountry(
-        typeof selectedTips === "object" &&
-          selectedTips?.hasOwnProperty("idCity") &&
-          typeof selectedTips?.idCity === "object"
-          ? selectedTips?.idCity.idCountry?.name || ""
-          : ""
-      );
-      setName(selectedTips.name);
-      setPrice(selectedTips.price);
-      setCity(
-        typeof selectedTips === "object" &&
-          selectedTips?.hasOwnProperty("idCity") &&
-          typeof selectedTips?.idCity === "object"
-          ? selectedTips?.idCity?.name || ""
-          : ""
-      );
-      setZipCode(
-        typeof selectedTips === "object" &&
-          selectedTips?.hasOwnProperty("idCity") &&
-          typeof selectedTips?.idCity === "object"
-          ? selectedTips?.idCity?.zipCode || ""
-          : ""
-      );
-      setAddress(selectedTips?.address);
-      setCountry(
-        typeof selectedTips === "object" &&
-          selectedTips?.hasOwnProperty("idCity") &&
-          typeof selectedTips?.idCity === "object"
-          ? selectedTips?.idCity.idCountry?.name || ""
-          : ""
-      );
+      const idCity = selectedTips.idCity;
+      if (idCity && typeof idCity === "object") {
+        setCountry(idCity.idCountry?.name || "");
+        setName(selectedTips.name);
+        setPrice(selectedTips.price);
+        setCity(idCity.name || "");
+        setZipCode(idCity.zipCode || "");
+        setAddress(selectedTips.address || "");
+      }
     }
   }, [selectedTips]);
 
@@ -126,7 +101,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         idUser: userId,
         lng: cityDetails.lng,
         lat: cityDetails.lat,
-        nbApprobation: 3,
+        nbApprobation: selectedTips.nbApprobation - 1,
       };
 
       if (!updatedTips.name || !updatedTips.idCity || !updatedTips.address) {
@@ -141,6 +116,11 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
 
       await updateTip(updatedTips, token);
       setSuccess("Tips modifié avec succès !");
+      setAddress("");
+      setCity("");
+      setCountry("");
+      setName("");
+      setPrice(0);
     } catch (error) {
       setError("Une erreur est survenue lors de la modification du tips");
     }
@@ -197,8 +177,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
               <Map
                 isInteractive={true}
                 initialPosition={{
-                  lat: selectedCountry?.latlgn?.[0],
-                  lng: selectedCountry?.latlgn?.[1],
+                  lat: parseInt(cityDetails.lat),
+                  lng: parseInt(cityDetails.lng),
                 }}
                 onLocationSelect={handleLocationSelect}
               />
