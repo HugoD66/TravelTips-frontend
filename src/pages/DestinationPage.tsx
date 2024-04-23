@@ -91,12 +91,16 @@ const DestinationPage = () => {
                 return;
             }
             const response = await getLastestTips(token)
+            setTips(response);
+            console.log(response)
+
+            /* TODO A CONCERVER ?
             if (Array.isArray(response)) {
                 setTips(response);
             } else {
                 console.error('Expected an array of tips, but received:', response.data);
             }
-            console.log(response)
+             */
         } catch (error) {
             console.error('Error fetching tips:', error);
         }
