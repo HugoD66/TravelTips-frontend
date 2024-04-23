@@ -15,32 +15,13 @@ interface AddTipsProps {
 
 const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const { cityDetails, setCityDetails } = useCity();
-  const [country, setCountry] = useState<string>(
-    typeof selectedTips === "object" &&
-      selectedTips?.hasOwnProperty("idCity") &&
-      typeof selectedTips?.idCity === "object"
-      ? selectedTips?.idCity.idCountry?.name || ""
-      : ""
-  );
+  const [country, setCountry] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>(selectedTips?.name || "");
-  const [city, setCity] = useState<string>(
-    typeof selectedTips === "object" &&
-      selectedTips?.hasOwnProperty("idCity") &&
-      typeof selectedTips?.idCity === "object"
-      ? selectedTips?.idCity?.name || ""
-      : ""
-  );
-  const [zipCode, setZipCode] = useState<string>(
-    typeof selectedTips === "object" &&
-      selectedTips?.hasOwnProperty("idCity") &&
-      typeof selectedTips?.idCity === "object"
-      ? selectedTips?.idCity?.zipCode || ""
-      : ""
-  );
-  const [adresse, setAdresse] = useState<string>(selectedTips?.address || "");
-
-  const [price, setPrice] = useState<number>(selectedTips?.price || 0);
+  const [city, setCity] = useState<string>("");
+  const [zipCode, setZipCode] = useState<string>("");
+  const [address, setAddress] = useState<string>("");
+  const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
@@ -75,6 +56,28 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
       );
       setName(selectedTips.name);
       setPrice(selectedTips.price);
+      setCity(
+        typeof selectedTips === "object" &&
+          selectedTips?.hasOwnProperty("idCity") &&
+          typeof selectedTips?.idCity === "object"
+          ? selectedTips?.idCity?.name || ""
+          : ""
+      );
+      setZipCode(
+        typeof selectedTips === "object" &&
+          selectedTips?.hasOwnProperty("idCity") &&
+          typeof selectedTips?.idCity === "object"
+          ? selectedTips?.idCity?.zipCode || ""
+          : ""
+      );
+      setAddress(selectedTips?.address);
+      setCountry(
+        typeof selectedTips === "object" &&
+          selectedTips?.hasOwnProperty("idCity") &&
+          typeof selectedTips?.idCity === "object"
+          ? selectedTips?.idCity.idCountry?.name || ""
+          : ""
+      );
     }
   }, [selectedTips]);
 
@@ -151,7 +154,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
       lng: location.lng,
       lat: location.lat,
     });
-    setAdresse(location.address);
+    setAddress(location.address);
     setCity(location.city);
     setZipCode(location.postcode);
   };
@@ -205,7 +208,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
           </div>
           <div className="form-group">
             <label>Adresse:</label>
-            <input type="text" value={adresse} readOnly />
+            <input type="text" value={address} readOnly />
           </div>
           <div className="form-group">
             Ville: <input type="text" value={city} readOnly />
