@@ -8,8 +8,13 @@ import { useCity } from "../../context/CityProvider";
 import { createTip } from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import {createPicture} from "../../services/pictureService";
+import { toast } from 'react-toastify';
 
-const AddTips = () => {
+interface AddTipsProps {
+  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
@@ -19,12 +24,19 @@ const AddTips = () => {
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<string>('');
   const token = localStorage.getItem("token");
+  
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const fetchedCountries = await fetchCountryList();
-        setCountriesList(fetchedCountries);
+        const convertedCountries = fetchedCountries.map((country) => ({
+          code: null, // Replace with the actual code value
+          name: country.name,
+          alpha3Code: country.alpha3Code,
+          latlgn: country.latlgn,
+        }));
+        setCountriesList(convertedCountries);
       } catch (error) {
         console.error("Error fetching countries:", error);
       }
@@ -53,14 +65,14 @@ const AddTips = () => {
         name: name,
         price: price,
         idCity: newCity.id,
-        adress: cityDetails.adress,
+        address: cityDetails.address,
         approvate: "false",
         idUser: userId,
         lng: cityDetails.lng,
         lat: cityDetails.lat,
       };
 
-      if(!tips.name || !tips.idCity || !tips.adress) {
+      if(!tips.name || !tips.idCity || !tips.address) {
         setError("Vous devez remplir tous les champs");
         return;
       }
@@ -73,15 +85,15 @@ const AddTips = () => {
         setError("Erreur pendant la création du tips");
         return;
       }
-
       for (const file of pictureFiles) {
         const formData: FormData = new FormData();
         formData.append("file", file);
          await createPicture(formData, userId, tipsResponse.id);
       }
-      setSuccess("Tips ajouté avec succès !");
+      setIsModalOpen(false);
+      toast.success("Tips ajouté avec succès !");
     } catch (error) {
-      setError("Vous devez choisir un pays pour ajouter un tips");
+      toast.error("Erreur d'enregistrement du tips");;
     }
   };
 
@@ -136,38 +148,39 @@ const AddTips = () => {
           </div>
           <div className="city-content">
             <label>
-              Ville:
-              <input type="text" value={cityDetails.city} readOnly />
+              Address: 
             </label>
+            <input type="text" value={cityDetails.address} readOnly />
+
+            <label>
+              Ville:
+            </label>
+            <input type="text" value={cityDetails.city} readOnly />
+
             <label>
               Code postal:
-              <input type="text" value={cityDetails.postcode} readOnly />
             </label>
+            <input type="text" value={cityDetails.postcode} readOnly />
+
           </div>
+
           <div className="form-group">
             <label htmlFor="name">
               Nom du tips:
-              <input
+            </label>
+            <input
                 id="name"
                 type="text"
                 name="name"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
               />
-            </label>
+
             <label htmlFor="price">
               Fourchette de prix:
-              <input
-                id="price"
-                type="range"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(parseInt(e.target.value, 10))}
-                min="0"
-                max="5"
-                step="1"
-              />
             </label>
+            <input type="range" id="price" min="0" max="100" value={price} onChange={e => setPrice(parseInt(e.target.value))} />
+
 
             <label htmlFor="pictureList">Photos:</label>
             <input

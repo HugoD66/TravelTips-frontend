@@ -81,8 +81,8 @@ const Map: React.FC<MapProps> = ({isInteractive, onLocationSelect, initialPositi
   }, [initialPosition.lat, initialPosition.lng]);
 
 
-  const handleCityFound = useCallback(({ city, postcode, adress, lat, lng }: any) => {
-    setCityDetails({ city, postcode, adress, lat, lng});
+  const handleCityFound = useCallback(({ city, postcode, address, lat, lng }: any) => {
+    setCityDetails({ city, postcode, address, lat, lng});
   }, [setCityDetails]);
 
 
