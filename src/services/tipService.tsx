@@ -21,7 +21,25 @@ export const createTip = (tip: TipModel, token: string) => {
       throw error;
     });
 };
+export const getLastestTips = (token: string) => {
+  return fetch("http://localhost:4000/tips/latest", {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
 
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+}
 export const getTipList = (token: string) => {
   return fetch(`http://localhost:4000/tips`, {
     method: "GET",

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import {Link, useNavigate} from 'react-router-dom';
 import '../styles/destination.css';
-import {getTipList} from "../services/tipService";
+import {getLastestTips} from "../services/tipService";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
 
@@ -90,14 +90,13 @@ const DestinationPage = () => {
             if(!token) {
                 return;
             }
-            const response = await getTipList(token)
+            const response = await getLastestTips(token)
             if (Array.isArray(response)) {
                 setTips(response);
             } else {
                 console.error('Expected an array of tips, but received:', response.data);
             }
-            //TODO const { data } = await axios.get<Tip[]>('http://localhost:4000/tips?_sort=createdAt&_order=desc&_limit=6');
-
+            console.log(response)
         } catch (error) {
             console.error('Error fetching tips:', error);
         }
