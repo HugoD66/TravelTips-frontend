@@ -113,24 +113,6 @@ export const getTipById = (id: string, token: string) => {
       throw error;
     });
 };
-export const getTipByName = (name: string, token: string) => {
-  return fetch(`http://localhost:4700/tips/by-name/${name}`, {
-    method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error("Réponse réseau non OK");
-      }
-      return response.json();
-    })
-    .catch((error) => {
-      console.error("Erreur lors de la récupération du tip:", error);
-      throw error;
-    });
-};
 export const updateTip = (tip: TipModel, token: string) => {
   return fetch(`http://localhost:4000/tips/${tip.id}`, {
     method: "PATCH",

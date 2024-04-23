@@ -24,7 +24,6 @@ export const registerUser = (
         throw new Error("L'inscription a échoué");
       }
       if (response.status === 400) {
-        // Gérer l'erreur "BdRequets"
         throw new Error(
           "Vérifier que les champs sont bien remplis ou contacter l'utilisateur."
         );
@@ -63,7 +62,6 @@ export const registerUserAdmin = (
         throw new Error("L'inscription a échoué");
       }
       if (response.status === 400) {
-        // Gérer l'erreur "BdRequets"
         throw new Error(
           "Vérifier que les champs sont bien remplis ou contacter l'utilisateur."
         );
@@ -89,10 +87,8 @@ export const loginUser = async (mail: String, password: String) => {
     if (!response.ok) {
       console.log(response);
       if (response.status === 401) {
-        // Gérer l'erreur "Unauthorized" (statut 401)
         throw new Error("Le mot de passe ou/et l'adresse mail est incorrect");
       } else {
-        // Gérer d'autres erreurs
         throw new Error("Erreur réseau");
       }
     }

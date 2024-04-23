@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { addMarker, setCountryMarkersOnMap } from "../services/mapService";
+import { addMarker } from "../services/mapService";
 import { useCity } from "../context/CityProvider";
-import maplibregl from "maplibre-gl";
+import maplibregl, {Marker} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import {TipModel} from "../models/TipModel";
 
@@ -16,13 +16,13 @@ interface MapProps {
     postcode: string;
     address: string;
   }) => void;
-  onMarkerClick?: (tip: TipModel) => void;
+  onMarkerClick?: (tip: any) => void;
 }
 
 export interface TipLocation {
   lat: string;
   lng: string;
-  tipSelected: string;
+  tipSelected: any;
 }
 
 const Map: React.FC<MapProps> = ({
@@ -30,7 +30,7 @@ const Map: React.FC<MapProps> = ({
   onLocationSelect,
   initialPosition,
   markers,
- onMarkerClick,
+  onMarkerClick,
 }) => {
   const { cityDetails, setCityDetails } = useCity();
   const mapContainer = useRef<HTMLDivElement>(null);
@@ -46,6 +46,10 @@ const Map: React.FC<MapProps> = ({
       zoom: 4,
     });
 
+    if (markers && map.current) {
+      setCountryMarkersOnMap(map.current, markers, onMarkerClick);
+    }
+
     if (isInteractive && cityDetails && map.current) {
       map.current.on("click", () => {
         if (!map.current) return;
@@ -57,25 +61,26 @@ const Map: React.FC<MapProps> = ({
   }, [isInteractive, markers]);
 
   useEffect(() => {
-    if (!map.current || !markers) return;
-    if (!isInteractive) {
-      if (map.current.isStyleLoaded()) {
-        // Vérifie si le style de la carte est chargé
-        setCountryMarkersOnMap(
-          map.current,
-          markers,
-          handleMarkerClick
-        );
-      } else {
-        map.current.on("load", () => {
+    if (!map.current || !markers ) return;
+      if(!isInteractive) {
+        if (map.current.isStyleLoaded()) {
           setCountryMarkersOnMap(
-            map.current!,
+            map.current,
             markers,
             handleMarkerClick
           );
-        });
+        } else {
+          map.current.on("load", () => {
+            setCountryMarkersOnMap(
+              map.current!,
+              markers,
+              handleMarkerClick
+            );
+
+          });
+
+        }
       }
-    }
   }, [markers]);
 
   useEffect(() => {
@@ -87,12 +92,38 @@ const Map: React.FC<MapProps> = ({
   }, [initialPosition.lat, initialPosition.lng]);
 
   const handleMarkerClick = (marker: TipLocation) => {
-    if (onMarkerClick) {
-      console.log(marker)
-      //onMarkerClick(marker.tipSelected);
+    if (onMarkerClick && token) {
+      console.log(marker.tipSelected)
+      onMarkerClick(marker.tipSelected);
     }
   };
 
+  const setCountryMarkersOnMap = (
+    map: maplibregl.Map,
+    markers: TipLocation[],
+    handleMarkerClick?: (tip: any) => void
+  ) => {
+    markers.forEach(marker => {
+      const { lat, lng, tipSelected } = marker;
+      const mapMarker = new Marker({ color: '#FF6347' })
+        .setLngLat([parseFloat(lng), parseFloat(lat)])
+        .addTo(map);
+
+      // Assurez-vous que tipSelected contient les données nécessaires
+      mapMarker.getElement().addEventListener('click', () => {
+        console.log('azeazeaze')
+        if (handleMarkerClick && tipSelected) {
+          console.log('loulou')
+
+          handleMarkerClick(tipSelected);
+          console.log(tipSelected)
+
+        } else {
+          console.log("Tip selected is undefined or handleMarkerClick is not a function");
+        }
+      });
+    });
+  };
   const handleCityFound = useCallback(
     ({ city, postcode, address, lat, lng }: any) => {
       setCityDetails({ city, postcode, address, lat, lng });

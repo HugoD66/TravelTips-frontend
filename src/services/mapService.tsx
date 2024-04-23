@@ -33,16 +33,6 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
   });
 }
 
-export const setCountryMarkersOnMap = (map: MaplibreMap, markers: TipLocation[], handleMarkerClick: (marker: TipLocation) => void) => {
-  markers.forEach(marker => {
-    const { lat, lng } = marker;
-    const mapMarker = new Marker({ color: '#FF6347' })
-      .setLngLat([parseFloat(lng), parseFloat(lat)])
-      .addTo(map);
-    mapMarker.getElement().addEventListener('click', () => handleMarkerClick(marker));
-  });
-};
-
 
 export const getCity = async (lat: number, lng: number) => {
   try {

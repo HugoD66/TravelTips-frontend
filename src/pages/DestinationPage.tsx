@@ -229,9 +229,9 @@ const DestinationPage = () => {
                   {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
                     pictureList.map((picture: PictureModel) =>
                       picture.idTips!.id === tip.id ?
-                        <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
+                        <img src={"http://localhost:4000/" + picture.url} className="temporary-fix-width-in-appcss" alt="représentation de l'image"/> : null
                     ) :
-                    <img src={defaultPicture} alt="Image par défaut"/>
+                    <img className="temporary-fix-width-in-appcss" src={defaultPicture} alt="Image par défaut"/>
                   }
                 </Link>
               ))}

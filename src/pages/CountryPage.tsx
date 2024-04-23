@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { SetStateAction, useEffect, useState } from "react";
+import {SetStateAction, useCallback, useEffect, useState} from "react";
 import Map, {TipLocation} from "../components/Map";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
@@ -7,6 +7,7 @@ import "../styles/countrypage.css";
 import axios from 'axios';
 import {getCountryByName} from "../services/countryService";
 import {getTipsByCityId} from "../services/tipService";
+import {TipModel} from "../models/TipModel";
 
 interface Country {
   name: {
@@ -57,7 +58,8 @@ const CountryPage = () => {
   const [tipsLocations, setTipsLocations] = useState<{ lat: string; lng: string }[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
   const [activeInfo, setActiveInfo] = useState<string | null>(null);
-  const [selectedTipInfo, setSelectedTipInfo] = useState<string | null>(null);
+  const [selectedTipInfo, setSelectedTipInfo] = useState<TipModel | null>(null);
+  const [tipDetails, setTipDetails] = useState<TipModel | null>(null);
 
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -122,7 +124,7 @@ const CountryPage = () => {
         const tipsLocations = flatTips.map((tip: any) => {
           return { lat: tip.lat, lng: tip.lng, tipSelected: tip };
         });
-
+        console.log("tipsLocations", tipsLocations)
         setGeoTips(tipsLocations);
       } else {
         console.log("No cities found for the given country name:", countryName);
@@ -131,10 +133,11 @@ const CountryPage = () => {
       console.error("Error fetching tips by country name:", error);
     }
   }
-  const handleMarkerClick = (info: string) => {
-    setActiveInfo(info);
-    setShowModal(true);
-  };
+  const handleTipSelect = useCallback((tip: any) => {
+    console.log("Tip selected:", tip);
+    setTipDetails(tip);
+    setSelectedTipInfo(tip);
+  }, [setTipDetails, setSelectedTipInfo]);
   return (
     <div className="country-page">
       {country ? (
@@ -190,21 +193,31 @@ const CountryPage = () => {
                 isInteractive={false}
                 initialPosition={{ lat: country.latlng[0], lng: country.latlng[1] }}
                 markers={geoTips}
-                onMarkerClick={setSelectedTipInfo}
+                onMarkerClick={handleTipSelect}
+
               />
+
               {selectedTipInfo && (
                 <div className="tip-info">
-                  <h3>Information sur le Tip sélectionné :</h3>
-                  <p>{selectedTipInfo.name}</p> {/* Assurez-vous que selectedTipInfo est bien un objet avant d'accéder à ses propriétés */}
+                  {tipDetails ? (
+                    <div>
+                      <h3>Information sur le Tip:</h3>
+                      <p>Nom: {tipDetails.name}</p>
+                      <p>Adresse: {tipDetails.address}</p>
+                      {/* Ajoutez plus de détails si nécessaire */}
+                    </div>
+                  ) : (
+                    <p>Cliquez sur un tip pour voir plus de détails.</p>
+                  )}
                 </div>
               )}
-
+              {/**/}
             </div>
-            <div className="country-tips">
-              <h2>Les bons tips</h2>
-              <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
-                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}
-            </div>
+          <div className="country-tips">
+            <h2>Les bons tips</h2>
+            <button onClick={() => setShowModal(true)} style={{marginTop: '20px'}}>Ajouter un Tips</button>
+            {showModal && <Modal onClose={() => setShowModal(false)}><AddTips/></Modal>}
+          </div>
 
         </>
       ) : (

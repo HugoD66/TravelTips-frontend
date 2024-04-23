@@ -3,3 +3,7 @@
 @import 'styles/globeanimation.css';
 
 
+.temporary-fix-width-in-appcss {
+    max-width: 300px;
+    max-height: 220px;
+}

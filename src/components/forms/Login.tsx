@@ -17,14 +17,12 @@ const Login = ({
 
   const handleLoginSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // Vérification de l'adresse e-mail avec une regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setError(new Error("Veuillez saisir une adresse e-mail valide"));
       return;
     }
 
-    // Vérification de la longueur du mot de passe
     if (password.length < 8) {
       setError(
         new Error("Le mot de passe doit contenir au moins 8 caractères")
@@ -39,7 +37,6 @@ const Login = ({
         localStorage.setItem("token", response.access_token);
         localStorage.setItem("id", response.id);
         localStorage.setItem("role", response.role);
-        console.log("ici le role est : ", localStorage.getItem("role"));
         handleLogin(true);
         navigate("/home");
       })
