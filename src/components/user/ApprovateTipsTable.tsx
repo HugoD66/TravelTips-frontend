@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { SetStateAction, useEffect, useState } from "react";
 import { TipModel } from "../../models/TipModel";
 import { getTipsUser } from "../../services/tipService";
 import UpdateTips from "./UpdateTips";
+import Modal from "../Modal";
 
 const UserTipsTable: React.FC = () => {
   const [tips, setTips] = useState<TipModel[]>([]);
   const token: string | null = localStorage.getItem("token");
   const userId: string | null = localStorage.getItem("id");
   const [selectedTip, setSelectedTip] = useState<TipModel | null>(null);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     fetchTips();
@@ -27,14 +29,9 @@ const UserTipsTable: React.FC = () => {
   const handleModify = (tipId: string) => {
     const selected = tips.find((tip) => tip.id === tipId);
     setSelectedTip(selected || null);
+    setShowModal(true);
   };
 
-  const renderTipForm = () => {
-    if (selectedTip) {
-      return <UpdateTips selectedTips={selectedTip} />;
-    }
-    return null;
-  };
   const filterTipsByApprovate = (approvateStatus: string) => {
     return tips.filter((tip) => tip.approvate === approvateStatus);
   };
@@ -161,7 +158,11 @@ const UserTipsTable: React.FC = () => {
                 <button onClick={() => tip.id && handleModify(tip.id)}>
                   Modifier
                 </button>
-                {renderTipForm()}
+                {showModal && (
+                  <Modal onClose={() => setShowModal(false)}>
+                    <UpdateTips selectedTips={selectedTip} />
+                  </Modal>
+                )}
               </td>
             </tr>
           ))}

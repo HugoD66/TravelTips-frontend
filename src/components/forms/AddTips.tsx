@@ -145,7 +145,7 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
             )}
           </div>
           <div className="city-content">
-            <label>Address:</label>
+            <label>Adresse:</label>
             <input type="text" value={cityDetails.address} readOnly />
 
             <label>Ville:</label>

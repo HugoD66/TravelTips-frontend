@@ -10,7 +10,7 @@ import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 
 interface AddTipsProps {
-  selectedTips: TipModel | null; // Le type peut être TipModel ou null
+  selectedTips: TipModel | null;
 }
 
 const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
@@ -24,6 +24,22 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   );
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>(selectedTips?.name || "");
+  const [city, setCity] = useState<string>(
+    typeof selectedTips === "object" &&
+      selectedTips?.hasOwnProperty("idCity") &&
+      typeof selectedTips?.idCity === "object"
+      ? selectedTips?.idCity?.name || ""
+      : ""
+  );
+  const [zipCode, setZipCode] = useState<string>(
+    typeof selectedTips === "object" &&
+      selectedTips?.hasOwnProperty("idCity") &&
+      typeof selectedTips?.idCity === "object"
+      ? selectedTips?.idCity?.zipCode || ""
+      : ""
+  );
+  const [adresse, setAdresse] = useState<string>(selectedTips?.address || "");
+
   const [price, setPrice] = useState<number>(selectedTips?.price || 0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const [error, setError] = useState<string>("");
@@ -34,13 +50,33 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
     const fetchData = async () => {
       try {
         const fetchedCountries = await fetchCountryList();
-        setCountriesList(fetchedCountries);
+        const convertedCountries = fetchedCountries.map((country) => ({
+          code: null,
+          name: country.name,
+          alpha3Code: country.alpha3Code,
+          latlgn: country.latlgn,
+        }));
+        setCountriesList(convertedCountries);
       } catch (error) {
         console.error("Error fetching countries:", error);
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (selectedTips) {
+      setCountry(
+        typeof selectedTips === "object" &&
+          selectedTips?.hasOwnProperty("idCity") &&
+          typeof selectedTips?.idCity === "object"
+          ? selectedTips?.idCity.idCountry?.name || ""
+          : ""
+      );
+      setName(selectedTips.name);
+      setPrice(selectedTips.price);
+    }
+  }, [selectedTips]);
 
   const handleUpdateTipsSubmit = async (
     event: React.FormEvent<HTMLFormElement>
@@ -57,20 +93,19 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
       const newCountry = selectedCountry
         ? await createCountry({ name: selectedCountry.name })
         : null;
-  const newCity = await createCity({
-    name: cityDetails.city,
-    idCountry: newCountry
-      ? newCountry.id
-      : selectedTips &&
-        typeof selectedTips === "object" &&
-        selectedTips.idCity &&
-        typeof selectedTips.idCity === "object" &&
-        selectedTips.idCity.idCountry
-      ? selectedTips.idCity.idCountry
-      : "",
-    zipCode: cityDetails.postcode,
-  });
-
+      const newCity = await createCity({
+        name: cityDetails.city,
+        idCountry: newCountry
+          ? newCountry.id
+          : selectedTips &&
+            typeof selectedTips === "object" &&
+            selectedTips.idCity &&
+            typeof selectedTips.idCity === "object" &&
+            selectedTips.idCity.idCountry
+          ? selectedTips.idCity.idCountry
+          : "",
+        zipCode: cityDetails.postcode,
+      });
 
       const userId = localStorage.getItem("id");
       if (!userId) {
@@ -84,6 +119,11 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         price: price,
         idCity: newCity.id,
         address: cityDetails.address,
+        approvate: "false",
+        idUser: userId,
+        lng: cityDetails.lng,
+        lat: cityDetails.lat,
+        nbApprobation: 3,
       };
 
       if (!updatedTips.name || !updatedTips.idCity || !updatedTips.address) {
@@ -110,12 +150,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      console.log(event.target.files);
-
       setPictureFiles(Array.from(event.target.files));
-      console.log(pictureFiles);
     }
-    console.log(pictureFiles);
   };
 
   return (
@@ -148,7 +184,6 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
                 }}
                 onLocationSelect={(location) => {
                   console.log("Nouvelle position sélectionnée:", location);
-                  // Logique pour ajouter un marqueur ou mettre à jour le state
                 }}
               />
             ) : (
@@ -156,13 +191,14 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
             )}
           </div>
           <div className="city-content">
+            <label>Adresse:</label>
+            <input type="text" value={adresse} readOnly />
             <label>
-              Ville:
-              <input type="text" value={cityDetails.city} readOnly />
+              Ville: <input type="text" value={city} readOnly />
             </label>
             <label>
               Code postal:
-              <input type="text" value={cityDetails.postcode} readOnly />
+              <input type="text" value={zipCode} readOnly />
             </label>
           </div>
           <div className="form-group">
