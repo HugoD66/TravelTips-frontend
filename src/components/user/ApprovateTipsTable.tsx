@@ -13,7 +13,7 @@ const UserTipsTable: React.FC = () => {
 
   useEffect(() => {
     fetchTips();
-  }, [token]);
+  }, []);
 
   const fetchTips = async () => {
     try {
@@ -56,7 +56,9 @@ const UserTipsTable: React.FC = () => {
   };
   return (
     <div>
-      <h2>Mes tips en attente de validation</h2>
+      <div>
+        <h2>Mes tips en attente de validation</h2>
+      </div>
       <table>
         <thead>
           <tr>
@@ -89,8 +91,9 @@ const UserTipsTable: React.FC = () => {
           ))}
         </tbody>
       </table>
-
-      <h2>Mes Tips en ligne</h2>
+      <div>
+        <h2>Mes tips en ligne</h2>
+      </div>
       <table>
         <thead>
           <tr>
@@ -123,8 +126,9 @@ const UserTipsTable: React.FC = () => {
           ))}
         </tbody>
       </table>
-
-      <h2>Mes tips rejetés modifiables</h2>
+      <div>
+        <h2>Mes tips rejetés modifiables</h2>
+      </div>
       <table>
         <thead>
           <tr>
@@ -168,8 +172,9 @@ const UserTipsTable: React.FC = () => {
           ))}
         </tbody>
       </table>
-
-      <h2>Mes tips rejetés non modifiables</h2>
+      <div>
+        <h2>Mes tips rejetés non modifiables</h2>
+      </div>
       <table>
         <thead>
           <tr>

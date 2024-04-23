@@ -7,6 +7,7 @@ import UserForm from "../components/forms/UserForm";
 import { getMe, updateMe } from "../services/userService";
 import "../styles/profilepage.css";
 import ApprovedTipsTable from "../components/user/ApprovateTipsTable";
+import UserTips from "../components/user/UserTips";
 
 const ProfilePage = ({
   handleLogin,
@@ -86,7 +87,7 @@ const ProfilePage = ({
           )}
           {selectedComponent === "userTips" && (
             <div className="user-info-container">
-              <ApprovedTipsTable></ApprovedTipsTable>
+              <UserTips></UserTips>
             </div>
           )}
         </div>

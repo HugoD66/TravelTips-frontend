@@ -23,7 +23,7 @@ const OtherTipsTable: React.FC = () => {
 
   return (
     <div>
-      <h2>Autres Tips</h2>
+      <h2>Tips refusés</h2>
       <table>
         <thead>
           <tr>

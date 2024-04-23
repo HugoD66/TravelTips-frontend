@@ -98,7 +98,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         price: price,
         idCity: newCity.id,
         address: cityDetails.address,
-        approvate: "false",
+        approvate: "pending",
         idUser: userId,
         lng: cityDetails.lng,
         lat: cityDetails.lat,
@@ -116,12 +116,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
       }
 
       await updateTip(updatedTips, token);
+
       setSuccess("Tips modifié avec succès !");
-      setAddress("");
-      setCity("");
-      setCountry("");
-      setName("");
-      setPrice(0);
     } catch (error) {
       setError("Une erreur est survenue lors de la modification du tips");
     }
