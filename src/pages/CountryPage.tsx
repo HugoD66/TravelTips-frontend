@@ -189,9 +189,7 @@ const CountryPage = () => {
             <div className="country-tips">
               <h2>Les bons tips</h2>
               <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
-                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips setIsModalOpen={function (value: SetStateAction<boolean>): void {
-              throw new Error("Function not implemented.");
-            } } /></Modal>}
+                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}
             </div>
 
         </>

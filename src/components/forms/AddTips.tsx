@@ -10,11 +10,8 @@ import { TipModel } from "../../models/TipModel";
 import {createPicture} from "../../services/pictureService";
 import { toast } from 'react-toastify';
 
-interface AddTipsProps {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
 
-const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
+const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
@@ -81,6 +78,7 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
         return;
       }
       const tipsResponse = await createTip(tips, token);
+      console.log(tipsResponse);
       if(!tipsResponse || !tipsResponse.id) {
         setError("Erreur pendant la création du tips");
         return;
@@ -88,9 +86,12 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
       for (const file of pictureFiles) {
         const formData: FormData = new FormData();
         formData.append("file", file);
-         await createPicture(formData, userId, tipsResponse.id);
+        try {
+          await createPicture(formData, userId, tipsResponse.id);
+        } catch (error) {
+          throw error;
+        }
       }
-      setIsModalOpen(false);
       toast.success("Tips ajouté avec succès !");
     } catch (error) {
       toast.error("Erreur d'enregistrement du tips");
@@ -109,97 +110,89 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
   };
 
   return (
-    <div>
+    <div className="tips-container">
       <h1>Ajouter un Tips</h1>
       <div className="add-tips-form">
         <form onSubmit={handleAddTipsSubmit}>
-          <div className="map-content">
-            <label htmlFor="country" className="country-input">
-              Choisissez un pays
-              <select
-                id="country"
-                name="country"
-                onChange={handleCountryChange}
-                value={country}
-              >
-                {countriesList.map((country, index) => (
+            <div className="form-group">
+              <label htmlFor="country" className="country-input">Choisissez un pays :</label>
+                <select
+                  id="country"
+                  name="country"
+                  onChange={handleCountryChange}
+                  value={country}>
+                  {countriesList.map((country, index) => (
                   <option key={index} value={country.name}>
                     {country.name}
                   </option>
                 ))}
-              </select>
-            </label>
-            {selectedCountry ? (
-              <Map
-                isInteractive={true}
-                initialPosition={{ lat: selectedCountry?.latlgn?.[0], lng: selectedCountry?.latlgn?.[1] }}
-                onLocationSelect={(location) => {
-                  console.log("Nouvelle position sélectionnée:", location);
-                }}
+                </select>
+              
+            </div>
+            <div className="map-tips">
+              {selectedCountry ? (
+                <Map
+                  isInteractive={true}
+                  initialPosition={{ lat: selectedCountry?.latlgn?.[0], lng: selectedCountry?.latlgn?.[1] }}
+                  onLocationSelect={(location) => {
+                    console.log("Nouvelle position sélectionnée:", location);
+                  }}
+                />
+              ) : (
+                <Loading width={400} height={400} />
+              )}
+            </div>
+            <div className="form-group">
+              <label>Adresse:</label>
+              <input type="text" value={cityDetails.address} readOnly />
+            </div>
+            <div className="form-group">
+              <label>Ville:</label>
+              <input type="text" value={cityDetails.city} readOnly />
+            </div>
+            <div className="form-group">
+              <label>Code postal:</label>
+              <input type="text" value={cityDetails.postcode} readOnly />
+            </div>
+            <div className="form-group">
+              <label htmlFor="name">Nom du tips:</label>
+              <input
+                  id="name"
+                  type="text"
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
               />
-            ) : (
-              <Loading width={400} height={400} />
-            )}
-          </div>
-          <div className="city-content">
-            <label>
-              Address:
-            </label>
-            <input type="text" value={cityDetails.address} readOnly />
-
-            <label>
-              Ville:
-            </label>
-            <input type="text" value={cityDetails.city} readOnly />
-
-            <label>
-              Code postal:
-            </label>
-            <input type="text" value={cityDetails.postcode} readOnly />
-
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="name">
-              Nom du tips:
-            </label>
-            <input
-                id="name"
-                type="text"
-                name="name"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
+            </div>
+            <div className="form-group">
+              <label htmlFor="price">Fourchette de prix:</label>
+              <input type="range" id="price" min="0" max="100" value={price} onChange={e => setPrice(parseInt(e.target.value))} />
+            </div>
+            <div className="form-group">
+              <label htmlFor="pictureList">Photos:</label>
+              <input
+                id="pictureList"
+                type="file"
+                name="pictureList"
+                multiple
+                onChange={handleFileChange}
               />
-
-            <label htmlFor="price">
-              Fourchette de prix:
-            </label>
-            <input type="range" id="price" min="0" max="100" value={price} onChange={e => setPrice(parseInt(e.target.value))} />
-
-
-            <label htmlFor="pictureList">Photos:</label>
-            <input
-              id="pictureList"
-              type="file"
-              name="pictureList"
-              multiple
-              onChange={handleFileChange}
-            />
-
-            <button
-              type="submit"
-              value="Envoyer"
-              className="submit-button-form"
-            >
-              Envoyer
-            </button>
-          </div>
+            </div>
+            <div className="form-group">
+              <button
+                type="submit"
+                value="Envoyer"
+                className="submit-button-form">Envoyer
+              </button>
+            </div>
         </form>
       </div>
       { error && <div className="error">{error}</div> }
       { success && <div className="success">{success}</div> }
     </div>
+    
   );
 };
 
 export default AddTips;
+
