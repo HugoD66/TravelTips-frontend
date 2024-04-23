@@ -119,8 +119,6 @@ const DestinationPage = () => {
             console.error('Error fetching tips:', error);
         }
     };
-  console.log(pictureList)
-  console.log(pictureList)
 
     const fetchItineraries = async () => {
         try {
@@ -155,6 +153,9 @@ const DestinationPage = () => {
       setSearchTerm('');
       setFilteredCountries([]);
     };
+
+  console.log(pictureList)
+  console.log(pictureList)
 
     return (
         <div className="destination-container">
@@ -216,37 +217,41 @@ const DestinationPage = () => {
                     ))}
                 </div>
             )}
-            <div className="carousel-container">
+          <div className="carousel-container">
             <h2>Derniers Tips</h2>
             <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
-                {isModalOpen && (
-                    <Modal onClose={() => setIsModalOpen(false)}>
-                        <AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
-                            throw new Error('Function not implemented.');
-                        } } />
-                    </Modal>
-                )}
+            {isModalOpen && (
+              <Modal onClose={() => setIsModalOpen(false)}>
+                <AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
+                  throw new Error('Function not implemented.');
+                }}/>
+              </Modal>
+            )}
             <div className="tips-carousel">
-                {tips.map(tip => (
-                    <Link key={tip.id} to={`/tips/${tip.id}`}>
-                        <div>{tip.name}</div>
-                      {pictureList.map((picture: PictureModel) =>
-                        picture.idTips!.id === tip.id ? <img src={"http://localhost:4000/" + picture.url} alt={tip.name}/> :
-                          <img src={defaultPicture} alt={tip.name}/>
-                      )}
-                    </Link>
-                ))}
+              {tips.map(tip => (
+                <Link key={tip.id} to={`/tips/${tip.id}`}>
+                  <div>{tip.name}</div>
+                  {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                    pictureList.map((picture: PictureModel) =>
+                      picture.idTips!.id === tip.id ?
+                        <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
+                    ) :
+                    <img src={defaultPicture} alt="Image par défaut"/>
+                  }
+                </Link>
+              ))}
             </div>
             <h2>Derniers Itinéraires</h2>
-            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire</button>
+            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire
+            </button>
             <div className="itineraries-carousel">
-                {itineraries.map(itinerary => (
-                    <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>
-                        <div>{itinerary.name}</div>
-                    </Link>
-                ))}
+              {itineraries.map(itinerary => (
+                <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>
+                  <div>{itinerary.name}</div>
+                </Link>
+              ))}
             </div>
-            </div>
+          </div>
         </div>
     );
 };
