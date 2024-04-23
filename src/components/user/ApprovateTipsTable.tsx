@@ -45,7 +45,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsByApprovate("pending").map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
@@ -79,7 +79,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsByApprovate("true").map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
@@ -113,7 +113,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsByApprovate("false").map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}

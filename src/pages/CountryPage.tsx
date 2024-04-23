@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useState } from "react";
 import Map from "../components/Map";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
@@ -189,7 +189,9 @@ const CountryPage = () => {
             <div className="country-tips">
               <h2>Les bons tips</h2>
               <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
-                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}
+                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips setIsModalOpen={function (value: SetStateAction<boolean>): void {
+              throw new Error("Function not implemented.");
+            } } /></Modal>}
             </div>
 
         </>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import {Link, useNavigate} from 'react-router-dom';
 import '../styles/destination.css';
 import {getTipList} from "../services/tipService";
+import Modal from "../components/Modal";
+import AddTips from "../components/forms/AddTips";
 
 interface Country {
     cca3: string;
@@ -39,6 +41,9 @@ const DestinationPage = () => {
     const [tips, setTips] = useState<Tip[]>([]);
     const [itineraries, setItineraries] = useState<Itinerary[]>([]);
     const token = localStorage.getItem('token');
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const navigate = useNavigate();
+
     useEffect(() => {
         fetchAllCountries();
         fetchTips();
@@ -91,6 +96,8 @@ const DestinationPage = () => {
             } else {
                 console.error('Expected an array of tips, but received:', response.data);
             }
+            //TODO const { data } = await axios.get<Tip[]>('http://localhost:4000/tips?_sort=createdAt&_order=desc&_limit=6');
+
         } catch (error) {
             console.error('Error fetching tips:', error);
         }
@@ -192,7 +199,14 @@ const DestinationPage = () => {
             )}
             <div className="carousel-container">
             <h2>Derniers Tips</h2>
-            <Link to="/add-tips" className="add-tip-button">Ajouter un Tips</Link>
+            <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
+                {isModalOpen && (
+                    <Modal onClose={() => setIsModalOpen(false)}>
+                        <AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
+                            throw new Error('Function not implemented.');
+                        } } />
+                    </Modal>
+                )}
             <div className="tips-carousel">
                 {tips.map(tip => (
                     <Link key={tip.id} to={`/tips/${tip.id}`}>
@@ -201,6 +215,7 @@ const DestinationPage = () => {
                 ))}
             </div>
             <h2>Derniers Itinéraires</h2>
+            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire</button>
             <div className="itineraries-carousel">
                 {itineraries.map(itinerary => (
                     <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>

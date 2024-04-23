@@ -41,7 +41,7 @@ const OtherTipsTable: React.FC = () => {
             return (
               <tr key={tip.id}>
                 <td>{tip.name}</td>
-                <td>{tip.adress}</td>
+                <td>{tip.address}</td>
                 <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
                 <td>
                   {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
