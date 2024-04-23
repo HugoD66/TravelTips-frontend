@@ -39,6 +39,7 @@ export const getLastestTips = (token: string) => {
       throw error;
     });
 }
+
 export const getTipList = (token: string) => {
   return fetch(`http://localhost:4000/tips`, {
     method: "GET",

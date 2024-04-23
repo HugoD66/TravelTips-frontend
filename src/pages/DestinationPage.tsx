@@ -5,6 +5,10 @@ import '../styles/destination.css';
 import {getLastestTips} from "../services/tipService";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
+import {getPictures} from "../services/pictureService";
+import {PictureModel} from "../models/PictureModel";
+import {TipModel} from "../models/TipModel";
+import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 
 interface Country {
     cca3: string;
@@ -42,6 +46,7 @@ const DestinationPage = () => {
     const [itineraries, setItineraries] = useState<Itinerary[]>([]);
     const token = localStorage.getItem('token');
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [pictureList, setPictureList] = useState<PictureModel[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -83,24 +88,33 @@ const DestinationPage = () => {
         } catch (error) {
             console.error('Error fetching countries:', error);
         }
+
+
+
     };
 
     const fetchTips = async () => {
-        try {
-            if(!token) {
-                return;
-            }
-            const response = await getLastestTips(token)
-            setTips(response);
-            console.log(response)
 
-            /* TODO A CONCERVER ?
-            if (Array.isArray(response)) {
-                setTips(response);
-            } else {
-                console.error('Expected an array of tips, but received:', response.data);
-            }
-             */
+      try {
+        if (!token) {
+          console.log("No token available.");
+          return;
+        }
+        const response = await getLastestTips(token);
+          if (response) {
+            const allPicturePromises = response.map(async (tip: TipModel) => {
+              const pictureResponses = await getPictures(tip.id!);
+              return pictureResponses.map((picture: PictureModel) => ({
+                ...picture,
+                tipId: tip.id
+              }));
+            });
+
+            const picturesArrays = await Promise.all(allPicturePromises);
+            const allPictures = picturesArrays.flat();
+            setPictureList(allPictures);
+            setTips(response);
+          }
         } catch (error) {
             console.error('Error fetching tips:', error);
         }
@@ -200,7 +214,7 @@ const DestinationPage = () => {
                     ))}
                 </div>
             )}
-            <div className="carousel-container">
+          <div className="carousel-container">
             <h2>Derniers Tips</h2>
             <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
                 {isModalOpen && (
@@ -209,22 +223,30 @@ const DestinationPage = () => {
                     </Modal>
                 )}
             <div className="tips-carousel">
-                {tips.map(tip => (
-                    <Link key={tip.id} to={`/tips/${tip.id}`}>
-                        <div>{tip.name}</div>
-                    </Link>
-                ))}
+              {tips.map(tip => (
+                <Link key={tip.id} to={`/tips/${tip.id}`}>
+                  <div>{tip.name}</div>
+                  {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                    pictureList.map((picture: PictureModel) =>
+                      picture.idTips!.id === tip.id ?
+                        <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
+                    ) :
+                    <img src={defaultPicture} alt="Image par défaut"/>
+                  }
+                </Link>
+              ))}
             </div>
             <h2>Derniers Itinéraires</h2>
-            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire</button>
+            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire
+            </button>
             <div className="itineraries-carousel">
-                {itineraries.map(itinerary => (
-                    <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>
-                        <div>{itinerary.name}</div>
-                    </Link>
-                ))}
+              {itineraries.map(itinerary => (
+                <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>
+                  <div>{itinerary.name}</div>
+                </Link>
+              ))}
             </div>
-            </div>
+          </div>
         </div>
     );
 };

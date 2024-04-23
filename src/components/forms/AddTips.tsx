@@ -5,7 +5,7 @@ import Loading from "../Loading";
 import { createCountry, fetchCountryList } from "../../services/countryService";
 import { createCity } from "../../services/cityService";
 import { useCity } from "../../context/CityProvider";
-import { createTip } from "../../services/tipService";
+import {createTip, deleteTip} from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 import { toast } from "react-toastify";
@@ -82,16 +82,20 @@ const AddTips = () => {
         return;
       }
       for (const file of pictureFiles) {
-        const formData: FormData = new FormData();
+        const formData = new FormData();
         formData.append("file", file);
         try {
           await createPicture(formData, userId, tipsResponse.id);
         } catch (error) {
-          throw error;
+          await deleteTip(tipsResponse.id, token);
+          // @ts-ignore
+          toast.error(error.message);
+          return;
         }
       }
       toast.success("Tips ajouté avec succès !");
     } catch (error) {
+      console.log("Erreur lors de l'ajout du tips:", error);
       toast.error("Erreur d'enregistrement du tips");
     }
   };
