@@ -8,7 +8,7 @@ export class TipModel {
   public lng!: string;
   public lat!: string;
   public idCity!: CityModel | string;
-  public adress!: string;
+  public address!: string;
   public idUser!: User | string;
   public approvate!: string;
   public nbApprobation!: number;

@@ -7,7 +7,7 @@ const UserTipsTable: React.FC = () => {
   const [tips, setTips] = useState<TipModel[]>([]);
   const token: string | null = localStorage.getItem("token");
   const userId: string | null = localStorage.getItem("id");
-  const [selectedTip, setSelectedTip] = useState<TipModel | null>(null); // État pour stocker le tip sélectionné pour la modification
+  const [selectedTip, setSelectedTip] = useState<TipModel | null>(null);
 
   useEffect(() => {
     fetchTips();
@@ -75,7 +75,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsByApprovate("pending").map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
@@ -109,7 +109,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsByApprovate("true").map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
@@ -143,7 +143,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsModify("false", 0).map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}
@@ -184,7 +184,7 @@ const UserTipsTable: React.FC = () => {
           {filterTipsNoModify("false", 0).map((tip) => (
             <tr key={tip.id}>
               <td>{tip.name}</td>
-              <td>{tip.adress}</td>
+              <td>{tip.address}</td>
               <td>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</td>
               <td>
                 {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}

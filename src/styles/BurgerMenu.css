@@ -3,6 +3,7 @@
   flex-direction: column;
   align-items: flex-end;
   position: relative;
+  z-index: 12;
 }
 
 .burger-icon {

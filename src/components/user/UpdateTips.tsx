@@ -5,7 +5,7 @@ import Loading from "../Loading";
 import { createCountry, fetchCountryList } from "../../services/countryService";
 import { createCity } from "../../services/cityService";
 import { useCity } from "../../context/CityProvider";
-import { createTip } from "../../services/tipService";
+import { createTip, updateTip } from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 
@@ -42,57 +42,64 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
     fetchData();
   }, []);
 
-  const handleAddTipsSubmit = async (
+  const handleUpdateTipsSubmit = async (
     event: React.FormEvent<HTMLFormElement>
   ) => {
     event.preventDefault();
     try {
-      const selectedCountry = countriesList.find((c) => c.name === country);
-      const newCountry = await createCountry({ name: selectedCountry!.name });
-      const newCity = await createCity({
-        name: cityDetails.city,
-        idCountry: newCountry.id,
-        zipCode: cityDetails.postcode,
-      });
-      const userId = localStorage.getItem("id");
-      if (!userId) {
-        setError("Il faut etre connecté pour ajouter un tip");
+      if (!selectedTips) {
+        setError("Aucun tips sélectionné pour la modification");
         return;
       }
-      const tips: TipModel = {
+
+      // Mettre à jour les détails du pays et de la ville si nécessaire
+      const selectedCountry = countriesList.find((c) => c.name === country);
+      const newCountry = selectedCountry
+        ? await createCountry({ name: selectedCountry.name })
+        : null;
+  const newCity = await createCity({
+    name: cityDetails.city,
+    idCountry: newCountry
+      ? newCountry.id
+      : selectedTips &&
+        typeof selectedTips === "object" &&
+        selectedTips.idCity &&
+        typeof selectedTips.idCity === "object" &&
+        selectedTips.idCity.idCountry
+      ? selectedTips.idCity.idCountry
+      : "",
+    zipCode: cityDetails.postcode,
+  });
+
+
+      const userId = localStorage.getItem("id");
+      if (!userId) {
+        setError("Il faut être connecté pour modifier un tips");
+        return;
+      }
+
+      const updatedTips: TipModel = {
+        ...selectedTips,
         name: name,
         price: price,
         idCity: newCity.id,
-        adress: cityDetails.adress,
-        approvate: "false",
-        idUser: userId,
-        lng: cityDetails.lng,
-        lat: cityDetails.lat,
-        nbApprobation: 3,
+        address: cityDetails.address,
       };
 
-      if (!tips.name || !tips.idCity || !tips.adress) {
+      if (!updatedTips.name || !updatedTips.idCity || !updatedTips.address) {
         setError("Vous devez remplir tous les champs");
         return;
       }
+
       if (!token) {
         setError("Erreur token");
         return;
       }
-      const tipsResponse = await createTip(tips, token);
-      if (!tipsResponse || !tipsResponse.id) {
-        setError("Erreur pendant la création du tips");
-        return;
-      }
 
-      for (const file of pictureFiles) {
-        const formData: FormData = new FormData();
-        formData.append("file", file);
-        await createPicture(formData, userId, tipsResponse.id);
-      }
-      setSuccess("Tips ajouté avec succès !");
+      await updateTip(updatedTips, token);
+      setSuccess("Tips modifié avec succès !");
     } catch (error) {
-      setError("Vous devez choisir un pays pour ajouter un tips");
+      setError("Une erreur est survenue lors de la modification du tips");
     }
   };
 
@@ -115,7 +122,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
     <div>
       <h1>Modifier un Tips</h1>
       <div className="add-tips-form">
-        <form onSubmit={handleAddTipsSubmit}>
+        <form onSubmit={handleUpdateTipsSubmit}>
           <div className="map-content">
             <label htmlFor="country" className="country-input">
               Choisissez un pays
