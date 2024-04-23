@@ -8,7 +8,13 @@ interface MapProps {
   isInteractive: boolean; //Pour AddTips
   initialPosition: { lat: number; lng: number }; //Pour AddTips
   markers?: { lat: string; lng: string }[]; //Pour CountryPage
-  onLocationSelect?: (location: { lat: number; lng: number }) => void;
+  onLocationSelect?: (location: {
+    lat: number;
+    lng: number;
+    city: string;
+    postcode: string;
+    address: string;
+  }) => void;
 
   /*
   lat?: number;
@@ -86,7 +92,7 @@ const Map: React.FC<MapProps> = ({
     ({ city, postcode, address, lat, lng }: any) => {
       setCityDetails({ city, postcode, address, lat, lng });
       if (onLocationSelect) {
-        onLocationSelect({ lat, lng });
+        onLocationSelect({ city, postcode, address, lat, lng });
       }
     },
     [setCityDetails, onLocationSelect]

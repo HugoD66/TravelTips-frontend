@@ -5,7 +5,7 @@ import Loading from "../Loading";
 import { createCountry, fetchCountryList } from "../../services/countryService";
 import { createCity } from "../../services/cityService";
 import { useCity } from "../../context/CityProvider";
-import { createTip, updateTip } from "../../services/tipService";
+import { updateTip } from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 
@@ -145,17 +145,15 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const handleLocationSelect = (location: any) => {
     setCityDetails({
       ...cityDetails,
-      address: cityDetails.address,
-      city: cityDetails.city,
-      postcode: cityDetails.postcode,
+      address: location.address,
+      city: location.city,
+      postcode: location.postcode,
       lng: location.lng,
       lat: location.lat,
     });
-    console.log(city);
-    console.log(adresse);
-    setAdresse(cityDetails.address);
-    setCity(cityDetails.city);
-    setZipCode(cityDetails.postcode);
+    setAdresse(location.address);
+    setCity(location.city);
+    setZipCode(location.postcode);
   };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -170,26 +168,28 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   };
 
   return (
-    <div>
+    <div className="tips-container">
       <h1>Modifier un Tips</h1>
       <div className="add-tips-form">
         <form onSubmit={handleUpdateTipsSubmit}>
-          <div className="map-content">
+          <div className="form-group">
             <label htmlFor="country" className="country-input">
               Choisissez un pays
-              <select
-                id="country"
-                name="country"
-                onChange={handleCountryChange}
-                value={country}
-              >
-                {countriesList.map((country, index) => (
-                  <option key={index} value={country.name}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
             </label>
+            <select
+              id="country"
+              name="country"
+              onChange={handleCountryChange}
+              value={country}
+            >
+              {countriesList.map((country, index) => (
+                <option key={index} value={country.name}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="map-tips">
             {selectedCountry ? (
               <Map
                 isInteractive={true}
@@ -203,12 +203,14 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
               <Loading width={400} height={400} />
             )}
           </div>
-          <div className="city-content">
+          <div className="form-group">
             <label>Adresse:</label>
             <input type="text" value={adresse} readOnly />
-            <label>
-              Ville: <input type="text" value={city} readOnly />
-            </label>
+          </div>
+          <div className="form-group">
+            Ville: <input type="text" value={city} readOnly />
+          </div>
+          <div className="form-group">
             <label>
               Code postal:
               <input type="text" value={zipCode} readOnly />
@@ -225,20 +227,19 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
                 onChange={(e) => setName(e.target.value)}
               />
             </label>
-            <label htmlFor="price">
-              Fourchette de prix:
-              <input
-                id="price"
-                type="range"
-                name="price"
-                value={price}
-                onChange={(e) => setPrice(parseInt(e.target.value, 10))}
-                min="0"
-                max="5"
-                step="1"
-              />
-            </label>
-
+          </div>
+          <div className="form-group">
+            <label htmlFor="price">Fourchette de prix:</label>
+            <input
+              type="range"
+              id="price"
+              min="0"
+              max="100"
+              value={price}
+              onChange={(e) => setPrice(parseInt(e.target.value))}
+            />
+          </div>
+          <div className="form-group">
             <label htmlFor="pictureList">Photos:</label>
             <input
               id="pictureList"
@@ -247,7 +248,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
               multiple
               onChange={handleFileChange}
             />
-
+          </div>
+          <div className="form-group">
             <button
               type="submit"
               value="Envoyer"
