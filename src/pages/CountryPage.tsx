@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
 import { SetStateAction, useEffect, useState } from "react";
-import Map from "../components/Map";
+import Map, {TipLocation} from "../components/Map";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
 import "../styles/countrypage.css";
@@ -55,7 +55,10 @@ const CountryPage = () => {
   const [weather, setWeather] = useState<Weather | null>(null);
   const [showModal, setShowModal] = useState(false);
   const [tipsLocations, setTipsLocations] = useState<{ lat: string; lng: string }[]>([]);
-  const [geoTips, setGeoTips] = useState<{ lat: string; lng: string }[]>([]);
+  const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
+  const [activeInfo, setActiveInfo] = useState<string | null>(null);
+  const [selectedTipInfo, setSelectedTipInfo] = useState<string | null>(null);
+
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (countryName) {
@@ -117,7 +120,7 @@ const CountryPage = () => {
         const flatTips = citiesWithTips.flat();
 
         const tipsLocations = flatTips.map((tip: any) => {
-          return { lat: tip.lat, lng: tip.lng };
+          return { lat: tip.lat, lng: tip.lng, tipSelected: tip };
         });
 
         setGeoTips(tipsLocations);
@@ -128,7 +131,10 @@ const CountryPage = () => {
       console.error("Error fetching tips by country name:", error);
     }
   }
-
+  const handleMarkerClick = (info: string) => {
+    setActiveInfo(info);
+    setShowModal(true);
+  };
   return (
     <div className="country-page">
       {country ? (
@@ -184,7 +190,15 @@ const CountryPage = () => {
                 isInteractive={false}
                 initialPosition={{ lat: country.latlng[0], lng: country.latlng[1] }}
                 markers={geoTips}
+                onMarkerClick={setSelectedTipInfo}
               />
+              {selectedTipInfo && (
+                <div className="tip-info">
+                  <h3>Information sur le Tip sélectionné :</h3>
+                  <p>{selectedTipInfo.name}</p> {/* Assurez-vous que selectedTipInfo est bien un objet avant d'accéder à ses propriétés */}
+                </div>
+              )}
+
             </div>
             <div className="country-tips">
               <h2>Les bons tips</h2>

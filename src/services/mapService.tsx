@@ -1,5 +1,7 @@
 import { Marker, Map as MaplibreMap  } from "maplibre-gl";
+import {TipLocation} from "../components/Map";
 import axios from 'axios';
+import {TipModel} from "../models/TipModel";
 
 let currentMarker: Marker | null = null;
 export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: string; postcode: string; address: string; lat: string; lng: string }) => void) => {
@@ -31,16 +33,16 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
   });
 }
 
-export const setCountryMarkersOnMap = (map: MaplibreMap, markers: { lat: string; lng: string }[]) => {
-
-  markers.forEach(geo => {
-
-    const { lat, lng } = geo;
-    new Marker({ color: '#FF6347' })
+export const setCountryMarkersOnMap = (map: MaplibreMap, markers: TipLocation[], handleMarkerClick: (marker: TipLocation) => void) => {
+  markers.forEach(marker => {
+    const { lat, lng } = marker;
+    const mapMarker = new Marker({ color: '#FF6347' })
       .setLngLat([parseFloat(lng), parseFloat(lat)])
       .addTo(map);
+    mapMarker.getElement().addEventListener('click', () => handleMarkerClick(marker));
   });
-}
+};
+
 
 export const getCity = async (lat: number, lng: number) => {
   try {
