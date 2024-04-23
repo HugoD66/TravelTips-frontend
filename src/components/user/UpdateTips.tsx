@@ -16,7 +16,7 @@ interface AddTipsProps {
 const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
-  const [countriesList, setCountriesList] = useState<{ name: string }[]>([]);
+  const [countriesList, setCountriesList] = useState<CountryName[]>([]);
   const [name, setName] = useState<string>(selectedTips?.name || "");
   const [city, setCity] = useState<string>("");
   const [zipCode, setZipCode] = useState<string>("");
@@ -33,6 +33,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         const fetchedCountries = await fetchCountryList();
         const countryName = fetchedCountries.map((country) => ({
           name: country.name,
+          alpha3Code: country.alpha3Code,
+          latlgn: country.latlgn,
         }));
         setCountriesList(countryName);
       } catch (error) {
@@ -66,7 +68,6 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         return;
       }
 
-      // Mettre à jour les détails du pays et de la ville si nécessaire
       const selectedCountry = countriesList.find((c) => c.name === country);
       const newCountry = selectedCountry
         ? await createCountry({ name: selectedCountry.name })
@@ -177,8 +178,8 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
               <Map
                 isInteractive={true}
                 initialPosition={{
-                  lat: parseInt(cityDetails.lat),
-                  lng: parseInt(cityDetails.lng),
+                  lat: selectedCountry?.latlgn?.[0],
+                  lng: selectedCountry?.latlgn?.[1],
                 }}
                 onLocationSelect={handleLocationSelect}
               />
