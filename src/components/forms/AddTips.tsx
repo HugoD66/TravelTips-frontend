@@ -81,7 +81,7 @@ const AddTips = () => {
       }
       setSuccess("Tips ajouté avec succès !");
     } catch (error) {
-      setError("Vous devez choisir un pays pour ajouter un tips");
+      console.warn("Vous devez choisir un pays pour ajouter un tips");
     }
   };
 
@@ -127,7 +127,6 @@ const AddTips = () => {
                 initialPosition={{ lat: selectedCountry?.latlgn?.[0], lng: selectedCountry?.latlgn?.[1] }}
                 onLocationSelect={(location) => {
                   console.log("Nouvelle position sélectionnée:", location);
-                  // Logique pour ajouter un marqueur ou mettre à jour le state
                 }}
               />
             ) : (

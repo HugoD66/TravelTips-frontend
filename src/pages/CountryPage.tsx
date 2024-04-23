@@ -6,7 +6,6 @@ import AddTips from "../components/forms/AddTips";
 import "../styles/countrypage.css";
 import axios from 'axios';
 import {getCountryByName} from "../services/countryService";
-import {getCityByName} from "../services/cityService";
 import {getTipsByCityId} from "../services/tipService";
 
 interface Country {
@@ -22,7 +21,7 @@ interface Country {
   latlng: number[];
   alpha3Code: string;
   currency: string[];
-  backgroundImageUrl: string; 
+  backgroundImageUrl: string;
 }
 
 interface WeatherInfo {
@@ -57,6 +56,7 @@ const CountryPage = () => {
   const [showModal, setShowModal] = useState(false);
   const [tipsLocations, setTipsLocations] = useState<{ lat: string; lng: string }[]>([]);
   const [geoTips, setGeoTips] = useState<{ lat: string; lng: string }[]>([]);
+  const token = localStorage.getItem("token");
   useEffect(() => {
     if (countryName) {
       fetchCountryDetails(countryName);
@@ -90,7 +90,7 @@ const CountryPage = () => {
         latlng: country.latlng,
         alpha3Code: country.cca3,
         currency: country.currencies ? Object.keys(country.currencies) : [],
-        backgroundImageUrl: `https://source.unsplash.com/1600x900/?${country.name.common}` 
+        backgroundImageUrl: `https://source.unsplash.com/1600x900/?${country.name.common}`
       }));
       setCountry(formattedData[0]);
     } catch (error) {
@@ -100,17 +100,26 @@ const CountryPage = () => {
 
   const getTipsByName = async (countryName: string) => {
     try {
-
       const response = await getCountryByName(countryName);
 
       if (response && response.city) {
         const tipsList = response.city.map(async (city: any) => {
-          return await getTipsByCityId(city.id);
+
+          if(!token) {
+            console.error("Token not found")
+            return;
+          }
+
+          return await getTipsByCityId(countryName, token);
+
+        });
+        const citiesWithTips = await Promise.all(tipsList);
+        const flatTips = citiesWithTips.flat();
+
+        const tipsLocations = flatTips.map((tip: any) => {
+          return { lat: tip.lat, lng: tip.lng };
         });
 
-        const citiesWithTips = await Promise.all(tipsList);
-        console.log(citiesWithTips)
-        const tipsLocations = citiesWithTips.map((city: any) => ({ lat: city.lat, lng: city.lng }));
         setGeoTips(tipsLocations);
       } else {
         console.log("No cities found for the given country name:", countryName);
@@ -119,7 +128,6 @@ const CountryPage = () => {
       console.error("Error fetching tips by country name:", error);
     }
   }
-  console.log(geoTips);
 
   return (
     <div className="country-page">
@@ -137,7 +145,7 @@ const CountryPage = () => {
                   <p>Subregion: {country.subregion}</p>
                   <p>Currency: {country.currency.join(', ')}</p>
                 </div>
-                <div className="flag">              
+                <div className="flag">
                   <img src={country.flags.svg} alt={`${country.name.common} flag`} />
                 </div>
               </div>
@@ -153,7 +161,7 @@ const CountryPage = () => {
                       <p>Condition: {weather.current.condition.text}</p>
                     </div>
                   </div>
-                  
+
                   <div className="forecast-info">
                     <h3>Météo à venir</h3>
                     <div className="forecast-cat">
@@ -163,7 +171,7 @@ const CountryPage = () => {
                         <p>Max temp: {day.day.maxtemp_c} °C</p>
                         <p>Min temp: {day.day.mintemp_c} °C</p>
                         <p>Condition: {day.day.condition.text}</p>
-                      </div>  
+                      </div>
                     ))}
                     </div>
                   </div>
@@ -183,7 +191,7 @@ const CountryPage = () => {
               <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
                 {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}
             </div>
-            
+
         </>
       ) : (
         <p>Loading country information...</p>
