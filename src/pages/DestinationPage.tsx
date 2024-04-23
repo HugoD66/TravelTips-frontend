@@ -205,9 +205,7 @@ const DestinationPage = () => {
             <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
                 {isModalOpen && (
                     <Modal onClose={() => setIsModalOpen(false)}>
-                        <AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
-                            throw new Error('Function not implemented.');
-                        } } />
+                        <AddTips />
                     </Modal>
                 )}
             <div className="tips-carousel">

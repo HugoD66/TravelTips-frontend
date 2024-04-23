@@ -10,11 +10,7 @@ import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 import { toast } from "react-toastify";
 
-interface AddTipsProps {
-  setIsModalOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
+const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
   const [country, setCountry] = useState<string>("");
   const [countriesList, setCountriesList] = useState<CountryName[]>([]);
@@ -88,9 +84,12 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
       for (const file of pictureFiles) {
         const formData: FormData = new FormData();
         formData.append("file", file);
-        await createPicture(formData, userId, tipsResponse.id);
+        try {
+          await createPicture(formData, userId, tipsResponse.id);
+        } catch (error) {
+          throw error;
+        }
       }
-      setIsModalOpen(false);
       toast.success("Tips ajouté avec succès !");
     } catch (error) {
       toast.error("Erreur d'enregistrement du tips");
@@ -109,26 +108,28 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
   };
 
   return (
-    <div>
+    <div className="tips-container">
       <h1>Ajouter un Tips</h1>
       <div className="add-tips-form">
         <form onSubmit={handleAddTipsSubmit}>
-          <div className="map-content">
+          <div className="form-group">
             <label htmlFor="country" className="country-input">
-              Choisissez un pays
-              <select
-                id="country"
-                name="country"
-                onChange={handleCountryChange}
-                value={country}
-              >
-                {countriesList.map((country, index) => (
-                  <option key={index} value={country.name}>
-                    {country.name}
-                  </option>
-                ))}
-              </select>
+              Choisissez un pays :
             </label>
+            <select
+              id="country"
+              name="country"
+              onChange={handleCountryChange}
+              value={country}
+            >
+              {countriesList.map((country, index) => (
+                <option key={index} value={country.name}>
+                  {country.name}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="map-tips">
             {selectedCountry ? (
               <Map
                 isInteractive={true}
@@ -144,17 +145,18 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
               <Loading width={400} height={400} />
             )}
           </div>
-          <div className="city-content">
+          <div className="form-group">
             <label>Adresse:</label>
             <input type="text" value={cityDetails.address} readOnly />
-
+          </div>
+          <div className="form-group">
             <label>Ville:</label>
             <input type="text" value={cityDetails.city} readOnly />
-
+          </div>
+          <div className="form-group">
             <label>Code postal:</label>
             <input type="text" value={cityDetails.postcode} readOnly />
           </div>
-
           <div className="form-group">
             <label htmlFor="name">Nom du tips:</label>
             <input
@@ -164,7 +166,8 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-
+          </div>
+          <div className="form-group">
             <label htmlFor="price">Fourchette de prix:</label>
             <input
               type="range"
@@ -174,7 +177,8 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
               value={price}
               onChange={(e) => setPrice(parseInt(e.target.value))}
             />
-
+          </div>
+          <div className="form-group">
             <label htmlFor="pictureList">Photos:</label>
             <input
               id="pictureList"
@@ -183,7 +187,8 @@ const AddTips: React.FC<AddTipsProps> = ({ setIsModalOpen }) => {
               multiple
               onChange={handleFileChange}
             />
-
+          </div>
+          <div className="form-group">
             <button
               type="submit"
               value="Envoyer"
