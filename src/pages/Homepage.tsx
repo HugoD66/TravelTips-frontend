@@ -92,9 +92,7 @@ const HomePage = () => {
               <div className="buttoncontainer">
                 <Link to={`/country/${selectedCountry.name.replace(/\s+/g, '-')}`}>Voir la destination</Link>
                 <button onClick={() => setShowModal(true)} style={{ marginTop: '20px' }}>Ajouter un Tips</button>
-                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
-                  throw new Error('Function not implemented.');
-                } } /></Modal>}                
+                {showModal && <Modal onClose={() => setShowModal(false)}><AddTips /></Modal>}                
                 <button onClick={handleCreateItinerary}>Créer un itinéraire</button>
               </div>
             </div>

@@ -15,7 +15,7 @@ const ParentComponent = () => {
             <button onClick={openModal}>Ajouter un Tips</button>
             {isModalOpen && (
                 <Modal onClose={closeModal}>
-                    <AddTips setIsModalOpen={setIsModalOpen} />
+                    <AddTips />
                 </Modal>
             )}
             <ToastContainer />

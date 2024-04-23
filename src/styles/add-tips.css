@@ -1,45 +1,71 @@
+.tips-container h1{
+  text-align: center;
+}
+
 .add-tips-form {
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    width: 80%;
-    margin: auto;
-    max-height: 400px; 
-    overflow-y: auto; 
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-  }
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  margin: auto;
+  max-height: 400px; 
+  overflow-y: auto; 
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
   
-  form {
-    display: flex;
-    flex-direction: column; 
-    gap: 15px; 
-  }
+form {
+  display: flex;
+  flex-direction: column; 
+  gap: 15px; 
+}
   
-  .form-group {
-    display: flex;
-    flex-direction: column;
-    width: 100%; 
-  }
-  
-  .submit-button-form {
-    width: auto; 
-    padding: 10px 20px; 
-    margin-top: 10px; 
-  }
+.form-group {
+  display: flex;
+  flex-direction: column;
+  width: 100%; 
+}
 
-  .error {
-    margin-top: 3px;
-    color: red;
-    font-size: 0.8rem;
-    width: 100%;
-    text-align: center;
-  }
+.form-group label {
+  display: block;
+  font-size: 16px;
+  color: #333;
+  margin-bottom: 5px;
+}
 
-  .success {
-    margin-top: 3px;
-    color: green;
-    font-size: 0.8rem;
+.form-group select {
     width: 100%;
-    text-align: center;
-  }
+    padding: 10px;
+    border: 1px solid #ccc;
+    outline: none;
+    background: transparent;
+    color: #333;
+    font-size: 14px;
+    border-radius: 5px;
+}
+
+.submit-button-form {
+  width: auto; 
+  padding: 10px 20px; 
+  margin-top: 10px; 
+}
+
+.submit-button:hover {
+  background-color: #7291f2;
+}
+
+.error {
+  margin-top: 3px;
+  color: red;
+  font-size: 0.8rem;
+  width: 100%;
+  text-align: center;
+}
+
+.success {
+  margin-top: 3px;
+  color: green;
+  font-size: 0.8rem;
+  width: 100%;
+  text-align: center;
+}

@@ -154,9 +154,6 @@ const DestinationPage = () => {
       setFilteredCountries([]);
     };
 
-  console.log(pictureList)
-  console.log(pictureList)
-
     return (
         <div className="destination-container">
             <div className="title-banner">
@@ -220,13 +217,11 @@ const DestinationPage = () => {
           <div className="carousel-container">
             <h2>Derniers Tips</h2>
             <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
-            {isModalOpen && (
-              <Modal onClose={() => setIsModalOpen(false)}>
-                <AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
-                  throw new Error('Function not implemented.');
-                }}/>
-              </Modal>
-            )}
+                {isModalOpen && (
+                    <Modal onClose={() => setIsModalOpen(false)}>
+                        <AddTips />
+                    </Modal>
+                )}
             <div className="tips-carousel">
               {tips.map(tip => (
                 <Link key={tip.id} to={`/tips/${tip.id}`}>

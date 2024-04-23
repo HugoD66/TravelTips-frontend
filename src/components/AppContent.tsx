@@ -22,9 +22,7 @@ const AppContent = () => {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/home" element={<HomePage />} />
-        <Route path="/add-tips" element={<AddTips setIsModalOpen={function (value: React.SetStateAction<boolean>): void {
-          throw new Error("Function not implemented.");
-        } } />} />
+        <Route path="/add-tips" element={<AddTips />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/adminPage" element={<AdminPage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
