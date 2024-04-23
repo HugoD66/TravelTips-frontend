@@ -142,6 +142,21 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
       setError("Une erreur est survenue lors de la modification du tips");
     }
   };
+  const handleLocationSelect = (location: any) => {
+    setCityDetails({
+      ...cityDetails,
+      address: cityDetails.address,
+      city: cityDetails.city,
+      postcode: cityDetails.postcode,
+      lng: location.lng,
+      lat: location.lat,
+    });
+    console.log(city);
+    console.log(adresse);
+    setAdresse(cityDetails.address);
+    setCity(cityDetails.city);
+    setZipCode(cityDetails.postcode);
+  };
 
   const handleCountryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setCountry(event.target.value);
@@ -182,9 +197,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
                   lat: selectedCountry?.latlgn?.[0],
                   lng: selectedCountry?.latlgn?.[1],
                 }}
-                onLocationSelect={(location) => {
-                  console.log("Nouvelle position sélectionnée:", location);
-                }}
+                onLocationSelect={handleLocationSelect}
               />
             ) : (
               <Loading width={400} height={400} />

@@ -26,7 +26,7 @@ const AddTips = () => {
       try {
         const fetchedCountries = await fetchCountryList();
         const convertedCountries = fetchedCountries.map((country) => ({
-          code: null, // Replace with the actual code value
+          code: null,
           name: country.name,
           alpha3Code: country.alpha3Code,
           latlgn: country.latlgn,
