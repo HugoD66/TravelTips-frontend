@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { getTipsUser } from "../../services/tipService";
-import { TipModel } from "../../models/TipModel";
+import { getTipsUser } from "../../../services/tipService";
+import { TipModel } from "../../../models/TipModel";
 import UserTipsTable from "./UserTipsTable";
 import ModifiableRejectedTipsTable from "./ModifyRejectedTipsTable";
 

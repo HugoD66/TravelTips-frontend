@@ -1,13 +1,16 @@
-import { CountryName } from "../../models/CountryData";
+import { CountryName } from "../../../models/CountryData";
 import React, { useEffect, useState } from "react";
-import Map from "../Map";
-import Loading from "../Loading";
-import { createCountry, fetchCountryList } from "../../services/countryService";
-import { createCity } from "../../services/cityService";
-import { useCity } from "../../context/CityProvider";
-import { updateTip } from "../../services/tipService";
-import { TipModel } from "../../models/TipModel";
-import { createPicture } from "../../services/pictureService";
+import Map from "../../Map";
+import Loading from "../../Loading";
+import {
+  createCountry,
+  fetchCountryList,
+} from "../../../services/countryService";
+import { createCity } from "../../../services/cityService";
+import { useCity } from "../../../context/CityProvider";
+import { updateTip } from "../../../services/tipService";
+import { TipModel } from "../../../models/TipModel";
+import { createPicture } from "../../../services/pictureService";
 
 interface AddTipsProps {
   selectedTips: TipModel | null;

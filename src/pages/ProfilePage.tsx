@@ -2,12 +2,11 @@ import React, { useEffect, useState } from "react";
 import Login from "../components/forms/Login";
 import Register from "../components/forms/Register";
 import { useLocation } from "react-router-dom";
-import UserInfo from "../components/user/UserInfo";
+import UserInfo from "../components/user/infos/UserInfo";
 import UserForm from "../components/forms/UserForm";
 import { getMe, updateMe } from "../services/userService";
 import "../styles/profilepage.css";
-import ApprovedTipsTable from "../components/user/ApprovateTipsTable";
-import UserTips from "../components/user/UserTips";
+import UserTips from "../components/user/tips/UserTips";
 
 const ProfilePage = ({
   handleLogin,

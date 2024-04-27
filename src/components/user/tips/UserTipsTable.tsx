@@ -1,4 +1,4 @@
-import { TipModel } from "../../models/TipModel";
+import { TipModel } from "../../../models/TipModel";
 
 const UserTipsTable: React.FC<{ tips: TipModel[]; title: string }> = ({
   tips,

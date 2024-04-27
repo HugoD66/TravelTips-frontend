@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
-import { User } from "../../models/UserData";
-import EditUserForm from "./userInfo/AdminEditUserform";
-import UserTable from "./userInfo/AdminUserTable";
-import AddUserForm from "./userInfo/AdminAddUserform";
-import { getUserList, removeUser } from "../../services/userService";
+import { User } from "../../../models/UserData";
+import EditUserForm from "./AdminEditUserform";
+import UserTable from "./AdminUserTable";
+import AddUserForm from "./AdminAddUserform";
+import { getUserList, removeUser } from "../../../services/userService";
 
 const AdminUserInfo: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import Modal from "../Modal";
+import Modal from "../../Modal";
 import UpdateTips from "./UpdateTips";
-import { TipModel } from "../../models/TipModel";
+import { TipModel } from "../../../models/TipModel";
 
 const ModifiableRejectedTipsTable: React.FC<{
   tips: TipModel[];

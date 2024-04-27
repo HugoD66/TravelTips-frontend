@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/navbar.css";
-import UserMenu from "./user/UserMenu";
+import UserMenu from "./user/general/UserMenu";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import AdminMenu from "./admin/AdminMenu";
+import AdminMenu from "./admin/general/AdminMenu";
 
 const NavBar = ({
   handleLogin,

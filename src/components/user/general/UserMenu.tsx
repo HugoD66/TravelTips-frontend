@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "../../styles/BurgerMenu.css";
+import "../../../styles/BurgerMenu.css";
 import { useNavigate } from "react-router-dom";
 
-const AdminMenu = ({ deco }: { deco: () => void }) => {
+const UserMenu = ({ deco }: { deco: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigate();
 
@@ -11,15 +11,11 @@ const AdminMenu = ({ deco }: { deco: () => void }) => {
   };
 
   const handleUserInfoClick = () => {
-    navigation(`/AdminPage?parametre=${"adminUserInfo"}`);
+    navigation(`/profile?parametre=${"userInfo"}`);
   };
 
   const handleUserTipsClick = () => {
-    navigation(`/AdminPage?parametre=${"AdminTips"}`);
-  };
-
-  const handleUserItineraryClick = () => {
-    navigation(`/AdminPage?parametre=${"AdminItinerary"}`);
+    navigation(`/profile?parametre=${"userTips"}`);
   };
 
   return (
@@ -33,15 +29,13 @@ const AdminMenu = ({ deco }: { deco: () => void }) => {
         <div className="bar3"></div>
       </div>
       <div className={`menu ${isOpen ? "open" : ""}`}>
-        <button onClick={handleUserTipsClick}>Gérer les tips</button>
-        <button onClick={handleUserItineraryClick}>
-          Gérer les itinéraires
-        </button>
-        <button onClick={handleUserInfoClick}>Gérer les utilisateurs</button>
+        <button onClick={handleUserInfoClick}>Mes informations</button>
+        <button>Mes itinéraires</button>
+        <button onClick={handleUserTipsClick}>Mes tips</button>
         <button onClick={deco}>Déconnexion</button>
       </div>
     </div>
   );
 };
 
-export default AdminMenu;
+export default UserMenu;
