@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import {SetStateAction, useCallback, useEffect, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import Map, {TipLocation} from "../components/Map";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
@@ -7,8 +7,8 @@ import "../styles/countrypage.css";
 import axios from 'axios';
 import {getCountryByName} from "../services/countryService";
 import {getTipsByCityId} from "../services/tipService";
-import {TipModel} from "../models/TipModel";
-
+import {useTip} from "../context/TipProvider";
+import ProgressBar from "../components/ProgressBar";
 interface Country {
   name: {
     common: string;
@@ -58,8 +58,9 @@ const CountryPage = () => {
   const [tipsLocations, setTipsLocations] = useState<{ lat: string; lng: string }[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
   const [activeInfo, setActiveInfo] = useState<string | null>(null);
-  const [selectedTipInfo, setSelectedTipInfo] = useState<TipModel | null>(null);
-  const [tipDetails, setTipDetails] = useState<TipModel | null>(null);
+  //const [tipDetails, setTipDetails] = useState<TipModel | null>(null);
+  const { tipDetail, setTipDetail } = useTip();
+
 
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -67,7 +68,6 @@ const CountryPage = () => {
       fetchCountryDetails(countryName);
       fetchWeather(countryName);
       getTipsByName(countryName);
-
     }
   }, [countryName]);
 
@@ -133,47 +133,53 @@ const CountryPage = () => {
       console.error("Error fetching tips by country name:", error);
     }
   }
-  const handleTipSelect = useCallback((tip: any) => {
-    console.log("Tip selected:", tip);
-    setTipDetails(tip);
-    setSelectedTipInfo(tip);
-  }, [setTipDetails, setSelectedTipInfo]);
+  const handleTipSelect = useCallback((tipDetail: any) => {
+    setTipDetail(tipDetail);
+  }, [setTipDetail]);
+
+  useEffect(() => {
+    console.log("Tip detail updated in CountryPage:", tipDetail);
+  }, [tipDetail]);
+
   return (
     <div className="country-page">
       {country ? (
         <>
-          <div className="country-title" style={{ backgroundImage: `url(${country?.backgroundImageUrl})`, backgroundSize: 'no-repeat center center/cover' }}>
+          <div className="country-title" style={{
+            backgroundImage: `url(${country?.backgroundImageUrl})`,
+            backgroundSize: 'no-repeat center center/cover'
+          }}>
             <h1>{country.name.common}</h1>
           </div>
-            <div className="country-details">
-              <h2>Informations</h2>
-              <div className="country-cards">
-                <div className="informations">
-                  <p>Capital: {country.capital}</p>
-                  <p>Region: {country.region}</p>
-                  <p>Subregion: {country.subregion}</p>
-                  <p>Currency: {country.currency.join(', ')}</p>
-                </div>
-                <div className="flag">
-                  <img src={country.flags.svg} alt={`${country.name.common} flag`} />
-                </div>
+          <div className="country-details">
+            <h2>Informations</h2>
+            <div className="country-cards">
+              <div className="informations">
+                <p>Capital: {country.capital}</p>
+                <p>Region: {country.region}</p>
+                <p>Subregion: {country.subregion}</p>
+                <p>Currency: {country.currency.join(', ')}</p>
+              </div>
+              <div className="flag">
+                <img src={country.flags.svg} alt={`${country.name.common} flag`}/>
               </div>
             </div>
-            <div className="weather-details">
+          </div>
+          <div className="weather-details">
             <h2>Météo</h2>
-              {weather && (
-                <>
-                  <div className="weather-info">
-                    <h3>Météo actuelle {country.capital}</h3>
-                    <div className="weather-cat">
-                      <p>Temperature: {weather.current.temp_c} °C</p>
-                      <p>Condition: {weather.current.condition.text}</p>
-                    </div>
+            {weather && (
+              <>
+                <div className="weather-info">
+                  <h3>Météo actuelle {country.capital}</h3>
+                  <div className="weather-cat">
+                    <p>Temperature: {weather.current.temp_c} °C</p>
+                    <p>Condition: {weather.current.condition.text}</p>
                   </div>
+                </div>
 
-                  <div className="forecast-info">
-                    <h3>Météo à venir</h3>
-                    <div className="forecast-cat">
+                <div className="forecast-info">
+                  <h3>Météo à venir</h3>
+                  <div className="forecast-cat">
                     {weather.forecast.forecastday.map((day, index) => (
                       <div key={index}>
                         <p>{day.date}</p>
@@ -182,37 +188,40 @@ const CountryPage = () => {
                         <p>Condition: {day.day.condition.text}</p>
                       </div>
                     ))}
-                    </div>
                   </div>
-                </>
-              )}
-            </div>
-            <div className="map-details">
-              <h2>Carte</h2>
-              <Map
-                isInteractive={false}
-                initialPosition={{ lat: country.latlng[0], lng: country.latlng[1] }}
-                markers={geoTips}
-                onMarkerClick={handleTipSelect}
-
-              />
-
-              {selectedTipInfo && (
-                <div className="tip-info">
-                  {tipDetails ? (
-                    <div>
-                      <h3>Information sur le Tip:</h3>
-                      <p>Nom: {tipDetails.name}</p>
-                      <p>Adresse: {tipDetails.address}</p>
-                      {/* Ajoutez plus de détails si nécessaire */}
-                    </div>
-                  ) : (
-                    <p>Cliquez sur un tip pour voir plus de détails.</p>
-                  )}
                 </div>
-              )}
-              {/**/}
-            </div>
+              </>
+            )}
+          </div>
+          <h2>Carte</h2>
+
+          <div className="map-details">
+            <Map
+              onMarkerClick={handleTipSelect}
+              isInteractive={false}
+              initialPosition={{lat: country.latlng[0], lng: country.latlng[1]}}
+              markers={geoTips}
+            />
+            {tipDetail.id ? (
+              <div className="detail-content">
+                <h3>Information sur le Tip:</h3>
+                <p>Nom: {tipDetail.name}</p>
+                <p>Adresse: {tipDetail.address}</p>
+                {tipDetail.createdAt ? (
+                  <p>Créé le: {new Date(tipDetail.createdAt).toLocaleDateString()}</p>
+                ) : (
+                  <p>Date de création inconnue</p>
+                )}
+                <p>Prix :
+                  <ProgressBar value={tipDetail.price} max={100} />
+                </p>
+              </div>
+            ) : (
+              <div className="detail-content">
+                <p>Cliquez sur un tip pour voir plus de détails.</p>
+              </div>
+            )}
+          </div>
           <div className="country-tips">
             <h2>Les bons tips</h2>
             <button onClick={() => setShowModal(true)} style={{marginTop: '20px'}}>Ajouter un Tips</button>

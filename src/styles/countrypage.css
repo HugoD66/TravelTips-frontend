@@ -122,8 +122,18 @@ body, html {
 }
 
 .map-details {
-    width: 100%;
-    margin: 20px;
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    @media screen and (max-width: 900px) {
+        flex-direction: column;
+    }
+}
+.detail-content {
+    width: 40%;
 }
 .map-details h2 {
     font-size: 2rem;

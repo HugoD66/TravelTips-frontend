@@ -4,6 +4,7 @@ import { useCity } from "../context/CityProvider";
 import maplibregl, {Marker} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
 import {TipModel} from "../models/TipModel";
+import {useTip} from "../context/TipProvider";
 
 interface MapProps {
   isInteractive: boolean;
@@ -26,16 +27,19 @@ export interface TipLocation {
 }
 
 const Map: React.FC<MapProps> = ({
-  isInteractive,
-  onLocationSelect,
-  initialPosition,
-  markers,
-  onMarkerClick,
+                                   isInteractive,
+                                   onLocationSelect,
+                                   initialPosition,
+                                   markers,
+                                   onMarkerClick,
 }) => {
   const { cityDetails, setCityDetails } = useCity();
+  const { tipDetail, setTipDetail } = useTip();
+
   const mapContainer = useRef<HTMLDivElement>(null);
   const map = useRef<maplibregl.Map | null>(null);
   const token = localStorage.getItem("token");
+
   useEffect(() => {
     if (!mapContainer.current) return;
 
@@ -76,9 +80,7 @@ const Map: React.FC<MapProps> = ({
               markers,
               handleMarkerClick
             );
-
           });
-
         }
       }
   }, [markers]);
@@ -93,7 +95,6 @@ const Map: React.FC<MapProps> = ({
 
   const handleMarkerClick = (marker: TipLocation) => {
     if (onMarkerClick && token) {
-      console.log(marker.tipSelected)
       onMarkerClick(marker.tipSelected);
     }
   };
@@ -109,21 +110,19 @@ const Map: React.FC<MapProps> = ({
         .setLngLat([parseFloat(lng), parseFloat(lat)])
         .addTo(map);
 
-      // Assurez-vous que tipSelected contient les données nécessaires
       mapMarker.getElement().addEventListener('click', () => {
-        console.log('azeazeaze')
-        if (handleMarkerClick && tipSelected) {
-          console.log('loulou')
-
-          handleMarkerClick(tipSelected);
-          console.log(tipSelected)
-
-        } else {
-          console.log("Tip selected is undefined or handleMarkerClick is not a function");
+        console.log("Tip selected data:", tipSelected);
+        if (!tipSelected) {
+          console.log("No tip data available");
+          return;
         }
+        setTipDetail(tipSelected);
+        console.log("Tip detail after set:", tipDetail);
       });
+
     });
   };
+
   const handleCityFound = useCallback(
     ({ city, postcode, address, lat, lng }: any) => {
       setCityDetails({ city, postcode, address, lat, lng });
@@ -133,6 +132,7 @@ const Map: React.FC<MapProps> = ({
     },
     [setCityDetails, onLocationSelect]
   );
+
 
   return (
     <div className="map-wrap">

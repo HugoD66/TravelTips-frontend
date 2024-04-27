@@ -7,3 +7,13 @@
     max-width: 300px;
     max-height: 220px;
 }
+
+.fixture-generation {
+    position: absolute;
+    z-index: 1000;
+    top: 10px;
+    right: 10px;
+    background-color: #ec7a7a;
+    width: 150px;
+    height: 60px;
+}
