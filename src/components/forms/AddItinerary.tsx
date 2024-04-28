@@ -12,7 +12,8 @@ const AddItinerary = ({
     name: string,
     country: string,
     dateDebut: string,
-    dateFin: string
+    dateFin: string,
+    isPublic: boolean
   ) => void;
   listCountry: CountryModel[];
 }) => {
@@ -20,12 +21,25 @@ const AddItinerary = ({
   const [dateDebut, setDateDebut] = useState<Date | null>(null);
   const [dateFin, setDateFin] = useState<Date | null>(null);
   const [name, setName] = useState("");
+  const [isPublic, setIsPublic] = useState(true);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (country && dateDebut && dateFin) {
-      onSubmit(name, country, dateDebut.toISOString(), dateFin.toISOString());
+      onSubmit(
+        name,
+        country,
+        dateDebut.toISOString(),
+        dateFin.toISOString(),
+        isPublic
+      );
     }
+  };
+
+  const handleCheckboxChange = (e: {
+    target: { checked: boolean | ((prevState: boolean) => boolean) };
+  }) => {
+    setIsPublic(e.target.checked);
   };
 
   return (
@@ -50,16 +64,27 @@ const AddItinerary = ({
       <div>
         <label>Date de début :</label>
         <Datetime
-          value={dateDebut || undefined} // Utilisez undefined si dateDebut est null
-          onChange={(date) => setDateDebut(moment(date).toDate())} // Convertit Moment en Date
+          value={dateDebut || undefined}
+          onChange={(date) => setDateDebut(moment(date).toDate())}
         />
       </div>
       <div>
         <label>Date de fin :</label>
         <Datetime
-          value={dateFin || undefined} // Utilisez undefined si dateFin est null
-          onChange={(date) => setDateFin(moment(date).toDate())} // Convertit Moment en Date
+          value={dateFin || undefined}
+          onChange={(date) => setDateFin(moment(date).toDate())}
         />
+      </div>
+      <div>
+        <label>
+          <input
+            type="checkbox"
+            checked={isPublic}
+            onChange={handleCheckboxChange}
+          />
+          Privé :
+        </label>
+        <span>{isPublic ? "true" : "false"}</span>
       </div>
       <button type="submit">Créer mon itinéraire</button>
     </form>

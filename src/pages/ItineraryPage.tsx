@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import AddItinerary from "../components/forms/AddItinerary";
 import TipsListComponent from "../components/addItinerary/TipsList";
-// import OrganizeItinerary from "../components/addItinerary/OrganizeItinerary";
+import OrganizeItinerary from "../components/addItinerary/OrganizeItinerary";
 import { getTipsByCountry } from "../services/tipService";
 import { TipModel } from "../models/TipModel";
 import { ItineraryModel } from "../models/ItineraryModel";
@@ -10,6 +10,7 @@ import { createItinerary } from "../services/itineraryService";
 import { CountryModel } from "../models/CountryModel";
 import { getCountryList } from "../services/countryService";
 import { toast } from "react-toastify";
+import { DayItineraryModel } from "../models/DayItineraryModel";
 
 const ItineraryPage = () => {
   const [isTipsListVisible, setIsTipsListVisible] = useState(false);
@@ -22,6 +23,7 @@ const ItineraryPage = () => {
   const id = localStorage.getItem("id") || null;
   const [listCountry, setListCountry] = useState<CountryModel[]>([]);
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [dayItinerary, setDayItinerary] = useState<DayItineraryModel[]>([]);
 
   function numberDay(dateDebutStr: string, dateFinStr: string) {
     const dateDebut = new Date(dateDebutStr);
@@ -34,6 +36,33 @@ const ItineraryPage = () => {
   useEffect(() => {
     fetchCountry();
   }, []);
+
+  const generateDayItinerary = (
+    startDate: string,
+    endDate: string
+  ): DayItineraryModel[] => {
+    const dayItineraryList: DayItineraryModel[] = [];
+    const dateDebut = new Date(startDate);
+    const dateFin = new Date(endDate);
+
+    // Copiez la date de début pour éviter de modifier l'original
+    const currentDate = new Date(dateDebut);
+
+    // Itérer jusqu'à ce que la date actuelle soit inférieure ou égale à la date de fin
+    while (currentDate <= dateFin) {
+      const newDayItinerary: DayItineraryModel = {
+        date: new Date(currentDate), // Utilisez une nouvelle instance de date pour éviter les problèmes de référence
+        idItinerary: itinerary?.id,
+      };
+
+      dayItineraryList.push(newDayItinerary);
+
+      // Passer au jour suivant
+      currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dayItineraryList;
+  };
 
   const fetchCountry = async () => {
     try {
@@ -50,7 +79,8 @@ const ItineraryPage = () => {
     name: string,
     country: string,
     dateDebut: string,
-    dateFin: string
+    dateFin: string,
+    isPublic: boolean
   ) => {
     if (token !== null && id !== null) {
       const tips = await getTipsByCountry(country, token);
@@ -65,16 +95,17 @@ const ItineraryPage = () => {
         lastDay: dateFin,
         idCategory: "a39a34de-10d9-4ae8-8649-13c8de0a84bc",
         idUser: id,
+        public: isPublic,
       };
-      setItinerary(newItinerary);
-      if (itinerary !== undefined) {
-        try {
-          await createItinerary(itinerary, token);
-          toast.success("Itinéraire créé avec succès");
-        } catch (error) {
-          console.log("erreur creation tips" + error);
-        }
+      try {
+        setItinerary(await createItinerary(newItinerary, token));
+        toast.success("Itinéraire créé avec succès");
+        generateDayItinerary(dateDebut, dateFin);
+        setItinerary(newItinerary);
+      } catch (error) {
+        console.log("erreur creation tips" + error);
       }
+
       setIsTipsListVisible(true);
       setIsAddItineraryVisible(false);
     }
@@ -82,10 +113,10 @@ const ItineraryPage = () => {
 
   const handleTipSelect = (tip: TipModel) => {
     setSelectedTips([...selectedTips, tip]);
+    toast.success("Ce tips a été ajouté à votre voyage");
   };
 
   const handleOrganizedDaysClick = () => {
-    // Afficher le component ItineraryComponent et masquer les components TipsListComponent et AddItinerary
     setIsTipsListVisible(false);
     setIsAddItineraryVisible(false);
     setIsItineraryVisible(true);
@@ -118,13 +149,14 @@ const ItineraryPage = () => {
           {isItineraryVisible && (
             <div className="itinerary">
               <h2>Itinéraire</h2>
-              {/* {itinerary && ( // Vérifie si itinerary est défini
-                <OrganizeItinerary
-                  itinerary={itinerary}
-                  selectedTips={selectedTips}
-                  onTipSelect={handleTipSelect}
-                />
-              )} */}
+              {itinerary && (
+                <>
+                  <OrganizeItinerary
+                    itinerary={itinerary}
+                    selectedTips={selectedTips}
+                  />
+                </>
+              )}
             </div>
           )}
         </div>

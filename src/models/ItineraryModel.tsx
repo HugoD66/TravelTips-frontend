@@ -10,4 +10,5 @@ export class ItineraryModel {
   lastDay?: string;
   idCategory?: CategoryModel | string;
   idUser?: UserModel | string;
+  public?: boolean;
 }

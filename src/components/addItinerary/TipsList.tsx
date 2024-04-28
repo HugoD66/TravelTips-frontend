@@ -33,7 +33,6 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
 
   return (
     <div>
-      {/* Liste des villes pour la sélection */}
       <div>
         <h3>Choisir une ou plusieurs villes :</h3>
         {cities.map((city) => (
@@ -49,8 +48,6 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
           </div>
         ))}
       </div>
-
-      {/* Liste des tips filtrés par les villes sélectionnées */}
       <div>
         {tips
           .filter(
@@ -62,14 +59,24 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
           )
           .map((tip) => (
             <div key={tip.id}>
-              <h3>{tip.name}</h3>
-              {/* Afficher les autres détails du tip */}
+              <h2>{tip.name}</h2>
+              <p>{tip.name}</p>
+              <p>{tip.address}</p>
+              <p>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</p>
+              <p>{typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}</p>
+              <p>
+                {tip.idCity &&
+                  typeof tip.idCity === "object" &&
+                  tip.idCity.idCountry &&
+                  typeof tip.idCity.idCountry === "object" &&
+                  tip.idCity.idCountry.name}
+              </p>
+              <p>{tip.price}</p>
               <button onClick={() => onTipSelect(tip)}>Ajouter</button>
             </div>
           ))}
       </div>
 
-      {/* Bouton pour organiser les journées */}
       <button onClick={onOrganizeDaysClick}>Organiser mes journées</button>
     </div>
   );

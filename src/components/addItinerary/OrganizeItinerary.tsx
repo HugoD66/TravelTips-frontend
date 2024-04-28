@@ -1,118 +1,141 @@
-// import React, { useState } from "react";
-// import { TipModel } from "../../models/TipModel";
-// import { DayItineraryModel } from "../../models/DayItineraryModel";
-// import { ItineraryModel } from "../../models/ItineraryModel";
+import React, { useEffect, useState } from "react";
+import { TipModel } from "../../models/TipModel";
+import { DayItineraryModel } from "../../models/DayItineraryModel";
+import { ItineraryModel } from "../../models/ItineraryModel";
+import "react-calendar/dist/Calendar.css";
 
-// interface OrganizeItineraryProps {
-//   itinerary: ItineraryModel;
-//   selectedTips: TipModel[];
-//   onTipSelect: (tip: TipModel) => void;
-// }
+interface OrganizeItineraryProps {
+  itinerary: ItineraryModel;
+  selectedTips: TipModel[];
+}
 
-// const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
-//   itinerary,
-//   selectedTips,
-//   onTipSelect,
-// }) => {
-//   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
-//   const [selectedTipIndex, setSelectedTipIndex] = useState(0);
+const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
+  itinerary,
+  selectedTips,
+}) => {
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [dayItinerary, setDayItinerary] = useState<DayItineraryModel[]>([]);
 
-//   const handleDaySelect = (dayIndex: number) => {
-//     setSelectedDayIndex(dayIndex);
-//     setSelectedTipIndex(0);
-//   };
+  // Créer un DayItineraryModel pour chaque jour de l'itinéraire
+  const initializeItinerary = () => {
+    const dayItineraryList = [];
+    if (typeof itinerary.dayOne === "object") {
+      let currentDate = new Date(itinerary.dayOne);
+      let numberOfDays = itinerary.numberDay;
+      for (let i = 0; i < numberOfDays; i++) {
+        const dayItinerary: DayItineraryModel = {
+          date: currentDate,
+          idItinerary: itinerary.id,
+        };
+        dayItineraryList.push(dayItinerary);
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      setDayItinerary(dayItineraryList);
+    }
+  };
 
-//   const handleTipSelect = (tipIndex: number) => {
-//     setSelectedTipIndex(tipIndex);
-//   };
+  // Appeler initializeItinerary lors du premier rendu
+  useEffect(() => {
+    initializeItinerary();
+  }, []);
 
-//   const handleAddTipToDay = () => {
-//     if (selectedDayIndex !== null && selectedTipIndex !== null) {
-//       const selectedDay = itinerary[selectedDayIndex];
-//       const selectedTip = selectedTips[selectedTipIndex];
-//       // Ajouter le tip à la journée sélectionnée
-//       // selectedDay.push(selectedTip.id);
-//       onTipSelect(selectedTip); // Mettre à jour la liste des tips sélectionnés
-//     }
-//   };
+  const handleDateClick = (date: Date) => {
+    setSelectedDate(date);
+  };
 
-//   const handleRemoveTipFromDay = (tipIndex) => {
-//     if (selectedDayIndex !== null) {
-//       const selectedDay = itinerary[selectedDayIndex];
-//       // Supprimer le tip de la journée sélectionnée
-//       selectedDay.tips.splice(tipIndex, 1);
-//       onTipSelect(null); // Mettre à jour la liste des tips sélectionnés
-//     }
-//   };
+  const handleAddTip = (tip: TipModel) => {
+    const dayIndex = dayItinerary.findIndex((day) => day.date === selectedDate);
+    if (dayIndex !== -1) {
+      const updatedDayItinerary = [...dayItinerary];
+      let ajoutTip: TipModel = tip;
+      if (
+        updatedDayItinerary[dayIndex].idTips !== undefined &&
+        typeof updatedDayItinerary[dayIndex].idTips !== "string"
+      ) {
+        const idTips = updatedDayItinerary[dayIndex].idTips;
+        if (Array.isArray(idTips)) {
+          idTips.push(ajoutTip);
+        }
+      }
+      setDayItinerary(updatedDayItinerary);
+    }
+  };
 
-//   const handleMoveTipUp = (tipIndex) => {
-//     if (selectedDayIndex !== null && tipIndex > 0) {
-//       const selectedDay = itinerary[selectedDayIndex];
-//       // Permuter le tip avec celui qui le précède dans la liste
-//       [selectedDay.tips[tipIndex - 1], selectedDay.tips[tipIndex]] = [
-//         selectedDay.tips[tipIndex],
-//         selectedDay.tips[tipIndex - 1],
-//       ];
-//     }
-//   };
+  const renderTips = () => {
+    const dayIndex = dayItinerary.findIndex((day) => day.date === selectedDate);
+    if (dayIndex !== -1) {
+      const tips = dayItinerary[dayIndex].idTips;
+      return (
+        <ul>
+          {typeof tips === "object" ? (
+            tips.map((tip, index) => <li key={index}>{tip.name}</li>)
+          ) : (
+            <p>'Pas de tips trouvés'</p>
+          )}
+        </ul>
+      );
+    }
+  };
 
-//   const handleMoveTipDown = (tipIndex) => {
-//     if (
-//       selectedDayIndex !== null &&
-//       tipIndex < itinerary[selectedDayIndex].tips.length - 1
-//     ) {
-//       const selectedDay = itinerary[selectedDayIndex];
-//       // Permuter le tip avec celui qui le suit dans la liste
-//       [selectedDay.tips[tipIndex], selectedDay.tips[tipIndex + 1]] = [
-//         selectedDay.tips[tipIndex + 1],
-//         selectedDay.tips[tipIndex],
-//       ];
-//     }
-//   };
+  // Générer des dates pour afficher dans le calendrier
+  const generateDates = () => {
+    const dates = [];
+    if (
+      typeof itinerary.dayOne === "string" &&
+      typeof itinerary.lastDay === "string"
+    ) {
+      let currentDate = new Date(itinerary.dayOne);
+      while (currentDate <= new Date(itinerary.lastDay)) {
+        dates.push(currentDate.toDateString());
+        currentDate.setDate(currentDate.getDate() + 1);
+      }
+      console.log("les dates sont : " + dates);
+      return dates;
+    }
+  };
 
-//   return (
-//     <div>
-//       <h2>Organiser l'itinéraire</h2>
-//       <div className="itinerary-days">
-//         {itinerary.map((day, index) => (
-//           <div key={index}>
-//             <h3>Journée {index + 1}</h3>
-//             <button onClick={() => handleDaySelect(index)}>
-//               Ajouter un tip
-//             </button>
-//             <ul>
-//               {day.idTips.map((tip, tipIndex) => (
-//                 <li key={tipIndex}>
-//                   {tip.name}
-//                   <button onClick={() => handleMoveTipUp(tipIndex)}>↑</button>
-//                   <button onClick={() => handleMoveTipDown(tipIndex)}>↓</button>
-//                   <button onClick={() => handleRemoveTipFromDay(tipIndex)}>
-//                     Supprimer
-//                   </button>
-//                 </li>
-//               ))}
-//             </ul>
-//           </div>
-//         ))}
-//       </div>
-//       {selectedDayIndex !== null && (
-//         <div>
-//           <h3>Sélectionner un tip</h3>
-//           <ul>
-//             {selectedTips.map((tip, index) => (
-//               <li key={index}>
-//                 {tip.name}
-//                 <button onClick={() => handleTipSelect(index)}>
-//                   Sélectionner
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//           <button onClick={handleAddTipToDay}>Ajouter</button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
+  // Rendu du calendrier
+  const renderCalendar = () => {
+    const dates = generateDates();
+    return (
+      <div className="calendar">
+        {Array.isArray(dates) ? (
+          dates.map((date, index) => (
+            <div key={index} onClick={() => handleDateClick(new Date(date))}>
+              {date}
+            </div>
+          ))
+        ) : (
+          <p>'Erreur calendrier'</p>
+        )}
+      </div>
+    );
+  };
 
-// export default OrganizeItinerary;
+  return (
+    <>
+      <div>
+        <h2>Calendrier</h2>
+        <p>Sélectionnez une date pour ajouter des tips :</p>
+        {renderCalendar()}
+        <div>
+          <h3>Ajouter un tip pour {selectedDate.toDateString()}</h3>
+          <select
+            onChange={(e) =>
+              handleAddTip(selectedTips[parseInt(e.target.value)])
+            }
+          >
+            <option value="">Choisir un tip</option>
+            {selectedTips.map((tip, index) => (
+              <option key={index} value={index}>
+                {tip.name}
+              </option>
+            ))}
+          </select>
+          {renderTips()}
+        </div>
+      </div>
+    </>
+  );
+};
+export default OrganizeItinerary;
