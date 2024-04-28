@@ -38,7 +38,7 @@ export const getLastestTips = (token: string) => {
       console.error("Erreur lors de la récupération des tips:", error);
       throw error;
     });
-}
+};
 
 export const getTipList = (token: string) => {
   return fetch(`http://localhost:4000/tips`, {
@@ -249,6 +249,24 @@ export const getDisapproveTips = (token: string) => {
 
 export const getTipsUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/users/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+export const getTipsByCountry = (name: string, token: string) => {
+  return fetch(`http://localhost:4000/tips/by-country/${name}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

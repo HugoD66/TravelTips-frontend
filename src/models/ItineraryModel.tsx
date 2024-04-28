@@ -1,14 +1,13 @@
-import {DayItineraryModel} from "./DayItineraryModel";
-import {UserModel} from "./UserModel";
-import {CategoryModel} from "./CategoryModel";
+import { DayItineraryModel } from "./DayItineraryModel";
+import { UserModel } from "./UserModel";
+import { CategoryModel } from "./CategoryModel";
 
 export class ItineraryModel {
-  id!: string;
+  id?: string;
   name!: string;
   numberDay!: number;
-  dayOne?: Date;
-  lastDay?: Date;
+  dayOne?: string;
+  lastDay?: string;
   idCategory?: CategoryModel | string;
   idUser?: UserModel | string;
-  dayItinerary: DayItineraryModel[] = [];
 }
