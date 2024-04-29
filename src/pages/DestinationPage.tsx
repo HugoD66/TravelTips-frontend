@@ -29,6 +29,7 @@ interface Countries {
 interface Tip {
     id: string;
     name: string;
+    adress: string;
 }
 
 interface Itinerary {
@@ -168,11 +169,6 @@ const DestinationPage = () => {
                     onChange={handleSearchChange}
                     className="search-bar"
                 />
-                {searchTerm && (
-                    <button onClick={clearSearch} className="search-clear">
-                        &#10005;
-                    </button>
-                )}
                  {filteredCountries.length > 0 && (
                 <div className="autocomplete-results">
                     <button onClick={clearSearch} className="close-button">&#10005;</button>
@@ -222,29 +218,46 @@ const DestinationPage = () => {
                         <AddTips />
                     </Modal>
                 )}
+
             <div className="tips-carousel">
               {tips.map(tip => (
+
                 <Link key={tip.id} to={`/tips/${tip.id}`}>
-                  <div>{tip.name}</div>
-                  {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-                    pictureList.map((picture: PictureModel) =>
-                      picture.idTips!.id === tip.id ?
-                        <img src={"http://localhost:4000/" + picture.url} className="temporary-fix-width-in-appcss" alt="représentation de l'image"/> : null
-                    ) :
-                    <img className="temporary-fix-width-in-appcss" src={defaultPicture} alt="Image par défaut"/>
-                  }
+                    <div className="card">
+                        <div className="card__background">
+                            {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                                pictureList.map((picture: PictureModel) =>
+                                picture.idTips!.id === tip.id ?
+                                    <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
+                                ) :
+                                <img src={defaultPicture} alt="Image par défaut"/>
+                            }
+                        </div>
+                        <div className="card__content">
+                            <div className="card__title">
+                                {tip.name}
+                            </div>
+                            <button className="card__button">Voir plus</button>
+                        </div>
+                    </div>
                 </Link>
               ))}
             </div>
+
+
             <h2>Derniers Itinéraires</h2>
-            <button onClick={() => navigate('/itinerary')} className="add-itinerary-button">Ajouter un Itinéraire
-            </button>
+            <Link to="/itinerary">
+                <button className="itinerary-button">Voir les itinéraires</button>
+            </Link>
             <div className="itineraries-carousel">
-              {itineraries.map(itinerary => (
-                <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`}>
-                  <div>{itinerary.name}</div>
-                </Link>
-              ))}
+                {itineraries.map(itinerary => (
+                    <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`} className="card">
+                        <div className="card__content">
+                            <h2 className="card__title">{itinerary.name}</h2>
+                            <button className="card__button">Explorer</button>
+                        </div>
+                    </Link>
+                ))}
             </div>
           </div>
         </div>
