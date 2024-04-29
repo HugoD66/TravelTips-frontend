@@ -110,7 +110,6 @@ const DestinationPage = () => {
                 tipId: tip.id
               }));
             });
-
             const picturesArrays = await Promise.all(allPicturePromises);
             const allPictures = picturesArrays.flat();
             setPictureList(allPictures);
@@ -129,6 +128,7 @@ const DestinationPage = () => {
         }
         const response = await getItineraryList(token);
         setItineraries(response);
+        console.log(itineraries)
       } catch (error) {
         console.error('Error fetching tips:', error);
       }
@@ -244,10 +244,11 @@ const DestinationPage = () => {
                 ))}
             </div>
 
-
             <h2>Derniers Itinéraires</h2>
             <Link to="/itinerary">
-                <button className="itinerary-button">Voir les itinéraires</button>
+              <button onClick={() => navigate('/itinerary')} className="add-itinerary-button-destination">Ajouter un Itinéraire
+              </button>
+
             </Link>
             <div className="itineraries-carousel">
                 {itineraries.map(itinerary => (
