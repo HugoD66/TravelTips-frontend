@@ -18,6 +18,10 @@ const UserMenu = ({ deco }: { deco: () => void }) => {
     navigation(`/profile?parametre=${"userTips"}`);
   };
 
+  const handleUserItineraryClick = () => {
+    navigation(`/profile?parametre=${"userItinerary"}`);
+  }
+
   return (
     <div className="burger-menu">
       <div
@@ -30,7 +34,7 @@ const UserMenu = ({ deco }: { deco: () => void }) => {
       </div>
       <div className={`menu ${isOpen ? "open" : ""}`}>
         <button onClick={handleUserInfoClick}>Mes informations</button>
-        <button>Mes itinéraires</button>
+        <button onClick={handleUserItineraryClick}>Mes itinéraires</button>
         <button onClick={handleUserTipsClick}>Mes tips</button>
         <button onClick={deco}>Déconnexion</button>
       </div>
