@@ -54,10 +54,10 @@ const PendingItineraryTable: React.FC = () => {
         <tr>
           <th>Nom</th>
           <th>Nombre de jours</th>
-          <th>Jour 1 </th>
+          <th>Jour de départ</th>
           <th>Dernier jour</th>
           <th>Catégorie</th>
-          <th>Créé par : </th>
+          <th>Créé par</th>
           <th>Actions</th>
         </tr>
         </thead>
@@ -70,8 +70,8 @@ const PendingItineraryTable: React.FC = () => {
               <td>{itinerary.numberDay}</td>
               <td>{itinerary.dayOne}</td>
               <td>{itinerary.lastDay}</td>
-              <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}</td>
-              <td>{typeof itinerary.idUser === "object" ? itinerary.idUser.firstname : ""}</td>
+              <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : "Non disponible"}</td>
+              <td>{typeof itinerary.idUser === "object" ? itinerary.idUser.firstName : "Non disponible"}</td>
               <td>
                 <button
                   onClick={() => itinerary && itinerary.id && handleApprove(itinerary.id)}

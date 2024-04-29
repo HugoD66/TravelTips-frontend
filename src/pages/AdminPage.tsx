@@ -6,6 +6,7 @@ import ApprovateItineraryTable from "../components/admin/itinerary/ApprovateItin
 import PendingTipsTable from "../components/admin/tips/PendingTipsTable";
 import OtherTipsTable from "../components/admin/tips/OtherTipsTable";
 import PendingItineraryTable from "../components/admin/itinerary/PendingItineraryTable";
+import OtherItinerariesTable from "../components/admin/itinerary/OtherItinerariesTable";
 
 const AdminPage = () => {
   const location = useLocation();
@@ -36,7 +37,7 @@ const AdminPage = () => {
         <div className="user-info-container">
           <PendingItineraryTable />
           <ApprovateItineraryTable />
-          {/* Contenu du composant AdminItinerary */}
+          <OtherItinerariesTable />
         </div>
       )}
     </div>

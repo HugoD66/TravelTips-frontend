@@ -2,6 +2,9 @@ import React, {useEffect, useState} from "react";
 import {TipModel} from "../../../models/TipModel";
 import {ItineraryModel} from "../../../models/ItineraryModel";
 import {getApproveTips} from "../../../services/tipService";
+import {getApproveItinerary} from "../../../services/itineraryService";
+import {CategoryModel} from "../../../models/CategoryModel";
+import {UserModel} from "../../../models/UserModel";
 
 const ApprovateItineraryTable = () => {
 
@@ -15,9 +18,10 @@ const ApprovateItineraryTable = () => {
   const fetchApprovedItinerary = async () => {
     try {
       if (token !== null) {
-        const itinerary = await getApproveTips(token);
+        const itinerary = await getApproveItinerary(token);
 
         setApprovedItinerary(itinerary);
+        console.log(itinerary)
       }
     } catch (error) {
       console.error("Error fetching approved tips:", error);
@@ -32,11 +36,10 @@ const ApprovateItineraryTable = () => {
         <tr>
           <th>Nom</th>
           <th>Nombre de jours</th>
-          <th>Jour 1</th>
+          <th>Jour de départ</th>
           <th>Dernier jour</th>
           <th>Catégorie</th>
-          <th>Créé par :</th>
-          <th>Actions</th>
+          <th>Créé par</th>
         </tr>
         </thead>
         <tbody>
@@ -44,9 +47,13 @@ const ApprovateItineraryTable = () => {
           const itinerary: ItineraryModel = approvedItinerary[parseInt(key, 10)];
           return (
               <tr key={itinerary.id}>
-              <td>{itinerary.name}</td>
-            </tr>
-
+                <td>{itinerary.name}</td>
+                <td>{itinerary.numberDay}</td>
+                <td>{itinerary.dayOne}</td>
+                <td>{itinerary.lastDay}</td>
+                <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : "Non disponible"}</td>
+                <td>{typeof itinerary.idUser === "object" ? itinerary.idUser.firstName : "Non disponible"}</td>
+              </tr>
           )
         })}
         </tbody>

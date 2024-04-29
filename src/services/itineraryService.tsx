@@ -90,7 +90,7 @@ export const deleteItinerary = (id: string) => {
 };
 
 export const getPendingItinerary = (token: string) => {
-  return fetch(`http://localhost:4000/tips/pendingItinerary`, {
+  return fetch(`http://localhost:4000/itinerary/pendingItinerary`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -109,7 +109,7 @@ export const getPendingItinerary = (token: string) => {
 };
 
 export const getApproveItinerary = (token: string) => {
-  return fetch(`http://localhost:4000/tips/approvateItinerary`, {
+  return fetch(`http://localhost:4000/itinerary/approvateItinerary`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -122,11 +122,11 @@ export const getApproveItinerary = (token: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des itineraires:", error);
+      console.error("Erreur de la requête", error);
       throw error;
     });
 };
-export const getDisapproveItinerary = (token: string) => {
+export const getDisapproveItineraries = (token: string) => {
   return fetch(`http://localhost:4000/itinerary/disapproveItinerary`, {
     method: "GET",
     headers: {
@@ -140,7 +140,7 @@ export const getDisapproveItinerary = (token: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des itineraires:", error);
+      console.error("Erreur de la requête", error);
       throw error;
     });
 };
@@ -158,7 +158,7 @@ export const approveItinerary = (id: string, token: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des tips:", error);
+      console.error("Erreur de la requête", error);
       throw error;
     });
 };
@@ -177,7 +177,7 @@ export const disapproveItinerary = (id: string, token: string) => {
       return response.json();
     })
     .catch((error) => {
-      console.error("Erreur lors de la récupération des tips:", error);
+      console.error("Erreur de la requête", error);
       throw error;
     });
 };
