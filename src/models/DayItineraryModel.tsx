@@ -5,6 +5,6 @@ export class DayItineraryModel {
   id?: string;
   slot?: string;
   date!: Date;
-  idTips?: string | TipModel[];
+  idTips?: string | TipModel;
   idItinerary?: string | ItineraryModel;
 }

@@ -1,136 +1,113 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import AddItinerary from "../components/forms/AddItinerary";
-import TipsListComponent from "../components/addItinerary/TipsList";
-import OrganizeItinerary from "../components/addItinerary/OrganizeItinerary";
-import { getTipsByCountry } from "../services/tipService";
-import { TipModel } from "../models/TipModel";
+import { getDayInItineraryList } from "../services/dayItineraryService";
 import { ItineraryModel } from "../models/ItineraryModel";
-import { createItinerary } from "../services/itineraryService";
-import { CountryModel } from "../models/CountryModel";
-import { getCountryList } from "../services/countryService";
-import { toast } from "react-toastify";
+import { DayItineraryModel } from "../models/DayItineraryModel";
+import { TipModel } from "../models/TipModel";
+import { Link } from "react-router-dom";
 
 const ItineraryPage = () => {
-  const [isTipsListVisible, setIsTipsListVisible] = useState(false);
-  const [isAddItineraryVisible, setIsAddItineraryVisible] = useState(true);
-  const [isItineraryVisible, setIsItineraryVisible] = useState(false);
-  const [tips, setTips] = React.useState([]);
-  const [selectedTips, setSelectedTips] = useState<TipModel[]>([]);
-  const [itinerary, setItinerary] = useState<ItineraryModel>();
-  const token = localStorage.getItem("token") || null;
-  const id = localStorage.getItem("id") || null;
-  const [listCountry, setListCountry] = useState<CountryModel[]>([]);
-  const [selectedCountry, setSelectedCountry] = useState("");
-
-  function numberDay(dateDebutStr: string, dateFinStr: string) {
-    const dateDebut = new Date(dateDebutStr);
-    const dateFin = new Date(dateFinStr);
-    const differenceMs: number = dateFin.getTime() - dateDebut.getTime();
-    const differenceJours: number = differenceMs / (1000 * 60 * 60 * 24);
-    return Math.floor(differenceJours);
-  }
+  const [itineraries, setItineraries] = useState<ItineraryModel[]>([]);
+  const [selectedItinerary, setSelectedItinerary] =
+    useState<ItineraryModel | null>(null);
+  const [dayItineraries, setDayItineraries] = useState<DayItineraryModel[]>([]);
+  const [tips, setTips] = useState<TipModel[]>([]);
+  const token = localStorage.getItem("token") || null; // Vérifie si l'utilisateur est connecté
 
   useEffect(() => {
-    fetchCountry();
+    getDayInItineraryList()
+      .then((data) => {
+        setDayItineraries(data);
+      })
+      .catch((error) => {
+        console.error(
+          "Erreur lors de la récupération des itinéraires :",
+          error
+        );
+      });
   }, []);
 
-  const fetchCountry = async () => {
-    try {
-      if (token) {
-        const countryList = await getCountryList(token);
-        setListCountry(countryList);
-      }
-    } catch (error) {
-      console.error("Error fetching countries", error);
+  // Fonction pour afficher les dayItineraries et les tips associés à l'itinéraire sélectionné
+  const handleItineraryClick = (dayItinerary: DayItineraryModel) => {
+    dayItineraries.push(dayItinerary);
+    if (
+      typeof dayItinerary.idItinerary === "object" &&
+      typeof dayItinerary.idTips === "object"
+    ) {
+      itineraries.push(dayItinerary.idItinerary);
+      tips.push(dayItinerary.idTips);
     }
   };
 
-  const handleFormSubmit = async (
-    name: string,
-    country: string,
-    dateDebut: string,
-    dateFin: string,
-    isPublic: boolean
-  ) => {
-    if (token !== null && id !== null) {
-      const tips = await getTipsByCountry(country, token);
-      setTips(tips);
-      setSelectedCountry(country);
-      let numberDays: number = numberDay(dateDebut, dateFin);
-      const newItinerary = {
-        name: name,
-        numberDay: numberDays,
-        idCountry: country,
-        dayOne: dateDebut,
-        lastDay: dateFin,
-        idCategory: "a39a34de-10d9-4ae8-8649-13c8de0a84bc",
-        idUser: id,
-        public: isPublic,
-      };
-      try {
-        setItinerary(await createItinerary(newItinerary, token));
-        toast.success("Itinéraire créé avec succès");
-      } catch (error) {
-        console.log("erreur creation tips" + error);
-      }
-
-      setIsTipsListVisible(true);
-      setIsAddItineraryVisible(false);
-    }
-  };
-
-  const handleTipSelect = (tip: TipModel) => {
-    setSelectedTips([...selectedTips, tip]);
-    toast.success("Ce tips a été ajouté à votre voyage");
-  };
-
-  const handleOrganizedDaysClick = () => {
-    setIsTipsListVisible(false);
-    setIsAddItineraryVisible(false);
-    setIsItineraryVisible(true);
+  // Fonction pour créer un nouvel itinéraire (à implémenter selon votre logique)
+  const handleCreateItinerary = () => {
+    // Rediriger vers la page de création d'itinéraire ou afficher un formulaire de création d'itinéraire
+    console.log("Créer un nouvel itinéraire");
   };
 
   return (
-    <>
-      <div>
-        <h1>Bienvenue sur ton itinéraire</h1>
-        <Link to={`/add-Tips`}>
-          <button>Créer un tips</button>
-        </Link>
-      </div>
-      <div className="app">
-        <h1>Planificateur d'Itinéraire</h1>
-        {isAddItineraryVisible && (
-          <AddItinerary onSubmit={handleFormSubmit} listCountry={listCountry} />
-        )}
-        <div className="content">
-          {isTipsListVisible && (
-            <div className="tips-list">
-              <h2>Tips disponibles pour {selectedCountry}</h2>
-              <TipsListComponent
-                tips={tips}
-                onTipSelect={handleTipSelect}
-                onOrganizeDaysClick={handleOrganizedDaysClick}
-              />
-            </div>
-          )}
-          {isItineraryVisible && (
-            <div className="itinerary">
-              <h2>Itinéraire</h2>
-              {itinerary && (
-                <>
-                  <OrganizeItinerary
-                    itinerary={itinerary}
-                    selectedTips={selectedTips}
-                  />
-                </>
-              )}
-            </div>
-          )}
+    <div>
+      <h2>Tous les itinéraires</h2>
+      <ul>
+        {dayItineraries.map((dayItinerary) => (
+          <li
+            key={dayItinerary.id}
+            onClick={() => handleItineraryClick(dayItinerary)}
+          >
+            {dayItinerary && (
+              <div>
+                {typeof dayItinerary.date === "object" && (
+                  <p>Date: {new Date(dayItinerary.date).toISOString()}</p>
+                )}
+                {typeof dayItinerary.idItinerary === "object" &&
+                  dayItinerary.idItinerary.name &&
+                  dayItinerary.idItinerary.dayOne &&
+                  dayItinerary.idItinerary.lastDay &&
+                  dayItinerary.idItinerary.idCategory && (
+                    <>
+                      <p>
+                        Nom de l'itinéraire: {dayItinerary.idItinerary.name}
+                      </p>
+                      <p>Date de début : {dayItinerary.idItinerary.dayOne}</p>
+
+                      <p>Date de fin: {dayItinerary.idItinerary.lastDay}</p>
+                    </>
+                  )}
+              </div>
+            )}
+          </li>
+        ))}
+      </ul>
+
+      {selectedItinerary && (
+        <div>
+          <h3>{selectedItinerary.name}</h3>
+          <h4>Day Itineraries</h4>
+          <ul>
+            {dayItineraries.map((dayItinerary) => (
+              <li key={dayItinerary.id}>
+                {dayItinerary.date.toISOString()} - Slot: {dayItinerary.slot}
+              </li>
+            ))}
+          </ul>
+          <h4>Tips</h4>
+          <ul>
+            {tips.map((tip) => (
+              <li key={tip.id}>{tip.name}</li>
+            ))}
+          </ul>
         </div>
-      </div>
-    </>
+      )}
+
+      {/* Affiche le bouton pour créer un nouvel itinéraire uniquement si l'utilisateur est connecté */}
+      {token && (
+        <Link to={"/add-itinerary"}>
+          <button onClick={handleCreateItinerary}>
+            Créer un nouvel itinéraire
+          </button>
+        </Link>
+      )}
+    </div>
   );
 };
+
 export default ItineraryPage;

@@ -12,17 +12,14 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
   onTipSelect,
   onOrganizeDaysClick,
 }) => {
-  // Liste des villes uniques
   const cities = Array.from(
     new Set(
       tips.map((tip) => (typeof tip.idCity === "object" ? tip.idCity.name : ""))
     )
   );
 
-  // État pour stocker les villes sélectionnées
   const [selectedCities, setSelectedCities] = useState<string[]>([]);
 
-  // Fonction de gestion de la sélection d'une ville
   const handleCitySelect = (city: string) => {
     setSelectedCities((prevSelectedCities) =>
       prevSelectedCities.includes(city)
@@ -32,7 +29,7 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
   };
 
   return (
-    <div>
+    <div className="container">
       <div>
         <h3>Choisir une ou plusieurs villes :</h3>
         {cities.map((city) => (

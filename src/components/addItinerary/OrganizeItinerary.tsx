@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from "react";
+import Calendar from "react-calendar";
+import "../../styles/calendar.css";
 import { TipModel } from "../../models/TipModel";
 import { DayItineraryModel } from "../../models/DayItineraryModel";
 import { ItineraryModel } from "../../models/ItineraryModel";
-import Calendar from "react-calendar";
-import "react-calendar/dist/Calendar.css";
 import AgendaPage from "./Agenda";
 import Modal from "../../components/Modal";
 import { createDayItinerary } from "../../services/dayItineraryService";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 interface OrganizeItineraryProps {
   itinerary: ItineraryModel;
   selectedTips: TipModel[];
 }
-
 const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
   itinerary,
   selectedTips,
@@ -21,11 +22,18 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [agendaVisible, setAgendaVisible] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [datesWithTips, setDatesWithTips] = useState<Date[]>([]);
   const token = localStorage.getItem("token") || null;
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const navigation = useNavigate();
 
   useEffect(() => {
-    initializeItinerary();
-  }, []);
+    const dates = dayItinerary.map(
+      (dayItinerary: DayItineraryModel) => new Date(dayItinerary.date)
+    );
+    setDatesWithTips(dates);
+  }, [dayItinerary]);
 
   const handleAddTip = (tip: TipModel, slot: string, date: string) => {
     const updatedDayItinerary = [...dayItinerary];
@@ -45,26 +53,6 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
     console.log(JSON.stringify(updatedDayItinerary));
   };
 
-  const initializeItinerary = () => {
-    const dayItineraryList = [];
-    if (
-      typeof itinerary.dayOne === "string" &&
-      typeof itinerary.lastDay === "string"
-    ) {
-      let currentDate = new Date(itinerary.dayOne);
-      while (currentDate <= new Date(itinerary.lastDay)) {
-        const dayItinerary: DayItineraryModel = {
-          date: currentDate,
-          idItinerary: itinerary.id,
-          idTips: [],
-        };
-        dayItineraryList.push(dayItinerary);
-        currentDate.setDate(currentDate.getDate() + 1);
-      }
-      setDayItinerary(dayItineraryList);
-    }
-  };
-
   const handleSubmit = () => {
     if (dayItinerary.length > 0) {
       dayItinerary.forEach((day) => {
@@ -76,6 +64,11 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
                 "DayItinerary ajouté à la base de données :",
                 response
               );
+              setShowModal(false);
+              setDayItinerary([]);
+              toast.success("Votre itinéraire a été créé avec succès");
+
+              navigation("/itinerary");
             })
             .catch((error) => {
               // Gérer les erreurs en cas d'échec de l'ajout
@@ -97,34 +90,33 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
     setShowModal(true);
   };
 
-  const renderTips = () => {
-    const dayIndex = dayItinerary.findIndex(
-      (day) => day.date.toDateString() === selectedDate.toDateString()
-    );
-    if (dayIndex !== -1) {
-      const tips = dayItinerary[dayIndex].idTips;
-      return (
-        <ul>
-          {typeof tips === "object" ? (
-            tips.length > 0 ? (
-              tips.map((tip, index) => <li key={index}>{tip.name}</li>)
-            ) : (
-              <p>'Pas de tips trouvés'</p>
-            )
-          ) : (
-            <p>'Pas de tips trouvés'</p>
-          )}
-        </ul>
-      );
+  const tileContent = ({ date, view }: { date: Date; view: string }) => {
+    if (view === "month") {
+      const currentDate = date.toISOString().split("T")[0];
+      if (
+        datesWithTips.find((d) => d.toISOString().split("T")[0] === currentDate)
+      ) {
+        return <div className="blue-dot"></div>;
+      }
     }
+    return null;
   };
 
   return (
     <>
       <div>
-        <h2>Calendrier</h2>
-        <p>Sélectionnez une date pour afficher l'agenda :</p>
-        <Calendar onClickDay={handleDateClick} value={selectedDate} />
+        <div className="titleItinerary">
+          <h1>Organise tes tips !</h1>
+          <p>Sélectionnez une date pour afficher l'agenda :</p>
+        </div>
+        <div className="container">
+          <Calendar
+            onClickDay={handleDateClick}
+            value={selectedDate}
+            tileContent={tileContent}
+          />
+          <button onClick={() => handleSubmit()}>Valider mon itinéraire</button>
+        </div>
         {agendaVisible && (
           <div className="agenda-popup">
             {showModal && (
@@ -133,9 +125,8 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
                   date={selectedDate}
                   tips={selectedTips}
                   onAddTipClick={handleAddTip}
-                  handleSubmit={handleSubmit}
-                ></AgendaPage>
-                {renderTips()}
+                  closeModal={() => setShowModal(false)}
+                />
               </Modal>
             )}
           </div>

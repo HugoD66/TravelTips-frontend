@@ -6,12 +6,12 @@ const AgendaPage = ({
   date,
   tips,
   onAddTipClick,
-  handleSubmit,
+  closeModal,
 }: {
   date: Date;
   tips: TipModel[];
   onAddTipClick: (tip: TipModel, slot: string, date: string) => void;
-  handleSubmit: () => void;
+  closeModal: () => void;
 }) => {
   const [selectedTimeSlot, setSelectedTimeSlot] = useState<string | null>(null);
   const [selectedTipsBySlot, setSelectedTipsBySlot] = useState<{
@@ -78,7 +78,7 @@ const AgendaPage = ({
             </button>
           </div>
         ))}
-        <button onClick={() => handleSubmit()}>Terminer l'itinéraire</button>
+        <button onClick={() => closeModal()}>Valider cette journée</button>
       </div>
     </div>
   );

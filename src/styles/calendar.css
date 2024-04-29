@@ -1,0 +1,83 @@
+/* Styles pour le calendrier */
+.react-calendar {
+  width: 80%;
+  height: 60%;
+  max-width: 100%;
+  border: 1px solid #d1d1d1;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Styles pour les jours du calendrier */
+.react-calendar__tile {
+  padding: 0.75em;
+}
+
+/* Styles pour les jours du mois */
+.react-calendar__month-view__days__day {
+  cursor: pointer;
+}
+
+/* Styles pour les jours non cliquables */
+.non-clickable {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* Styles pour les jours cliquables */
+.clickable {
+  cursor: pointer;
+}
+
+.react-calendar__navigation {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px;
+}
+
+.react-calendar__month-view__weekdays__weekday {
+  flex: 1;
+  text-align: center;
+}
+/* Styles pour le point bleu indiquant les jours avec des tips */
+.blue-dot {
+  width: 8px;
+  height: 8px;
+  background-color: blue;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 2px;
+}
+/* Styles pour les boutons du calendrier */
+.react-calendar__tile {
+  padding: 1% 2%;
+  margin: 1%2%;
+}
+.react-calendar__navigation__arrow {
+  background-color: #315d55;
+  border: none;
+  cursor: pointer;
+}
+
+.react-calendar__navigation__label {
+  font-weight: bold;
+}
+
+.react-calendar__tile--active {
+  background-color: #315d55;
+  border-radius: 50%;
+}
+
+.react-calendar__tile--now {
+  background-color: #a6c6c7;
+}
+
+.react-calendar__tile--hasActive {
+  background-color: #c0c0c0;
+}
+.titleItinerary {
+  text-align: center;
+  margin-bottom: -15%;
+}

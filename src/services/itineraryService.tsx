@@ -21,9 +21,13 @@ export const createItinerary = (itinerary: ItineraryModel, token: string) => {
     });
 };
 
-export const getItineraryList = () => {
+export const getItineraryList = (token: string) => {
   return fetch(`http://localhost:4000/itinerary`, {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

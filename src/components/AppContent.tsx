@@ -8,6 +8,7 @@ import NavBar from "../components/NavBar";
 import AdminPage from "../pages/AdminPage";
 import AddTips from "./forms/AddTips";
 import CountryPage from "../pages/CountryPage";
+import CreateItineraryPage from "../pages/CreateItineraryPage";
 
 const AppContent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -24,6 +25,7 @@ const AppContent = () => {
         <Route path="/home" element={<HomePage />} />
         <Route path="/add-tips" element={<AddTips />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
+        <Route path="/add-itinerary" element={<CreateItineraryPage />} />
         <Route path="/adminPage" element={<AdminPage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/country/:countryName" element={<CountryPage />} />

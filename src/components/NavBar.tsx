@@ -44,23 +44,28 @@ const NavBar = ({
     navigation("/home");
   };
 
-  const generationFixtures= () => {
+  const generationFixtures = () => {
     return fetch(`http://localhost:4000/fixtures/mockups`, {
       method: "POST",
     }).then((response) => {
       if (!response.ok) {
         //throw new Error("Réponse réseau non OK");
-        return
+        return;
       }
       return response.json();
     });
-  }
+  };
   return (
     <nav className="navbar">
-      <button className="fixture-generation" onClick={() => generationFixtures()}>Generation fixtures</button>
+      <button
+        className="fixture-generation"
+        onClick={() => generationFixtures()}
+      >
+        Generation fixtures
+      </button>
       <div className="nav-logo">
         <Link to="/">
-          <img src="/images/logoSide.png" alt="Logo"/>
+          <img src="/images/logoSide.png" alt="Logo" />
         </Link>
       </div>
       <button className="burger" onClick={() => setIsOpen(!isOpen)}>
@@ -70,11 +75,11 @@ const NavBar = ({
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <Link to="/home">Accueil</Link>
         <Link to="/destinations">Destinations</Link>
-        <Link to="/itinerary">Mon itinéraire</Link>
+        <Link to="/itinerary">Les itinéraires</Link>
         {isLoggedIn ? (
           <>
-            {userRole === "Admin" && <AdminMenu deco={deco}/>}
-            {userRole === "User" && <UserMenu deco={deco}/>}
+            {userRole === "Admin" && <AdminMenu deco={deco} />}
+            {userRole === "User" && <UserMenu deco={deco} />}
           </>
         ) : (
           <div className="nav-profile">
