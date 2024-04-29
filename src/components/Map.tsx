@@ -3,7 +3,6 @@ import { addMarker } from "../services/mapService";
 import { useCity } from "../context/CityProvider";
 import maplibregl, {Marker} from "maplibre-gl";
 import "maplibre-gl/dist/maplibre-gl.css";
-import {TipModel} from "../models/TipModel";
 import {useTip} from "../context/TipProvider";
 
 interface MapProps {
@@ -32,7 +31,7 @@ const Map: React.FC<MapProps> = ({
                                    initialPosition,
                                    markers,
                                    onMarkerClick,
-}) => {
+}: MapProps) => {
   const { cityDetails, setCityDetails } = useCity();
   const { tipDetail, setTipDetail } = useTip();
 
