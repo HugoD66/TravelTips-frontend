@@ -3,7 +3,7 @@ import { ItineraryModel } from "./ItineraryModel";
 
 export class DayItineraryModel {
   id?: string;
-  orderInDay?: number;
+  slot?: string;
   date!: Date;
   idTips?: string | TipModel[];
   idItinerary?: string | ItineraryModel;

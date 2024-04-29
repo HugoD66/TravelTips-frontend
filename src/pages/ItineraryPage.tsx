@@ -10,7 +10,6 @@ import { createItinerary } from "../services/itineraryService";
 import { CountryModel } from "../models/CountryModel";
 import { getCountryList } from "../services/countryService";
 import { toast } from "react-toastify";
-import { DayItineraryModel } from "../models/DayItineraryModel";
 
 const ItineraryPage = () => {
   const [isTipsListVisible, setIsTipsListVisible] = useState(false);
@@ -23,7 +22,6 @@ const ItineraryPage = () => {
   const id = localStorage.getItem("id") || null;
   const [listCountry, setListCountry] = useState<CountryModel[]>([]);
   const [selectedCountry, setSelectedCountry] = useState("");
-  const [dayItinerary, setDayItinerary] = useState<DayItineraryModel[]>([]);
 
   function numberDay(dateDebutStr: string, dateFinStr: string) {
     const dateDebut = new Date(dateDebutStr);
@@ -36,33 +34,6 @@ const ItineraryPage = () => {
   useEffect(() => {
     fetchCountry();
   }, []);
-
-  const generateDayItinerary = (
-    startDate: string,
-    endDate: string
-  ): DayItineraryModel[] => {
-    const dayItineraryList: DayItineraryModel[] = [];
-    const dateDebut = new Date(startDate);
-    const dateFin = new Date(endDate);
-
-    // Copiez la date de début pour éviter de modifier l'original
-    const currentDate = new Date(dateDebut);
-
-    // Itérer jusqu'à ce que la date actuelle soit inférieure ou égale à la date de fin
-    while (currentDate <= dateFin) {
-      const newDayItinerary: DayItineraryModel = {
-        date: new Date(currentDate), // Utilisez une nouvelle instance de date pour éviter les problèmes de référence
-        idItinerary: itinerary?.id,
-      };
-
-      dayItineraryList.push(newDayItinerary);
-
-      // Passer au jour suivant
-      currentDate.setDate(currentDate.getDate() + 1);
-    }
-
-    return dayItineraryList;
-  };
 
   const fetchCountry = async () => {
     try {
@@ -100,8 +71,6 @@ const ItineraryPage = () => {
       try {
         setItinerary(await createItinerary(newItinerary, token));
         toast.success("Itinéraire créé avec succès");
-        generateDayItinerary(dateDebut, dateFin);
-        setItinerary(newItinerary);
       } catch (error) {
         console.log("erreur creation tips" + error);
       }
