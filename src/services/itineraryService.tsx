@@ -41,9 +41,13 @@ export const getItineraryList = (token: string) => {
     });
 };
 
-export const getItineraryById = (id: string) => {
+export const getItineraryById = (id: string, token: string) => {
   return fetch(`http://localhost:4000/itinerary/${id}`, {
     method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

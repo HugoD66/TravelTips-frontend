@@ -257,3 +257,14 @@
     padding: 20px;
     overflow: hidden;
 }
+.card__footer {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 0;
+    .category {
+        font-weight: 200;
+    }
+}

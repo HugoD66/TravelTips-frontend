@@ -1,0 +1,103 @@
+h1 {
+    margin-left: 5%;
+}
+.content-detail {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    @media screen and (max-width: 900px) {
+        flex-direction: column;
+    }
+}
+
+.content-click-detail {
+    width: 50%;
+    margin: auto;
+    height: 500px;
+    min-height: 100%;
+}
+
+.content-detail-itinaries {
+    width: 100%;
+    height: 300px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.8);
+}
+.click-detail-tip {
+    height: 50%;
+    width: 100%;
+}
+.dayz-information {
+    width: 80%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    p {
+        text-align: center;
+    }
+}
+.title-tips {
+    text-align: center;
+    width: 100%;
+}
+.detail-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+    @media screen and (max-width: 900px) {
+        flex-direction: column;
+    }
+
+}
+.name-adress {
+    width: 90%;
+    margin: auto;
+}
+.price-created-at {
+    width: 90%;
+    margin: auto;
+}
+.private-itinary {
+    color: #d90007;
+}
+.public-itinary {
+    color: forestgreen;
+}
+.dayz-country {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    .start-end-day {
+        width: 50%;
+    }
+    .count-tips {
+        width: 50%;
+        text-align: end;
+        margin-bottom: 15px;
+    }
+}
+
+.list-tips-itinerary {
+    h2 {
+        margin-left: 5%;
+    }
+
+}
+
+
+/*
+background: rgba(255, 255, 255, 0.8);
+ */

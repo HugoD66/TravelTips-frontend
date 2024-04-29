@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/Homepage";
 import DestinationsPage from "../pages/DestinationPage";
 import ItineraryPage from "../pages/ItineraryPage";
@@ -9,6 +9,7 @@ import AdminPage from "../pages/AdminPage";
 import AddTips from "./forms/AddTips";
 import CountryPage from "../pages/CountryPage";
 import CreateItineraryPage from "../pages/CreateItineraryPage";
+import ItineraryDetail from "../pages/ItineraryDetail";
 
 const AppContent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -26,6 +27,7 @@ const AppContent = () => {
         <Route path="/add-tips" element={<AddTips />} />
         <Route path="/itinerary" element={<ItineraryPage />} />
         <Route path="/add-itinerary" element={<CreateItineraryPage />} />
+        <Route path="/itineraries/:id" element={<ItineraryDetail />} />
         <Route path="/adminPage" element={<AdminPage />} />
         <Route path="/destinations" element={<DestinationsPage />} />
         <Route path="/country/:countryName" element={<CountryPage />} />

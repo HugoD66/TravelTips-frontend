@@ -9,6 +9,7 @@ import {getPictures} from "../services/pictureService";
 import {PictureModel} from "../models/PictureModel";
 import {TipModel} from "../models/TipModel";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
+import {getItineraryList} from "../services/itineraryService";
 
 interface Country {
     cca3: string;
@@ -33,6 +34,8 @@ interface Tip {
 }
 
 interface Itinerary {
+  idCategory: any;
+  numberDay: any;
     id: string;
     name: string;
 }
@@ -89,13 +92,9 @@ const DestinationPage = () => {
         } catch (error) {
             console.error('Error fetching countries:', error);
         }
-
-
-
     };
 
     const fetchTips = async () => {
-
       try {
         if (!token) {
           console.log("No token available.");
@@ -110,7 +109,6 @@ const DestinationPage = () => {
                 tipId: tip.id
               }));
             });
-
             const picturesArrays = await Promise.all(allPicturePromises);
             const allPictures = picturesArrays.flat();
             setPictureList(allPictures);
@@ -122,23 +120,18 @@ const DestinationPage = () => {
     };
 
     const fetchItineraries = async () => {
-        try {
-            const response = await axios.get('http://localhost:4000/itinerary', {
-              method: "GET",
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            });
-            if (Array.isArray(response.data)) {
-                setTips(response.data);
-            } else {
-                console.error('Expected an array of itineraries, but received:', response.data);
-            }
-        } catch (error) {
-            console.error('Error fetching itineraries:', error);
+      try {
+        if (!token) {
+          console.log("No token available.");
+          return;
         }
-    };
-
+        const response = await getItineraryList(token);
+        setItineraries(response);
+        console.log(itineraries)
+      } catch (error) {
+        console.error('Error fetching tips:', error);
+      }
+    }
     const handleSubregionClick = (subregion: string) => {
       setActiveSubregion(activeSubregion === subregion ? null : subregion);
     };
@@ -248,8 +241,6 @@ const DestinationPage = () => {
                 </Link>
               ))}
             </div>
-
-
             <h2>Derniers Itinéraires</h2>
             <Link to="/itinerary">
                 <button className="itinerary-button">Voir les itinéraires</button>
@@ -257,10 +248,21 @@ const DestinationPage = () => {
             <div className="itineraries-carousel">
                 {itineraries.map(itinerary => (
                     <Link key={itinerary.id} to={`/itineraries/${itinerary.id}`} className="card">
-                        <div className="card__content">
-                            <h2 className="card__title">{itinerary.name}</h2>
-                            <button className="card__button">Explorer</button>
-                        </div>
+
+                      <div className="card__content">
+                          <div className="card__background">
+                          </div>
+                          <h2 className="card__title">{itinerary.name}</h2>
+                          <button className="card__button">Explorer</button>
+                          <div className="card__footer">
+                            <p>
+                              <i>{itinerary.numberDay} jours</i>
+                            </p>
+                            <p className="category">
+                              {typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}
+                            </p>
+                          </div>
+                      </div>
                     </Link>
                 ))}
             </div>
