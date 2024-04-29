@@ -1,4 +1,3 @@
-import { DayItineraryModel } from "./DayItineraryModel";
 import { UserModel } from "./UserModel";
 import { CategoryModel } from "./CategoryModel";
 
@@ -11,4 +10,6 @@ export class ItineraryModel {
   idCategory?: CategoryModel | string;
   idUser?: UserModel | string;
   public?: boolean;
+  approvate?: string;
+  nbApprobation?: number;
 }
