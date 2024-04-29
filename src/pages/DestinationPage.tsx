@@ -123,7 +123,12 @@ const DestinationPage = () => {
 
     const fetchItineraries = async () => {
         try {
-            const response = await axios.get('http://localhost:4000/itinerary');
+            const response = await axios.get('http://localhost:4000/itinerary', {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            });
             if (Array.isArray(response.data)) {
                 setTips(response.data);
             } else {

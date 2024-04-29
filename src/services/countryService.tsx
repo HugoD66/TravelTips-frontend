@@ -1,5 +1,6 @@
 import { ApiResponse } from "../models/CountryData";
 import axios from "axios";
+const token = localStorage.getItem('token');
 
 export const createCountry = (country: any) => {
   return fetch(`http://localhost:4000/country`, {
@@ -7,6 +8,7 @@ export const createCountry = (country: any) => {
     body: JSON.stringify(country),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
@@ -59,6 +61,9 @@ export const getCountriesById = (id: string) => {
 export const getCountryByName = (countryName: string) => {
   return fetch(`http://localhost:4000/country/get-by-name/${countryName}`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
