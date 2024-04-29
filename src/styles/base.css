@@ -5,6 +5,10 @@
 @import './map.css';
 @import './add-tips.css';
 
+* {
+  box-sizing: border-box;
+}
+
 :root {
   --color-primary: #d7bfac;
   --color-secondary: #e7ded3;
@@ -15,6 +19,9 @@
   --color-black: #000000;
   --color-error: #df6c2c;
   --color-title: #ffff;
+
+  --font-title: 'Montserrat', sans-serif;
+  --font-text: 'Lato', sans-serif;
 }
 
 body, html {
