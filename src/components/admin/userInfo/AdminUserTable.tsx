@@ -1,4 +1,5 @@
 import { User } from "../../../models/UserData";
+import '../../../styles/admin.css';
 
 interface UserTableProps {
   users: User[];
@@ -12,7 +13,7 @@ const UserTable: React.FC<UserTableProps> = ({
   editUser,
 }) => {
   return (
-    <table>
+    <table className="admin-users-table" >
       <thead>
         <tr>
           <th>Prénom</th>

@@ -161,7 +161,7 @@
     margin-bottom: 10px;
 }
 
-.add-tip-button {
+.add-tip-button-destination {
     width: auto;
     text-align: center;
     padding: 10px;
@@ -179,81 +179,78 @@
 }
 
 /* H2 carousel */
-.carousel-container {
+.carousel-container-destination {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin: 20px;
 }
-.carousel-container h2 {
+.carousel-container-destination h2 {
     font-size: 2rem;
     margin-bottom: 20px;
 }
-/* Style des cartes pour derniers tips et itinéraires */
-.tips-carousel .card, .itineraries-carousel .card {
+/* Style des cartes pour derniers tips */
+.tips-destination {
+    flex-direction: row;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    margin: 20px;
+}
+.tips-destination .card-destination {
     display: flex;
     flex-direction: column;
-    align-items: center;
     width: 300px;
     height: 400px;
     margin: 10px;
     border-radius: 10px;
     overflow: hidden;
-    background: transparent;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    background-color: var(--color-background);
     position: relative;
-    transition: transform 0.3s ease;
+    cursor: pointer;
+    transition: transform 500ms ease-in-out, box-shadow 500ms ease-in-out;
 }
 
-.tips-carousel .card:hover, .itineraries-carousel .card:hover {
+.tips-destination .card-destination:hover {
     transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.3);
 }
 
-.tips-carousel .card img, .itineraries-carousel .card img {
+.tips-destination .card-destination-image {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: 50%;
+    background-size: cover;
+    background-position: center;
 }
 
-.tips-carousel .card__content, .itineraries-carousel .card__content {
+.tips-destination .card-content-destination {
     padding: 20px;
-    background: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     color: white;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: space-between;
 }
 
-.tips-carousel .card__title, .itineraries-carousel .card__title {
+.tips-destination .card-title-destination {
     font-size: 1.5rem;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-.tips-carousel .card__button, .itineraries-carousel .card__button {
+.tips-destination .card-button-destination {
     padding: 10px 20px;
+    background-color: var(--color-accent);
+    color: white;
     border: none;
-    background-color: var(--brand-color);
-    color: var(--black);
-    text-transform: uppercase;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
 }
 
-.tips-carousel .card__button:hover, .itineraries-carousel .card__button:hover {
-    background-color: darken(var(--brand-color), 10%);
-}
-
-/* Responsiveness and wrapping */
-.tips-carousel, .itineraries-carousel {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-    padding: 20px;
-    overflow: hidden;
+.tips-destination .card-button-destination:hover {
+    background-color: var(--color-primary);
 }

@@ -9,6 +9,11 @@ import {getCountryByName} from "../services/countryService";
 import {getTipsByCityId} from "../services/tipService";
 import {useTip} from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
+import { getTipsByCountry } from "../services/tipService";
+import {PictureModel} from "../models/PictureModel";
+import {Link} from "react-router-dom";
+
+
 interface Country {
   name: {
     common: string;
@@ -50,6 +55,17 @@ interface Weather {
   };
 }
 
+interface Tip {
+  id: string;
+  name: string;
+  address: string;
+  location: {
+    lat: number;
+    lng: number;
+  };
+  images: string[];
+}
+
 const CountryPage = () => {
   const { countryName } = useParams<{ countryName: string }>();
   const [country, setCountry] = useState<Country | null>(null);
@@ -60,6 +76,9 @@ const CountryPage = () => {
   const [activeInfo, setActiveInfo] = useState<string | null>(null);
   //const [tipDetails, setTipDetails] = useState<TipModel | null>(null);
   const { tipDetail, setTipDetail } = useTip();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [tips, setTips] = useState<Tip[]>([]);
+  const [pictureList, setPictureList] = useState<PictureModel[]>([]);
 
 
   const token = localStorage.getItem("token");
@@ -68,9 +87,11 @@ const CountryPage = () => {
       fetchCountryDetails(countryName);
       fetchWeather(countryName);
       getTipsByName(countryName);
+      fetchTips();
     }
   }, [countryName]);
 
+  
   const fetchWeather = async (capital: string) => {
     const apiKey = "b09f1e16de6744c1b9195639241604";
     try {
@@ -133,6 +154,18 @@ const CountryPage = () => {
       console.error("Error fetching tips by country name:", error);
     }
   }
+
+  const fetchTips = async () => {
+    if (token && countryName) {
+        try {
+            const fetchedTips = await getTipsByCountry(countryName, token);
+            setTips(fetchedTips);
+        } catch (error) {
+            console.error('Failed to fetch tips:', error);
+        }
+    }
+};
+
   const handleTipSelect = useCallback((tipDetail: any) => {
     setTipDetail(tipDetail);
   }, [setTipDetail]);
@@ -151,8 +184,11 @@ const CountryPage = () => {
           }}>
             <h1>{country.name.common}</h1>
           </div>
+          <h2>Informations</h2>
           <div className="country-details">
-            <h2>Informations</h2>
+            <div className="flag">
+              <img src={country.flags.svg} alt={`${country.name.common} flag`}/>
+            </div>
             <div className="country-cards">
               <div className="informations">
                 <p>Capital: {country.capital}</p>
@@ -160,9 +196,7 @@ const CountryPage = () => {
                 <p>Subregion: {country.subregion}</p>
                 <p>Currency: {country.currency.join(', ')}</p>
               </div>
-              <div className="flag">
-                <img src={country.flags.svg} alt={`${country.name.common} flag`}/>
-              </div>
+              
             </div>
           </div>
           <div className="weather-details">
@@ -204,7 +238,7 @@ const CountryPage = () => {
             />
             {tipDetail.id ? (
               <div className="detail-content">
-                <h3>Information sur le Tip:</h3>
+                <h3>Information sur le tips:</h3>
                 <p>Nom: {tipDetail.name}</p>
                 <p>Adresse: {tipDetail.address}</p>
                 {tipDetail.createdAt ? (
@@ -218,19 +252,40 @@ const CountryPage = () => {
               </div>
             ) : (
               <div className="detail-content">
-                <p>Cliquez sur un tip pour voir plus de détails.</p>
+                <p>Cliquez sur un tips pour voir plus de détails.</p>
+                {isModalOpen && (
+                <Modal onClose={() => setIsModalOpen(false)}>
+                  <AddTips />
+                </Modal>
+              )}
+              <button onClick={() => setIsModalOpen(true)}>Ajouter un nouveau tips</button>
               </div>
             )}
           </div>
-          <div className="country-tips">
-            <h2>Les bons tips</h2>
-            <button onClick={() => setShowModal(true)} style={{marginTop: '20px'}}>Ajouter un Tips</button>
-            {showModal && <Modal onClose={() => setShowModal(false)}><AddTips/></Modal>}
-          </div>
-
+          
+          <div className="tips-container">
+            <h2>La liste des tips pour le pays: {countryName}</h2>
+              <div className="tips-carousel">
+                {tips.map(tip => (
+                  <Link key={tip.id} to={`/tips/${tip.id}`} className="tip-card">
+                    {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                      pictureList.map((picture: PictureModel) =>
+                        picture.idTips!.id === tip.id ?
+                          <img src={"http://localhost:4000/" + picture.url}  className="tip-card-image" alt="représentation de l'image"/> : null
+                      ) :
+                      <img src={`https://picsum.photos/400/200?random=${tip.id}`} className="tip-card-image" alt="Default view"/>
+                    }
+                     <div className="tip-card-content">
+                      <h3 className="tip-card-title">{tip.name}</h3>
+                      <p className="tip-card-description">{tip.address}</p>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </div>
         </>
       ) : (
-        <p>Loading country information...</p>
+        <p>Pas d'information sur le pays...</p>
       )}
     </div>
   );

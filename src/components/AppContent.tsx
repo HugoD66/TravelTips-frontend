@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import HomePage from "../pages/Homepage";
 import DestinationsPage from "../pages/DestinationPage";
 import ItineraryPage from "../pages/ItineraryPage";
@@ -8,6 +8,8 @@ import NavBar from "../components/NavBar";
 import AdminPage from "../pages/AdminPage";
 import AddTips from "./forms/AddTips";
 import CountryPage from "../pages/CountryPage";
+import TipsPage from "../pages/TipsPage";
+import Footer from "../components/Footer";
 
 const AppContent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,7 +33,9 @@ const AppContent = () => {
           path="/profile"
           element={<ProfilePage handleLogin={handleLogin} />}
         />
+        <Route path="/tips/:tipId" element={<TipsPage />} />  {/* New route for TipsPage */}
       </Routes>
+      <Footer />
     </>
   );
 };
