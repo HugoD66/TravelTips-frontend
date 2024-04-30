@@ -29,9 +29,9 @@ const ApprovateItineraryTable = () => {
   };
 
   return (
-    <div>
-      <h2>Itinéraires approuvés</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Itinéraires approuvés</h2>
+      <table className="admin-table">
         <thead>
         <tr>
           <th>Nom</th>

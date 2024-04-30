@@ -47,9 +47,9 @@ const PendingItineraryTable: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Itineraires en attente d'approbation</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Itineraires en attente d'approbation</h2>
+      <table className="admin-table">
         <thead>
         <tr>
           <th>Nom</th>

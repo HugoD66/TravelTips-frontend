@@ -52,6 +52,7 @@ export const getTipList = () => {
       throw error;
     });
 };
+
 export const getTipListUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/myTips/${id}`, {
     method: "GET",
@@ -85,9 +86,12 @@ export const getTipsByCityId = (id: string) => {
       throw error;
     });
 };
-export const getTipById = (id: string) => {
-  return fetch(`http://localhost:4700/tips/${id}`, {
+export const getTipById = (id: string, token: string) => {
+  return fetch(`http://localhost:4000/tips/${id}`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

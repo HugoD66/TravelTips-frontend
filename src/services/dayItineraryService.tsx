@@ -1,5 +1,20 @@
-import { ItineraryModel } from "../models/ItineraryModel";
 import { DayItineraryModel } from "../models/DayItineraryModel";
+
+export const findAllByItineraryId = (idItinerary: string) => {
+  return fetch(`http://localhost:4000/day-itinerary/by-itinerary/${idItinerary}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des dayInItinerary:", error);
+      throw error;
+    });
+}
 
 export const createDayItinerary = (
   dayInItinerary: DayItineraryModel,

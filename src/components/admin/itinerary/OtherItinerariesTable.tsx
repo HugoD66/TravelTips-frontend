@@ -22,9 +22,9 @@ const OtherItinerariesTable = () => {
   }
 
   return (
-    <div>
-      <h2>Itinéraires refusés</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Itinéraires refusés</h2>
+      <table className="admin-table">
         <thead>
         <tr>
           <th>Nom</th>

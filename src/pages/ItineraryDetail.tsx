@@ -1,77 +1,68 @@
-import { Link, useParams } from "react-router-dom";
-import { ItineraryModel } from "../models/ItineraryModel";
-import React, { useCallback, useEffect, useState } from "react";
-import { getItineraryById } from "../services/itineraryService";
-import Map, { TipLocation } from "../components/Map";
-import { TipModel } from "../models/TipModel";
-import { getLastestTips } from "../services/tipService";
-import { getPictures } from "../services/pictureService";
-import { PictureModel } from "../models/PictureModel";
+import {Link, useParams} from "react-router-dom";
+import {ItineraryModel} from "../models/ItineraryModel";
+import React, {useCallback, useEffect, useState} from "react";
+import {getItineraryById} from "../services/itineraryService";
+import Map, {TipLocation} from "../components/Map";
+import {TipModel} from "../models/TipModel";
+import {getLastestTips} from "../services/tipService";
+import {getPictures} from "../services/pictureService";
+import {PictureModel} from "../models/PictureModel";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
-import { useTip } from "../context/TipProvider";
+import {useTip} from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
+import {findAllByItineraryId} from "../services/dayItineraryService";
 
 const ItineraryDetail = () => {
   const { id } = useParams<{ id: string }>();
   const { tipDetail, setTipDetail } = useTip();
   const [itinerary, setItinerary] = useState<ItineraryModel>();
-  const token = localStorage.getItem("token");
+  const token = localStorage.getItem('token');
   const [listTip, setTipList] = useState<TipModel[]>([]);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
   useEffect(() => {
     fetchItinerary();
-    fetchTips();
   }, []);
 
   const fetchItinerary = async () => {
     try {
-      if (!token || !id) {
+      if(!token || !id) {
         return;
       }
       const response = await getItineraryById(id, token);
       setItinerary(response);
-    } catch (error) {
-      console.error("Erreur lors de la récupération de l'itinéraire:", error);
-    }
-  };
+      const responseDayItinerary = await findAllByItineraryId(response.id)
+      console.log(responseDayItinerary)
+      const tips = responseDayItinerary.map((dayItinerary: any) => dayItinerary.idTips);
+      setTipList(tips);
 
-  // TEMPORAIRE
-  const fetchTips = async () => {
-    try {
-      const response = await getLastestTips();
-      if (response) {
-        const allPicturePromises = response.map(async (tip: TipModel) => {
-          const pictureResponses = await getPictures(tip.id!);
-          return pictureResponses.map((picture: PictureModel) => ({
-            ...picture,
-            tipId: tip.id,
-          }));
-        });
-
-        const allGeoTips = response.map((tip: TipLocation) => ({
-          lat: tip.lat,
-          lng: tip.lng,
-          tipSelected: tip,
+      const allPicturePromises = tips.map(async (tip: TipModel) => {
+        const pictureResponses = await getPictures(tip.id!);
+        return pictureResponses.map((picture: PictureModel) => ({
+          ...picture,
+          tipId: tip.id
         }));
-        setGeoTips(allGeoTips);
-        console.log(allGeoTips);
-        const picturesArrays = await Promise.all(allPicturePromises);
-        const allPictures = picturesArrays.flat();
-        setPictureList(allPictures);
-        setTipList(response);
-      }
-    } catch (error) {
-      console.error("Error fetching tips:", error);
-    }
-  };
+      });
 
-  const handleTipSelect = useCallback(
-    (tipDetail: any) => {
-      setTipDetail(tipDetail);
-    },
-    [setTipDetail]
-  );
+      const allGeoTips = tips.map((tip: TipLocation) => ({
+        lat: tip.lat,
+        lng: tip.lng,
+        tipSelected: tip
+      }));
+      setGeoTips(allGeoTips);
+
+      const picturesArrays = await Promise.all(allPicturePromises);
+      const allPictures = picturesArrays.flat();
+      setPictureList(allPictures);
+
+    } catch (error) {
+      console.error('Erreur lors de la récupération de l\'itinéraire:', error)
+    }
+  }
+
+  const handleTipSelect = useCallback((tipDetail: any) => {
+    setTipDetail(tipDetail);
+  }, [setTipDetail]);
 
   return (
     <>
@@ -81,11 +72,9 @@ const ItineraryDetail = () => {
           <div className="content-detail-itinaries">
             <h2>{itinerary?.name}</h2>
             <div className="dayz-information">
-              {itinerary?.public ? (
-                <p className="public-itinary">Itinéraire Public</p>
-              ) : (
-                <p className="private-itinary">Itinéraire Privé</p>
-              )}
+
+              {itinerary?.public ? <p className="public-itinary">Itinéraire Public</p> :
+                <p className="private-itinary">Itinéraire Privé</p>}
             </div>
             <div className="dayz-country">
               <div className="start-end-day">
@@ -111,23 +100,17 @@ const ItineraryDetail = () => {
                   </div>
                   <div className="price-created-at">
                     {tipDetail.createdAt ? (
-                      <p>
-                        Créé le:{" "}
-                        {new Date(tipDetail.createdAt).toLocaleDateString()}
-                      </p>
+                      <p>Créé le: {new Date(tipDetail.createdAt).toLocaleDateString()}</p>
                     ) : (
                       <p>Date de création inconnue</p>
                     )}
-                    <p>
-                      Prix :
-                      <ProgressBar value={tipDetail.price} max={100} />
+                    <p>Prix :
+                      <ProgressBar value={tipDetail.price} max={100}/>
                     </p>
                   </div>
                 </div>
               </>
-            ) : (
-              ""
-            )}
+            ) : ''}
           </div>
         </div>
         <Map
@@ -140,33 +123,21 @@ const ItineraryDetail = () => {
       <div className="list-tips-itinerary">
         <h2 className="title-list-itinerary">Tous les tips de l'itinéraire</h2>
         <div className="tips-destination">
-          {listTip.map((tip) => (
-            <Link
-              key={tip.id}
-              to={`/tips/${tip.id}`}
-              className="card-destination"
-            >
+          {listTip.map(tip => (
+            <Link key={tip.id} to={`/tips/${tip.id}`} className="card-destination">
               <div className="card-content-destination">
                 <h3 className="card-title-destination">{tip.name}</h3>
                 <button className="card-button-destination">Voir plus</button>
               </div>
-              {pictureList.find((picture) => picture.idTips!.id === tip.id) ? (
+              {pictureList.find(picture => picture.idTips!.id === tip.id) ? (
                 <div
                   className="card-destination-image"
-                  style={{
-                    backgroundImage: `url(http://localhost:4000/${
-                      pictureList.find(
-                        (picture) => picture.idTips!.id === tip.id
-                      )?.url
-                    })`,
-                  }}
+                  style={{backgroundImage: `url(http://localhost:4000/${pictureList.find(picture => picture.idTips!.id === tip.id)?.url})`}}
                 ></div>
               ) : (
                 <div
                   className="card-destination-image"
-                  style={{
-                    backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`,
-                  }}
+                  style={{backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`}}
                 ></div>
               )}
             </Link>
