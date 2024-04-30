@@ -20,12 +20,9 @@ export const createTip = (tip: TipModel, token: string) => {
       throw error;
     });
 };
-export const getLastestTips = (token: string) => {
+export const getLastestTips = () => {
   return fetch("http://localhost:4000/tips/latest", {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -40,12 +37,9 @@ export const getLastestTips = (token: string) => {
     });
 };
 
-export const getTipList = (token: string) => {
+export const getTipList = () => {
   return fetch(`http://localhost:4000/tips`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -76,12 +70,9 @@ export const getTipListUser = (id: string, token: string) => {
       throw error;
     });
 };
-export const getTipsByCityId = (id: string, token: string) => {
+export const getTipsByCityId = (id: string) => {
   return fetch(`http://localhost:4000/tips/by-city/${id}`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -94,12 +85,9 @@ export const getTipsByCityId = (id: string, token: string) => {
       throw error;
     });
 };
-export const getTipById = (id: string, token: string) => {
+export const getTipById = (id: string) => {
   return fetch(`http://localhost:4700/tips/${id}`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) => {
       if (!response.ok) {

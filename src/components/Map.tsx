@@ -110,7 +110,6 @@ const Map: React.FC<MapProps> = ({
         .addTo(map);
 
       mapMarker.getElement().addEventListener('click', () => {
-        console.log("Tip selected data:", tipSelected);
         if (!tipSelected) {
           console.log("No tip data available");
           return;

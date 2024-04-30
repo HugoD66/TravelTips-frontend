@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getDisapproveTips } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
+import "../../../styles/admin.css";
 
 const OtherTipsTable: React.FC = () => {
   const [otherTips, setOtherTips] = useState<TipModel[]>([]);
@@ -22,9 +23,9 @@ const OtherTipsTable: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Tips refusés</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Tips refusés</h2>
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nom</th>

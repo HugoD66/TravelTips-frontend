@@ -31,7 +31,6 @@ const Login = ({
     }
     loginUser(email, password)
       .then((response) => {
-        console.log("Utilisateur connecté avec succès :", response);
         setEmail("");
         setPassword("");
         localStorage.setItem("token", response.access_token);

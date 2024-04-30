@@ -128,8 +128,6 @@ export const fetchCountryByName = async (countryName: string) => {
     const response = await axios.get<ApiResponse[]>(url);
     if (response.data && response.data.length > 0) {
       const country = response.data[0];
-      console.log(country);
-      console.log(country);
       return {
         name: country.name.common,
         alpha3Code: "TODO", // country.cca3

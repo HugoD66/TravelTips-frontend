@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { User } from "../../../models/UserData";
 import { registerUserAdmin } from "../../../services/userService";
+import '../../../styles/admin.css';
 
 const AddUserForm: React.FC<{ onUserAdded: (user: User) => void }> = ({
   onUserAdded,
@@ -55,7 +56,7 @@ const AddUserForm: React.FC<{ onUserAdded: (user: User) => void }> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="admin-users-form" onSubmit={handleSubmit}>
       <input
         type="text"
         name="firstName"

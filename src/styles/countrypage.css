@@ -53,7 +53,7 @@ body, html {
   }
   
 .country-details {
-    flex-direction: column;
+    flex-direction: row;
     display: flex;
     align-items: center;
     gap: 20px;
@@ -134,6 +134,10 @@ body, html {
 }
 .detail-content {
     width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 .map-details h2 {
     font-size: 2rem;
@@ -204,4 +208,93 @@ body, html {
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     z-index: 999;
+}
+.tips-container {
+  text-align: center;
+}
+
+.tips-carousel {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 20px;
+  padding: 20px;
+}
+
+.tip-card {
+  position: relative;
+  overflow: hidden;
+  transition: filter 0.3s;
+  cursor: pointer;
+  border-radius: 5px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.tip-card::before {
+  content: "Voir le tips";
+  text-transform: uppercase;
+  z-index: 333;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 2rem;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.tip-card:hover {
+  opacity: 1;
+}
+
+.tip-card:hover::before {
+  opacity: 2;
+}
+
+.tip-card:hover {
+  filter: blur(2px);
+}
+
+.tip-card-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  transition: transform 0.3s ease-out;
+}
+
+.tip-card-content {
+  padding: 15px;
+  background-color: #f9f9f9;
+  transition: background-color 0.3s;
+}
+
+.tip-card:hover .tip-card-content {
+  background-color: rgba(249, 249, 249, 0.8);
+}
+
+.tip-card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.tip-card-description {
+  font-size: 1rem;
+  color: var(-color-tertiary);
+}
+
+
+@media (hover: hover) {
+  .tip-card:hover {
+    filter: blur(2px);
+  }
+
+  .tip-card:hover .tip-card-image {
+    transform: scale(1.05);
+  }
 }

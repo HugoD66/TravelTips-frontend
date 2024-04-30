@@ -12,14 +12,6 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
 
   const handleRegisterSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("Tentative de connexion avec : ", {
-      mail,
-      password,
-      firstname,
-      lastname,
-      birthday,
-    });
-    // Validation du prénom
     if (!/^[a-zA-Z]{3,}$/.test(firstname)) {
       setError(
         new Error(
@@ -29,7 +21,6 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
       return;
     }
 
-    // Validation du nom
     if (!/^[a-zA-Z]{3,}$/.test(lastname)) {
       setError(
         new Error(
@@ -39,26 +30,12 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
       return;
     }
 
-    // // Validation de la date de naissance
-    // const birthdateRegex =
-    //   /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[012])\/(19[2-9]\d|200[0-9]|201[0-5])$/;
-    // if (!birthdateRegex.test(birthday)) {
-    //   setError(
-    //     new Error(
-    //       "La date de naissance doit être au format jj/mm/aaaa et comprise entre 1920 et 2015"
-    //     )
-    //   );
-    //   return;
-    // }
-
-    // Validation de l'adresse e-mail
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(mail)) {
       setError(new Error("Veuillez saisir une adresse e-mail valide"));
       return;
     }
 
-    // Validation du mot de passe
     const passwordRegex =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordRegex.test(password)) {
@@ -72,7 +49,6 @@ const Register = ({ goChangeForm }: { goChangeForm: () => void }) => {
 
     registerUser(firstname, lastname, birthday, mail, password)
       .then((response) => {
-        console.log("Utilisateur enregistré avec succès :", response);
         setMail("");
         setPassword("");
         setFirstname("");

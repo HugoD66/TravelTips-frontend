@@ -5,6 +5,7 @@ import {
   getPendingTips,
 } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
+import "../../../styles/admin.css";
 
 const PendingTipsTable: React.FC = () => {
   const [pendingTips, setPendingTips] = useState<TipModel[]>([]);
@@ -48,9 +49,9 @@ const PendingTipsTable: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Tips en attente d'approbation</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Tips en attente d'approbation</h2>
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nom</th>
