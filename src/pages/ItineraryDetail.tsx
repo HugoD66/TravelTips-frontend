@@ -130,32 +130,29 @@ const ItineraryDetail = () => {
       </div>
       <div className="list-tips-itinerary">
         <h2 className="title-list-itinerary">Tous les tips de l'itinéraire</h2>
-        <div className="tips-carousel">
+        <div className="tips-destination">
           {listTip.map(tip => (
-            <Link key={tip.id} to={`/tips/${tip.id}`}>
-              <div className="card">
-                <div className="card__background">
-                  {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-                    pictureList.map((picture: PictureModel) =>
-                      picture.idTips!.id === tip.id ?
-                        <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
-                    ) :
-                    <img src={defaultPicture} alt="Image par défaut"/>
-                  }
-                </div>
-                <div className="card__content">
-                  <div className="card__title">
-                    {tip.name}
-                  </div>
-                  <button className="card__button">Voir plus</button>
-                </div>
+            <Link key={tip.id} to={`/tips/${tip.id}`} className="card-destination">
+              <div className="card-content-destination">
+                <h3 className="card-title-destination">{tip.name}</h3>
+                <button className="card-button-destination">Voir plus</button>
               </div>
+              {pictureList.find(picture => picture.idTips!.id === tip.id) ? (
+                <div
+                  className="card-destination-image"
+                  style={{backgroundImage: `url(http://localhost:4000/${pictureList.find(picture => picture.idTips!.id === tip.id)?.url})`}}
+                ></div>
+              ) : (
+                <div
+                  className="card-destination-image"
+                  style={{backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`}}
+                ></div>
+              )}
             </Link>
           ))}
         </div>
       </div>
     </>
-
   );
 }
 

@@ -5,7 +5,6 @@
 @import './map.css';
 @import './add-tips.css';
 @import './itinaries-detail.css';
-
 * {
   box-sizing: border-box;
 }
