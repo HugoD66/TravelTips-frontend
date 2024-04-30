@@ -75,7 +75,7 @@ const NavBar = ({
       <div className={`nav-links ${isOpen ? "open" : ""}`}>
         <Link to="/home">Accueil</Link>
         <Link to="/destinations">Destinations</Link>
-        <Link to="/itinerary">Les itinéraires</Link>
+        <Link to="/itinerary">Itinéraires</Link>
         {isLoggedIn ? (
           <>
             {userRole === "Admin" && <AdminMenu deco={deco} />}

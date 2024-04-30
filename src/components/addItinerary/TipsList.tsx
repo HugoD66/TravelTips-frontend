@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { TipModel } from "../../models/TipModel";
+import "../../styles/tiplist.css";
 
 interface TipsListComponentProps {
   tips: TipModel[];
@@ -29,8 +30,8 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
   };
 
   return (
-    <div className="container">
-      <div>
+    <div>
+      <div className="containerList">
         <h3>Choisir une ou plusieurs villes :</h3>
         {cities.map((city) => (
           <div key={city}>
@@ -45,7 +46,7 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
           </div>
         ))}
       </div>
-      <div>
+      <div className="containerList">
         {tips
           .filter(
             (tip) =>
@@ -73,8 +74,9 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
             </div>
           ))}
       </div>
-
-      <button onClick={onOrganizeDaysClick}>Organiser mes journées</button>
+      <div>
+        <button onClick={onOrganizeDaysClick}>Organiser mes journées</button>
+      </div>
     </div>
   );
 };

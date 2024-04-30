@@ -61,16 +61,17 @@ const CreateItineraryPage = () => {
       const newItinerary = {
         name: name,
         numberDay: numberDays,
-        idCountry: country,
         dayOne: dateDebut,
         lastDay: dateFin,
         idCategory: "a39a34de-10d9-4ae8-8649-13c8de0a84bc",
         idUser: id,
         public: isPublic,
+        approvate: "pending",
+        nbApprobation: 3,
       };
       try {
         setItinerary(await createItinerary(newItinerary, token));
-        toast.success("Itinéraire créé avec succès");
+        toast.success("Itinéraire initialisé avec succès");
       } catch (error) {
         console.log("erreur creation tips" + error);
       }

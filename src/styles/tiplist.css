@@ -1,0 +1,14 @@
+.containerList {
+  margin-right: 15%;
+  margin-left: 15%;
+
+  padding: 5%;
+  align-items: center;
+  text-align: center;
+}
+button {
+  margin-right: 25%;
+  padding: -2%;
+  padding-left: -10%;
+  padding-right: -10%;
+}
