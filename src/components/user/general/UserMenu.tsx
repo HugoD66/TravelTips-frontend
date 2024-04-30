@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../../styles/burgermenu.css";
+import "../../../styles/BurgerMenu.css";
 import { useNavigate } from "react-router-dom";
 
 const UserMenu = ({ deco }: { deco: () => void }) => {

@@ -4,7 +4,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap');
 @import './map.css';
 @import './add-tips.css';
-@import './itinaries-detail.css';
 
 * {
   box-sizing: border-box;
@@ -28,18 +27,18 @@
 body, html {
   margin: 0;
   padding: 0;
-  background-color: var(--color-background); 
+  background-color: var(--color-background);
   color: var(--color-dark);
   font-family: "Quicksand", sans-serif;
 }
 
 a {
-  color: var(--color-accent); 
-  text-decoration: none; 
+  color: var(--color-accent);
+  text-decoration: none;
 }
 
 a:hover {
-  color: var(--color-dark); 
+  color: var(--color-dark);
 }
 
 /* Styles de base pour les en-têtes et le texte */
