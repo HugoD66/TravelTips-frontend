@@ -1,5 +1,5 @@
 import { useState } from "react";
-import "../../../styles/BurgerMenu.css";
+import "../../../styles/burgermenu.css";
 import { useNavigate } from "react-router-dom";
 
 const UserMenu = ({ deco }: { deco: () => void }) => {
@@ -20,7 +20,7 @@ const UserMenu = ({ deco }: { deco: () => void }) => {
 
   const handleUserItineraryClick = () => {
     navigation(`/profile?parametre=${"userItinerary"}`);
-  }
+  };
 
   return (
     <div className="burger-menu">
