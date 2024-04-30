@@ -1,7 +1,7 @@
 import { ItineraryModel } from "../models/ItineraryModel";
 
 export const createItinerary = (itinerary: ItineraryModel, token: string) => {
-  return fetch(`http://localhost:4000/itinerary`, {
+  return fetch(`http://172.16.70.192:4000/itinerary`, {
     method: "POST",
     body: JSON.stringify(itinerary),
     headers: {
@@ -41,7 +41,7 @@ export const getItineraryList = () => {
 };
 
 export const getItineraryById = (id: string, token: string) => {
-  return fetch(`http://localhost:4000/itinerary/${id}`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/${id}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -61,7 +61,7 @@ export const getItineraryById = (id: string, token: string) => {
 };
 
 export const updateItinerary = (itinerary: ItineraryModel) => {
-  return fetch(`http://localhost:4000/itinerary/${itinerary.id}`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/${itinerary.id}`, {
     method: "PUT",
     body: JSON.stringify(itinerary),
     headers: {
@@ -81,7 +81,7 @@ export const updateItinerary = (itinerary: ItineraryModel) => {
 };
 
 export const deleteItinerary = (id: string) => {
-  return fetch(`http://localhost:4000/itinerary/${id}`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
@@ -97,7 +97,7 @@ export const deleteItinerary = (id: string) => {
 };
 
 export const getPendingItinerary = (token: string) => {
-  return fetch(`http://localhost:4000/itinerary/pendingItinerary`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/pendingItinerary`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -116,7 +116,7 @@ export const getPendingItinerary = (token: string) => {
 };
 
 export const getApproveItinerary = (token: string) => {
-  return fetch(`http://localhost:4000/itinerary/approvateItinerary`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/approvateItinerary`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -134,7 +134,7 @@ export const getApproveItinerary = (token: string) => {
     });
 };
 export const getDisapproveItineraries = (token: string) => {
-  return fetch(`http://localhost:4000/itinerary/disapproveItinerary`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/disapproveItinerary`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -152,7 +152,7 @@ export const getDisapproveItineraries = (token: string) => {
     });
 };
 export const approveItinerary = (id: string, token: string) => {
-  return fetch(`http://localhost:4000/itinerary/approvate/${id}`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/approvate/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -171,7 +171,7 @@ export const approveItinerary = (id: string, token: string) => {
 };
 
 export const disapproveItinerary = (id: string, token: string) => {
-  return fetch(`http://localhost:4000/itinerary/disapprove/${id}`, {
+  return fetch(`http://172.16.70.192:4000/itinerary/disapprove/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,

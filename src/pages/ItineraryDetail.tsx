@@ -39,10 +39,6 @@ const ItineraryDetail = () => {
   // TEMPORAIRE
   const fetchTips = async () => {
     try {
-      if (!token) {
-        console.log("No token available.");
-        return;
-      }
       const response = await getLastestTips();
       if (response) {
         const allPicturePromises = response.map(async (tip: TipModel) => {

@@ -1,7 +1,7 @@
 import { CategoryModel } from "../models/CategoryModel";
 
 export const createCategory = (category: CategoryModel) => {
-  return fetch(`http://localhost:4000/category`, {
+  return fetch(`http://172.16.70.192:4000/category`, {
     method: "POST",
     body: JSON.stringify(category),
     headers: {
@@ -20,12 +20,9 @@ export const createCategory = (category: CategoryModel) => {
     });
 };
 
-export const getCategoryList = (token: string) => {
+export const getCategoryList = () => {
   return fetch(`http://localhost:4000/category`, {
     method: "GET",
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -40,7 +37,7 @@ export const getCategoryList = (token: string) => {
 };
 
 export const getCategoryById = (id: string) => {
-  return fetch(`http://localhost:4000/category/${id}`, {
+  return fetch(`http://172.16.70.192:4000/category/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -56,7 +53,7 @@ export const getCategoryById = (id: string) => {
 };
 
 export const updateCategory = (category: CategoryModel) => {
-  return fetch(`http://localhost:4000/category/${category.id}`, {
+  return fetch(`http://172.16.70.192:4000/category/${category.id}`, {
     method: "PUT",
     body: JSON.stringify(category),
     headers: {
@@ -76,7 +73,7 @@ export const updateCategory = (category: CategoryModel) => {
 };
 
 export const deleteCategory = (id: string) => {
-  return fetch(`http://localhost:4000/category/${id}`, {
+  return fetch(`http://172.16.70.192:4000/category/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
