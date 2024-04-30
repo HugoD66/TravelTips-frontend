@@ -124,7 +124,6 @@ const CountryPage = () => {
         const tipsLocations = flatTips.map((tip: any) => {
           return { lat: tip.lat, lng: tip.lng, tipSelected: tip };
         });
-        console.log("tipsLocations", tipsLocations)
         setGeoTips(tipsLocations);
       } else {
         console.log("No cities found for the given country name:", countryName);

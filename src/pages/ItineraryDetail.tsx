@@ -31,11 +31,11 @@ const ItineraryDetail = () => {
       }
       const response = await getItineraryById(id, token);
       setItinerary(response);
-      console.log(itinerary)
     } catch (error) {
       console.error('Erreur lors de la récupération de l\'itinéraire:', error)
     }
   }
+
   // TEMPORAIRE
   const fetchTips = async () => {
     try {

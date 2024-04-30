@@ -97,7 +97,6 @@ const DestinationPage = () => {
     const fetchTips = async () => {
       try {
         if (!token) {
-          console.log("No token available.");
           return;
         }
         const response = await getLastestTips(token);
@@ -127,7 +126,6 @@ const DestinationPage = () => {
         }
         const response = await getItineraryList(token);
         setItineraries(response);
-        console.log(itineraries)
       } catch (error) {
         console.error('Error fetching tips:', error);
       }

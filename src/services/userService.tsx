@@ -73,10 +73,9 @@ export const registerUserAdmin = (
       throw error;
     });
 };
-/* Login USER */
+
 export const loginUser = async (mail: String, password: String) => {
   try {
-    console.log(password);
     const response = await fetch("http://localhost:4000/users/auth/login", {
       method: "POST",
       body: JSON.stringify({ mail: mail, password: password }),
@@ -85,7 +84,6 @@ export const loginUser = async (mail: String, password: String) => {
       },
     });
     if (!response.ok) {
-      console.log(response);
       if (response.status === 401) {
         throw new Error("Le mot de passe ou/et l'adresse mail est incorrect");
       } else {

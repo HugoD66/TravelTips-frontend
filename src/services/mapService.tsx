@@ -15,7 +15,6 @@ export const addMarker = (map: MaplibreMap, onCityFound: (details: { city: strin
       .addTo(map);
     try {
       const cityDetails = await getCity(lat, lng);
-      console.log(cityDetails);
       if (cityDetails && cityDetails.address) {
         const city = cityDetails.address.city || "Ville non spécifiée";
         const postcode = cityDetails.address.postcode || "Code postal non spécifié";
