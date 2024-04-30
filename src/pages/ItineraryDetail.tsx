@@ -35,6 +35,7 @@ const ItineraryDetail = () => {
       console.error('Erreur lors de la récupération de l\'itinéraire:', error)
     }
   }
+
   // TEMPORAIRE
   const fetchTips = async () => {
     try {
