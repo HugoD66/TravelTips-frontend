@@ -6,7 +6,7 @@ export const registerUser = (
   mail: String,
   password: String
 ) => {
-  return fetch("http://172.16.70.192:4000/users/register", {
+  return fetch("http://localhost:4000/users/register", {
     method: "POST",
     body: JSON.stringify({
       firstName: firstname,
@@ -43,7 +43,7 @@ export const registerUserAdmin = (
   password: String,
   role: String
 ) => {
-  return fetch("http://172.16.70.192:4000/users/register", {
+  return fetch("http://localhost:4000/users/register", {
     method: "POST",
     body: JSON.stringify({
       firstName: firstname,
@@ -76,7 +76,7 @@ export const registerUserAdmin = (
 
 export const loginUser = async (mail: String, password: String) => {
   try {
-    const response = await fetch("http://172.16.70.192:4000/users/auth/login", {
+    const response = await fetch("http://localhost:4000/users/auth/login", {
       method: "POST",
       body: JSON.stringify({ mail: mail, password: password }),
       headers: {
@@ -99,7 +99,7 @@ export const loginUser = async (mail: String, password: String) => {
 };
 // GET USER
 export const getMe = (token: string, id: string) => {
-  return fetch(`http://172.16.70.192:4000/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -119,7 +119,7 @@ export const getMe = (token: string, id: string) => {
 
 // GET USERS
 export const getUserList = (token: string) => {
-  return fetch(`http://172.16.70.192:4000/users`, {
+  return fetch(`http://localhost:4000/users`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -146,7 +146,7 @@ export const updateMe = (
   password: string,
   token: string
 ) => {
-  return fetch(`http://172.16.70.192:4000/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify({
       firstName: firstname,
@@ -175,7 +175,7 @@ export const updateMe = (
 // UPDATE USER
 
 export const updateUser = (id: string, formData: any) => {
-  return fetch(`http://172.16.70.192:4000/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "PATCH",
     body: JSON.stringify(formData),
     headers: {
@@ -197,7 +197,7 @@ export const updateUser = (id: string, formData: any) => {
 //REMOVE USER
 
 export const removeUser = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/users/${id}`, {
+  return fetch(`http://localhost:4000/users/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,

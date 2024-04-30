@@ -1,7 +1,7 @@
 import { TipModel } from "../models/TipModel";
 
 export const createTip = (tip: TipModel, token: string) => {
-  return fetch("http://172.16.70.192:4000/tips", {
+  return fetch("http://localhost:4000/tips", {
     method: "POST",
     body: JSON.stringify(tip),
     headers: {
@@ -53,7 +53,7 @@ export const getTipList = () => {
     });
 };
 export const getTipListUser = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/myTips/${id}`, {
+  return fetch(`http://localhost:4000/tips/myTips/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -101,7 +101,7 @@ export const getTipById = (id: string) => {
     });
 };
 export const updateTip = (tip: TipModel, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/${tip.id}`, {
+  return fetch(`http://localhost:4000/tips/${tip.id}`, {
     method: "PATCH",
     body: JSON.stringify(tip),
     headers: {
@@ -122,7 +122,7 @@ export const updateTip = (tip: TipModel, token: string) => {
 };
 
 export const deleteTip = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/${id}`, {
+  return fetch(`http://localhost:4000/tips/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -141,7 +141,7 @@ export const deleteTip = (id: string, token: string) => {
 };
 
 export const approveTip = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/approvate/${id}`, {
+  return fetch(`http://localhost:4000/tips/approvate/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -160,7 +160,7 @@ export const approveTip = (id: string, token: string) => {
 };
 
 export const disapproveTip = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/disapprove/${id}`, {
+  return fetch(`http://localhost:4000/tips/disapprove/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -179,7 +179,7 @@ export const disapproveTip = (id: string, token: string) => {
 };
 
 export const getPendingTips = (token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/pendingTips`, {
+  return fetch(`http://localhost:4000/tips/pendingTips`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -198,7 +198,7 @@ export const getPendingTips = (token: string) => {
 };
 
 export const getApproveTips = (token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/approvateTips`, {
+  return fetch(`http://localhost:4000/tips/approvateTips`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -216,7 +216,7 @@ export const getApproveTips = (token: string) => {
     });
 };
 export const getDisapproveTips = (token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/disapproveTips`, {
+  return fetch(`http://localhost:4000/tips/disapproveTips`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -235,7 +235,7 @@ export const getDisapproveTips = (token: string) => {
 };
 
 export const getTipsUser = (id: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/users/${id}`, {
+  return fetch(`http://localhost:4000/tips/users/${id}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -253,7 +253,7 @@ export const getTipsUser = (id: string, token: string) => {
     });
 };
 export const getTipsByCountry = (name: string, token: string) => {
-  return fetch(`http://172.16.70.192:4000/tips/by-country/${name}`, {
+  return fetch(`http://localhost:4000/tips/by-country/${name}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,

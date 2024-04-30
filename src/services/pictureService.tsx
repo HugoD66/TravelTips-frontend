@@ -4,7 +4,7 @@ export const createPicture = async (
   tipsId: string
 ) => {
   return fetch(
-    `http://172.16.70.192:4000/picture/upload-file/${userId}/${tipsId}`,
+    `http://localhost:4000/picture/upload-file/${userId}/${tipsId}`,
     {
       method: "POST",
       body: formData,
@@ -25,7 +25,7 @@ export const createPicture = async (
 };
 
 export const getPictures = async (tipsId: string) => {
-  return fetch(`http://172.16.70.192:4000/picture/${tipsId}`, {
+  return fetch(`http://localhost:4000/picture/${tipsId}`, {
     method: "GET",
   })
     .then((response) => {

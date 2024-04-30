@@ -1,7 +1,7 @@
 import { CityModel } from "../models/CityModel";
 
 export const createCity = (city: CityModel) => {
-  return fetch(`http://172.16.70.192:4000/city`, {
+  return fetch(`http://localhost:4000/city`, {
     method: "POST",
     body: JSON.stringify(city),
     headers: {
@@ -21,7 +21,7 @@ export const createCity = (city: CityModel) => {
 };
 
 export const getCityList = () => {
-  return fetch(`http://172.16.70.192:4000/city`, {
+  return fetch(`http://localhost:4000/city`, {
     method: "GET",
   })
     .then((response) => {
@@ -37,7 +37,7 @@ export const getCityList = () => {
 };
 
 export const getCityByName = (cityName: string) => {
-  return fetch(`http://172.16.70.192:4000/city/by-name/${cityName}`, {
+  return fetch(`http://localhost:4000/city/by-name/${cityName}`, {
     method: "GET",
   })
     .then((response) => {
@@ -53,7 +53,7 @@ export const getCityByName = (cityName: string) => {
 };
 
 export const getCityById = (id: string) => {
-  return fetch(`http://172.16.70.192:4000/city/${id}`, {
+  return fetch(`http://localhost:4000/city/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -69,7 +69,7 @@ export const getCityById = (id: string) => {
 };
 
 export const updateCity = (city: CityModel) => {
-  return fetch(`http://172.16.70.192:4000/city/${city.id}`, {
+  return fetch(`http://localhost:4000/city/${city.id}`, {
     method: "PUT",
     body: JSON.stringify(city),
     headers: {
@@ -89,7 +89,7 @@ export const updateCity = (city: CityModel) => {
 };
 
 export const deleteCity = (id: string) => {
-  return fetch(`http://172.16.70.192:4000/city/${id}`, {
+  return fetch(`http://localhost:4000/city/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
