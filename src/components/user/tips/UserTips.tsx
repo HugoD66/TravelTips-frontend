@@ -3,6 +3,7 @@ import { getTipsUser } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
 import UserTipsTable from "./UserTipsTable";
 import ModifiableRejectedTipsTable from "./ModifyRejectedTipsTable";
+import '../../../styles/user.css';
 
 const UserTips: React.FC = () => {
   const [tips, setTips] = useState<TipModel[]>([]);

@@ -1,6 +1,7 @@
 import { ChangeEvent, useEffect, useState } from "react";
 import { User } from "../../../models/UserData";
 import { updateMe } from "../../../services/userService";
+import '../../../styles/admin.css';
 
 interface EditUserFormProps {
   user: User;
@@ -55,7 +56,7 @@ const EditUserForm: React.FC<EditUserFormProps> = ({ user, updateUser }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="admin-users-form" onSubmit={handleSubmit}>
       <input
         type="text"
         name="firstName"

@@ -95,8 +95,10 @@ const DestinationPage = () => {
     };
 
     const fetchTips = async () => {
+
       try {
         if (!token) {
+          console.log("No token available.");
           return;
         }
         const response = await getLastestTips(token);
@@ -108,6 +110,7 @@ const DestinationPage = () => {
                 tipId: tip.id
               }));
             });
+
             const picturesArrays = await Promise.all(allPicturePromises);
             const allPictures = picturesArrays.flat();
             setPictureList(allPictures);
@@ -165,6 +168,11 @@ const DestinationPage = () => {
                     onChange={handleSearchChange}
                     className="search-bar"
                 />
+                {searchTerm && (
+                    <button onClick={clearSearch} className="search-clear">
+                        &#10005;
+                    </button>
+                )}
                  {filteredCountries.length > 0 && (
                 <div className="autocomplete-results">
                     <button onClick={clearSearch} className="close-button">&#10005;</button>
@@ -206,39 +214,37 @@ const DestinationPage = () => {
                     ))}
                 </div>
             )}
-          <div className="carousel-container">
+          <div className="carousel-container-destination">
             <h2>Derniers Tips</h2>
-            <button onClick={() => setIsModalOpen(true)} className="add-tip-button">Ajouter un Tips</button>
+            <button onClick={() => setIsModalOpen(true)} className="add-tip-button-destination">Ajouter un Tips</button>
                 {isModalOpen && (
                     <Modal onClose={() => setIsModalOpen(false)}>
                         <AddTips />
                     </Modal>
                 )}
-
-            <div className="tips-carousel">
-              {tips.map(tip => (
-
-                <Link key={tip.id} to={`/tips/${tip.id}`}>
-                    <div className="card">
-                        <div className="card__background">
-                            {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-                                pictureList.map((picture: PictureModel) =>
-                                picture.idTips!.id === tip.id ?
-                                    <img src={"http://localhost:4000/" + picture.url} alt="représentation de l'image"/> : null
-                                ) :
-                                <img src={defaultPicture} alt="Image par défaut"/>
-                            }
+           <div className="tips-destination">
+                {tips.map(tip => (
+                    <Link key={tip.id} to={`/tips/${tip.id}`} className="card-destination">
+                        <div className="card-content-destination">
+                            <h3 className="card-title-destination">{tip.name}</h3>
+                            <button className="card-button-destination">Voir plus</button>
                         </div>
-                        <div className="card__content">
-                            <div className="card__title">
-                                {tip.name}
-                            </div>
-                            <button className="card__button">Voir plus</button>
-                        </div>
-                    </div>
-                </Link>
-              ))}
+                        {pictureList.find(picture => picture.idTips!.id === tip.id) ? (
+                            <div
+                                className="card-destination-image"
+                                style={{backgroundImage: `url(http://localhost:4000/${pictureList.find(picture => picture.idTips!.id === tip.id)?.url})`}}
+                            ></div>
+                        ) : (
+                            <div
+                                className="card-destination-image"
+                                style={{backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`}}
+                            ></div>
+                        )}
+                    </Link>
+                ))}
             </div>
+
+
             <h2>Derniers Itinéraires</h2>
             <Link to="/itinerary">
                 <button className="itinerary-button">Voir les itinéraires</button>

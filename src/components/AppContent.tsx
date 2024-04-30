@@ -10,6 +10,8 @@ import AddTips from "./forms/AddTips";
 import CountryPage from "../pages/CountryPage";
 import CreateItineraryPage from "../pages/CreateItineraryPage";
 import ItineraryDetail from "../pages/ItineraryDetail";
+import TipsPage from "../pages/TipsPage";
+import Footer from "../components/Footer";
 
 const AppContent = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -35,7 +37,9 @@ const AppContent = () => {
           path="/profile"
           element={<ProfilePage handleLogin={handleLogin} />}
         />
+        <Route path="/tips/:tipId" element={<TipsPage />} />  {/* New route for TipsPage */}
       </Routes>
+      <Footer />
     </>
   );
 };

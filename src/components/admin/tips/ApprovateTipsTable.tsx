@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { getApproveTips } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
+import '../../../styles/admin.css';
 
 const ApprovedTipsTable: React.FC = () => {
   const [approvedTips, setApprovedTips] = useState<TipModel[]>([]);
@@ -23,9 +24,9 @@ const ApprovedTipsTable: React.FC = () => {
   };
 
   return (
-    <div>
-      <h2>Tips approuvés</h2>
-      <table>
+    <div className="admin-page">
+      <h2 className="admin-header">Tips approuvés</h2>
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nom</th>

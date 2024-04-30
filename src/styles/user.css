@@ -1,0 +1,24 @@
+.admin-table-container {
+    width: 100%;
+    overflow-x: auto;
+    margin: 20px 0 0 0;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .admin-table td {
+    padding: 8px;
+  }
+  
+  .admin-table tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  

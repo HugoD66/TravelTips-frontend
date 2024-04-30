@@ -10,7 +10,7 @@ import { createCity } from "../../../services/cityService";
 import { useCity } from "../../../context/CityProvider";
 import { updateTip } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
-import { createPicture } from "../../../services/pictureService";
+import '../../../styles/user.css'
 
 interface AddTipsProps {
   selectedTips: TipModel | null;

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Modal from "../../Modal";
 import UpdateTips from "./UpdateTips";
 import { TipModel } from "../../../models/TipModel";
+import '../../../styles/user.css'
 
 const ModifiableRejectedTipsTable: React.FC<{
   tips: TipModel[];
@@ -17,10 +18,10 @@ const ModifiableRejectedTipsTable: React.FC<{
 
   return (
     <>
-      <div>
+      <div className="admin-table-container">
         <h2>Mes tips rejetés modifiables</h2>
       </div>
-      <table>
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nom</th>
@@ -29,6 +30,7 @@ const ModifiableRejectedTipsTable: React.FC<{
             <th>Code Postal</th>
             <th>Pays</th>
             <th>Prix</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -63,11 +65,6 @@ const ModifiableRejectedTipsTable: React.FC<{
           ))}
         </tbody>
       </table>
-      {showModal && (
-        <Modal onClose={() => setShowModal(false)}>
-          <UpdateTips selectedTips={selectedTip} />
-        </Modal>
-      )}
     </>
   );
 };
