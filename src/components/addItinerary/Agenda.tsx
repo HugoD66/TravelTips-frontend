@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TipModel } from "../../models/TipModel";
 import "../../styles/agenda.css";
+import { toast } from "react-toastify";
 
 const AgendaPage = ({
   date,
@@ -22,14 +23,29 @@ const AgendaPage = ({
     setSelectedTimeSlot(timeSlot);
   };
 
+  const handleRemoveTip = (timeSlot: string, tipIndex: number) => {
+    setSelectedTipsBySlot((prevSelectedTips) => {
+      const updatedTips = prevSelectedTips[timeSlot].filter(
+        (_, index) => index !== tipIndex
+      );
+      if (updatedTips.length === 0) {
+        const { [timeSlot]: _, ...remainingTips } = prevSelectedTips;
+        return remainingTips;
+      } else {
+        return { ...prevSelectedTips, [timeSlot]: updatedTips };
+      }
+    });
+  };
+
   const handleAddTip = (tip: TipModel) => {
     if (selectedTimeSlot) {
+      if (selectedTipsBySlot[selectedTimeSlot]) {
+        toast.error("Un tips est déjà sélectionné pour cette plage horaire");
+        return;
+      }
       setSelectedTipsBySlot((prevSelectedTips) => ({
         ...prevSelectedTips,
-        [selectedTimeSlot]: [
-          ...(prevSelectedTips[selectedTimeSlot] || []),
-          tip,
-        ],
+        [selectedTimeSlot]: [tip],
       }));
       onAddTipClick(tip, selectedTimeSlot, date.toISOString());
     }
@@ -60,6 +76,9 @@ const AgendaPage = ({
                 {selectedTipsBySlot[timeSlot].map((tip, index) => (
                   <div key={index} className="agenda-tip">
                     <span>{tip.name}</span>
+                    <button onClick={() => handleRemoveTip(timeSlot, index)}>
+                      X
+                    </button>
                   </div>
                 ))}
               </div>

@@ -14,7 +14,7 @@ const ItineraryPage = () => {
   const token = localStorage.getItem("token") || null; // Vérifie si l'utilisateur est connecté
 
   useEffect(() => {
-    getDayInItineraryList()
+    fetchItinerary()
       .then((data) => {
         setDayItineraries(data);
       })
