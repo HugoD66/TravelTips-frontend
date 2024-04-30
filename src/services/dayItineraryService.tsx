@@ -5,7 +5,7 @@ export const createDayItinerary = (
   dayInItinerary: DayItineraryModel,
   token: string
 ) => {
-  return fetch(`http://localhost:4000/day-itinerary`, {
+  return fetch(`http://172.16.70.192:4000/day-itinerary`, {
     method: "POST",
     body: JSON.stringify(dayInItinerary),
     headers: {
@@ -27,7 +27,7 @@ export const createDayItinerary = (
 };
 
 export const getDayInItineraryList = () => {
-  return fetch(`http://localhost:4000/day-itinerary`, {
+  return fetch(`http://172.16.70.192:4000/day-itinerary`, {
     method: "GET",
   })
     .then((response) => {
@@ -46,7 +46,7 @@ export const getDayInItineraryList = () => {
 };
 
 export const getDayInItineraryById = (id: string) => {
-  return fetch(`http://localhost:4000/day-itinerary/${id}`, {
+  return fetch(`http://172.16.70.192:4000/day-itinerary/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -62,7 +62,7 @@ export const getDayInItineraryById = (id: string) => {
 };
 
 export const updateDayInItinerary = (dayInItinerary: DayItineraryModel) => {
-  return fetch(`http://localhost:4000/day-itinerary/${dayInItinerary.id}`, {
+  return fetch(`http://172.16.70.192:4000/day-itinerary/${dayInItinerary.id}`, {
     method: "PUT",
     body: JSON.stringify(dayInItinerary),
     headers: {
@@ -82,7 +82,7 @@ export const updateDayInItinerary = (dayInItinerary: DayItineraryModel) => {
 };
 
 export const deleteDayInItinerary = (id: string) => {
-  return fetch(`http://localhost:4000/day-itinerary/${id}`, {
+  return fetch(`http://172.16.70.192:4000/day-itinerary/${id}`, {
     method: "DELETE",
   })
     .then((response) => {

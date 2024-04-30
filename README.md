@@ -40,7 +40,7 @@ Une fois dans le conteneur, vous pouvez lancer l'application en exécutant :
 
 npm start
 
-Votre application devrait maintenant être accessible sur http://localhost:3000.
+Votre application devrait maintenant être accessible sur http://172.16.70.192:3000.
 
 ## Structure du Projet
 
