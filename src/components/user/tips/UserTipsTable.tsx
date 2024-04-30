@@ -1,4 +1,5 @@
 import { TipModel } from "../../../models/TipModel";
+import '../../../styles/user.css'
 
 const UserTipsTable: React.FC<{ tips: TipModel[]; title: string }> = ({
   tips,
@@ -6,10 +7,10 @@ const UserTipsTable: React.FC<{ tips: TipModel[]; title: string }> = ({
 }) => {
   return (
     <div>
-      <div>
+      <div className="admin-table-container">
         <h2>{title}</h2>
       </div>
-      <table>
+      <table className="admin-table">
         <thead>
           <tr>
             <th>Nom</th>

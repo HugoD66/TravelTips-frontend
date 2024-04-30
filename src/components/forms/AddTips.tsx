@@ -53,7 +53,7 @@ const AddTips = () => {
       });
       const userId = localStorage.getItem("id");
       if (!userId) {
-        setError("Il faut etre connecté pour ajouter un tip");
+        setError("Il faut etre connecté pour ajouter un tips");
         return;
       }
       const tips: TipModel = {

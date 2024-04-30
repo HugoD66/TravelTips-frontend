@@ -4,6 +4,7 @@ import EditUserForm from "./AdminEditUserform";
 import UserTable from "./AdminUserTable";
 import AddUserForm from "./AdminAddUserform";
 import { getUserList, removeUser } from "../../../services/userService";
+import '../../../styles/admin.css';
 
 const AdminUserInfo: React.FC = () => {
   const [users, setUsers] = useState<User[]>([]);
@@ -61,7 +62,7 @@ const AdminUserInfo: React.FC = () => {
     setEditUser(id);
   };
   return (
-    <div>
+    <div className="admin-users-info" >
       <h2>Liste des utilisateurs</h2>
       <UserTable users={users} deleteUser={deleteUser} editUser={handleEdit} />
       {editUser !== null ? (

@@ -1,0 +1,140 @@
+@import 'base.css';
+
+/* TIPS */
+.admin-page {
+    background-color: var(--color-background);
+    color: var(--color-dark);
+    margin: 0 10px;
+    padding: 20px;
+    width: 100% !important;
+  }
+  
+  .admin-header {
+    background-color: var(--color-primary);
+    color: var(--color-title);
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .admin-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-table th,
+  .admin-table td {
+    padding: 8px;
+    border-bottom: 1px solid var(--color-secondary);
+  }
+  
+  .admin-table th {
+    background-color: var(--color-primary);
+    color: var(--color-title);
+    font-weight: bold;
+  }
+  
+  .admin-table tr:nth-child(even) {
+    background-color: var(--color-tertiary);
+  }
+  
+  .admin-table tr:hover {
+    background-color: var(--color-accent);
+  }
+  
+  .admin-users-table button {
+    background-color: var(--color-primary);
+    color: var(--color-title);
+    border: none;
+    cursor: pointer;
+    margin: 5px;
+  }
+
+  
+  .admin-button:hover {
+    background-color: var(--color-accent);
+  }
+  
+  /* USERS */
+
+/* admin-users.css */
+
+.admin-users-container {
+    /* Styles pour le conteneur des composants des utilisateurs admin */
+  }
+  
+  .admin-users-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .admin-users-table th,
+  .admin-users-table td {
+    border: 1px solid var(--color-primary);
+    padding: 8px;
+  }
+  
+  .admin-users-table th {
+    background-color: var(--color-secondary);
+    color: var(--color-title);
+    font-weight: bold;
+  }
+  
+  .admin-users-table td {
+    background-color: var(--color-tertiary);
+  }
+  
+  .admin-users-table td button {
+    background-color: var(--color-accent);
+    color: var(--color-dark);
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-users-table td button:hover {
+    background-color: var(--color-primary);
+  }
+  
+  .admin-users-table td button + button {
+    margin-left: 5px;
+  }
+  
+  .admin-users-form {
+    /* Styles pour le formulaire d'ajout et d'édition d'utilisateur */
+  }
+  
+  .admin-users-form input[type="text"],
+  .admin-users-form input[type="email"],
+  .admin-users-form input[type="password"],
+  .admin-users-form input[type="date"],
+  .admin-users-form select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid var(--color-primary);
+    border-radius: 4px;
+    box-sizing: border-box;
+    font-family: var(--font-text);
+  }
+  
+  .admin-users-form select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%2371798E'%3E%3Cpath fill-rule='evenodd' d='M10 12l-5-5h10l-5 5zm-5-7l5 5 5-5H5z' clip-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+  }
+  
+  .admin-users-form button {
+    background-color: var(--color-accent);
+    color: var(--color-dark);
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .admin-users-form button:hover {
+    background-color: var(--color-primary);
+  }
+  

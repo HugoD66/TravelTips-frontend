@@ -1,0 +1,32 @@
+.tip-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px;
+  }
+  
+  .tip-header {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: var(--color-secondary);
+    padding: 20px 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tip-header h2 {
+    margin-bottom: 10px;
+  }
+  
+  .tip-img {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
+  
+  .tip-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
