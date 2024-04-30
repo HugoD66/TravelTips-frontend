@@ -58,7 +58,6 @@ export const getTipList = (token: string) => {
       throw error;
     });
 };
-
 export const getTipListUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/tips/myTips/${id}`, {
     method: "GET",

@@ -10,6 +10,8 @@ import { createItinerary } from "../services/itineraryService";
 import { CountryModel } from "../models/CountryModel";
 import { getCountryList } from "../services/countryService";
 import { toast } from "react-toastify";
+import { getCategoryList } from "../services/categoryService";
+import { CategoryModel } from "../models/CategoryModel";
 
 const CreateItineraryPage = () => {
   const [isTipsListVisible, setIsTipsListVisible] = useState(false);
@@ -22,6 +24,7 @@ const CreateItineraryPage = () => {
   const id = localStorage.getItem("id") || null;
   const [listCountry, setListCountry] = useState<CountryModel[]>([]);
   const [selectedCountry, setSelectedCountry] = useState("");
+  const [categories, setCategories] = useState<CategoryModel[]>([]);
 
   function numberDay(dateDebutStr: string, dateFinStr: string) {
     const dateDebut = new Date(dateDebutStr);
@@ -33,7 +36,19 @@ const CreateItineraryPage = () => {
 
   useEffect(() => {
     fetchCountry();
+    fetchCategories();
   }, []);
+
+  const fetchCategories = async () => {
+    try {
+      if (token) {
+        const categoriesList = await getCategoryList(token);
+        setCategories(categoriesList);
+      }
+    } catch (error) {
+      console.error("Error fetching category", error);
+    }
+  };
 
   const fetchCountry = async () => {
     try {
@@ -51,7 +66,8 @@ const CreateItineraryPage = () => {
     country: string,
     dateDebut: string,
     dateFin: string,
-    isPublic: boolean
+    isPublic: boolean,
+    category: string
   ) => {
     if (token !== null && id !== null) {
       const tips = await getTipsByCountry(country, token);
@@ -63,7 +79,7 @@ const CreateItineraryPage = () => {
         numberDay: numberDays,
         dayOne: dateDebut,
         lastDay: dateFin,
-        idCategory: "a39a34de-10d9-4ae8-8649-13c8de0a84bc",
+        idCategory: category,
         idUser: id,
         public: isPublic,
         approvate: "pending",
@@ -111,7 +127,11 @@ const CreateItineraryPage = () => {
       <div className="app">
         <h1>Planificateur d'Itinéraire</h1>
         {isAddItineraryVisible && (
-          <AddItinerary onSubmit={handleFormSubmit} listCountry={listCountry} />
+          <AddItinerary
+            onSubmit={handleFormSubmit}
+            listCountry={listCountry}
+            listCategories={categories}
+          />
         )}
         <div className="content">
           {isTipsListVisible && (

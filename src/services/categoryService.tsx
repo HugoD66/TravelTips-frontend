@@ -1,4 +1,4 @@
-import {CategoryModel} from "../models/CategoryModel";
+import { CategoryModel } from "../models/CategoryModel";
 
 export const createCategory = (category: CategoryModel) => {
   return fetch(`http://localhost:4000/category`, {
@@ -17,12 +17,15 @@ export const createCategory = (category: CategoryModel) => {
     .catch((error) => {
       console.error("Erreur lors de la création de la catégorie:", error);
       throw error;
-  });
-}
+    });
+};
 
-export const getCategoryList = () => {
+export const getCategoryList = (token: string) => {
   return fetch(`http://localhost:4000/category`, {
     method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {
@@ -33,8 +36,8 @@ export const getCategoryList = () => {
     .catch((error) => {
       console.error("Erreur lors de la récupération des catégories:", error);
       throw error;
-  });
-}
+    });
+};
 
 export const getCategoryById = (id: string) => {
   return fetch(`http://localhost:4000/category/${id}`, {
@@ -49,8 +52,8 @@ export const getCategoryById = (id: string) => {
     .catch((error) => {
       console.error("Erreur lors de la récupération de la catégorie:", error);
       throw error;
-  });
-}
+    });
+};
 
 export const updateCategory = (category: CategoryModel) => {
   return fetch(`http://localhost:4000/category/${category.id}`, {
@@ -69,8 +72,8 @@ export const updateCategory = (category: CategoryModel) => {
     .catch((error) => {
       console.error("Erreur lors de la modification de la catégorie:", error);
       throw error;
-  });
-}
+    });
+};
 
 export const deleteCategory = (id: string) => {
   return fetch(`http://localhost:4000/category/${id}`, {
@@ -85,5 +88,5 @@ export const deleteCategory = (id: string) => {
     .catch((error) => {
       console.error("Erreur lors de la suppression de la catégorie:", error);
       throw error;
-  });
-}
+    });
+};

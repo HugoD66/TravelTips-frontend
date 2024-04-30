@@ -4,35 +4,49 @@ import "react-datetime/css/react-datetime.css";
 import { CountryModel } from "../../models/CountryModel";
 import moment from "moment";
 import "moment/locale/fr";
+import { CategoryModel } from "../../models/CategoryModel";
 
 const AddItinerary = ({
   onSubmit,
   listCountry,
+  listCategories,
 }: {
   onSubmit: (
     name: string,
     country: string,
     dateDebut: string,
     dateFin: string,
-    isPublic: boolean
+    isPublic: boolean,
+    category: string
   ) => void;
   listCountry: CountryModel[];
+  listCategories: CategoryModel[];
 }) => {
   const [country, setCountry] = useState("");
   const [dateDebut, setDateDebut] = useState<Date | null>(null);
   const [dateFin, setDateFin] = useState<Date | null>(null);
   const [name, setName] = useState("");
   const [isPublic, setIsPublic] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (country && dateDebut && dateFin) {
+    let id = "";
+
+    if (country && dateDebut && dateFin && selectedCategory) {
+      const selectedCategoryObject = listCategories.find(
+        (categ) => categ.name === selectedCategory
+      );
+      if (selectedCategoryObject) {
+        id = selectedCategoryObject.id;
+      }
       onSubmit(
         name,
         country,
         dateDebut.toISOString(),
         dateFin.toISOString(),
-        isPublic
+        isPublic,
+        id
       );
     }
   };
@@ -85,6 +99,19 @@ const AddItinerary = ({
             onChange={(date) => setDateFin(moment(date).toDate())}
           />
         </div>
+        <div className="category-list">
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+          >
+            <option value="">Sélectionner une catégorie</option>
+            {listCategories.map((categ) => (
+              <option key={categ.id} value={categ.name}>
+                {categ.name}
+              </option>
+            ))}
+          </select>
+        </div>
         <div>
           <label>
             <input
@@ -92,9 +119,9 @@ const AddItinerary = ({
               checked={isPublic}
               onChange={handleCheckboxChange}
             />
-            Privé :
+            Public :
           </label>
-          <span>{isPublic ? "Oui" : "Non"}</span>
+          <span>{isPublic ? " Oui" : " Non"}</span>
         </div>
         <button type="submit">Créer mon itinéraire</button>
       </form>
