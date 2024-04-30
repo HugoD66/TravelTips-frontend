@@ -98,10 +98,7 @@ const DestinationPage = () => {
 
   const fetchTips = async () => {
     try {
-      if (!token) {
-        return;
-      }
-      const response = await getLastestTips(token);
+      const response = await getLastestTips();
       if (response) {
         const allPicturePromises = response.map(async (tip: TipModel) => {
           const pictureResponses = await getPictures(tip.id!);
@@ -122,12 +119,9 @@ const DestinationPage = () => {
 
   const fetchItineraries = async () => {
     try {
-      if (!token) {
-        console.log("No token available.");
-        return;
-      }
-      const response = await getItineraryList(token);
+      const response = await getItineraryList();
       setItineraries(response);
+      console.log(itineraries);
     } catch (error) {
       console.error("Error fetching tips:", error);
     }

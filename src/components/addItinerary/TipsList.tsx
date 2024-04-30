@@ -6,12 +6,16 @@ interface TipsListComponentProps {
   tips: TipModel[];
   onTipSelect: (tip: TipModel) => void;
   onOrganizeDaysClick: () => void;
+  isTipSelected: (tip: TipModel) => boolean;
+  onTipDeselect: (tip: TipModel) => void;
 }
 
 const TipsListComponent: React.FC<TipsListComponentProps> = ({
   tips,
   onTipSelect,
   onOrganizeDaysClick,
+  isTipSelected,
+  onTipDeselect,
 }) => {
   const cities = Array.from(
     new Set(
@@ -70,7 +74,20 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
                   tip.idCity.idCountry.name}
               </p>
               <p>{tip.price}</p>
-              <button onClick={() => onTipSelect(tip)}>Ajouter</button>
+              {isTipSelected(tip) ? (
+                <>
+                  <div>
+                    <button onClick={() => onTipDeselect(tip)}>
+                      Supprimer de la liste
+                    </button>
+                    <button disabled>
+                      {isTipSelected(tip) ? "Sélectionné" : "Ajouter"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <button onClick={() => onTipSelect(tip)}>Ajouter</button>
+              )}
             </div>
           ))}
       </div>

@@ -21,7 +21,7 @@ export const createCategory = (category: CategoryModel) => {
 };
 
 export const getCategoryList = () => {
-  return fetch(`http://172.16.70.192:4000/category`, {
+  return fetch(`http://localhost:4000/category`, {
     method: "GET",
   })
     .then((response) => {

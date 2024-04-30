@@ -4,14 +4,10 @@ import { ItineraryModel } from "../models/ItineraryModel";
 import { DayItineraryModel } from "../models/DayItineraryModel";
 import { TipModel } from "../models/TipModel";
 import { Link } from "react-router-dom";
-
 const ItineraryPage = () => {
-  const [itineraries, setItineraries] = useState<ItineraryModel[]>([]);
-  const [selectedItinerary, setSelectedItinerary] =
-    useState<ItineraryModel | null>(null);
   const [dayItineraries, setDayItineraries] = useState<DayItineraryModel[]>([]);
-  const [tips, setTips] = useState<TipModel[]>([]);
-  const token = localStorage.getItem("token") || null; // Vérifie si l'utilisateur est connecté
+  const token = localStorage.getItem("token") || null;
+  const dayItinerariesByItinerary: { [key: string]: DayItineraryModel[] } = {};
 
   useEffect(() => {
     getDayInItineraryList()
@@ -26,84 +22,64 @@ const ItineraryPage = () => {
       });
   }, []);
 
-  // Fonction pour afficher les dayItineraries et les tips associés à l'itinéraire sélectionné
-  const handleItineraryClick = (dayItinerary: DayItineraryModel) => {
-    dayItineraries.push(dayItinerary);
-    if (
-      typeof dayItinerary.idItinerary === "object" &&
-      typeof dayItinerary.idTips === "object"
-    ) {
-      itineraries.push(dayItinerary.idItinerary);
-      tips.push(dayItinerary.idTips);
-    }
-  };
+  // Objet pour stocker les itinéraires uniques et leurs tips associés
+  const uniqueItineraries: {
+    [key: string]: { itinerary: ItineraryModel; tips: TipModel[] };
+  } = {};
 
-  // Fonction pour créer un nouvel itinéraire (à implémenter selon votre logique)
-  const handleCreateItinerary = () => {
-    // Rediriger vers la page de création d'itinéraire ou afficher un formulaire de création d'itinéraire
-    console.log("Créer un nouvel itinéraire");
-  };
+  // Traitement des dayItineraries pour obtenir les itinéraires uniques
+  dayItineraries.forEach((dayItinerary) => {
+    const itinerary = dayItinerary.idItinerary;
+    if (itinerary && typeof itinerary === "object") {
+      const itineraryId = itinerary.id;
+      if (itineraryId) {
+        // Vérification de la définition de itineraryId
+        if (!(itineraryId in uniqueItineraries)) {
+          uniqueItineraries[itineraryId] = { itinerary, tips: [] };
+        }
+        if (Array.isArray(dayItinerary.idTips)) {
+          uniqueItineraries[itineraryId].tips.push(...dayItinerary.idTips);
+        }
+      }
+    }
+  });
 
   return (
     <div>
       <h2>Tous les itinéraires</h2>
       <ul>
-        {dayItineraries.map((dayItinerary) => (
-          <li
-            key={dayItinerary.id}
-            onClick={() => handleItineraryClick(dayItinerary)}
-          >
-            {dayItinerary && (
-              <div>
-                {typeof dayItinerary.date === "object" && (
-                  <p>Date: {new Date(dayItinerary.date).toISOString()}</p>
-                )}
-                {typeof dayItinerary.idItinerary === "object" &&
-                  dayItinerary.idItinerary.name &&
-                  dayItinerary.idItinerary.dayOne &&
-                  dayItinerary.idItinerary.lastDay &&
-                  dayItinerary.idItinerary.idCategory && (
-                    <>
-                      <p>
-                        Nom de l'itinéraire: {dayItinerary.idItinerary.name}
-                      </p>
-                      <p>Date de début : {dayItinerary.idItinerary.dayOne}</p>
-
-                      <p>Date de fin: {dayItinerary.idItinerary.lastDay}</p>
-                    </>
-                  )}
-              </div>
-            )}
+        {Object.values(uniqueItineraries).map(({ itinerary, tips }) => (
+          <li key={itinerary.id}>
+            <div>
+              <h3>{itinerary.name}</h3>
+              <p>
+                Date de début :{" "}
+                {itinerary.dayOne && new Date(itinerary.dayOne).toISOString()}
+              </p>
+              <p>
+                Date de fin :{" "}
+                {itinerary.lastDay && new Date(itinerary.lastDay).toISOString()}
+              </p>
+              {Object.entries(dayItinerariesByItinerary).map(
+                ([itineraryId, dayItineraries]) => (
+                  <div key={itineraryId}>
+                    <h4>Day Itineraries for Itinerary {itineraryId}</h4>
+                    <ul>
+                      {dayItineraries.map((dayItinerary) => (
+                        <li key={dayItinerary.id}>{dayItinerary.slot}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )
+              )}
+            </div>
           </li>
         ))}
       </ul>
 
-      {selectedItinerary && (
-        <div>
-          <h3>{selectedItinerary.name}</h3>
-          <h4>Day Itineraries</h4>
-          <ul>
-            {dayItineraries.map((dayItinerary) => (
-              <li key={dayItinerary.id}>
-                {dayItinerary.date.toISOString()} - Slot: {dayItinerary.slot}
-              </li>
-            ))}
-          </ul>
-          <h4>Tips</h4>
-          <ul>
-            {tips.map((tip) => (
-              <li key={tip.id}>{tip.name}</li>
-            ))}
-          </ul>
-        </div>
-      )}
-
-      {/* Affiche le bouton pour créer un nouvel itinéraire uniquement si l'utilisateur est connecté */}
       {token && (
         <Link to={"/add-itinerary"}>
-          <button onClick={handleCreateItinerary}>
-            Créer un nouvel itinéraire
-          </button>
+          <button>Créer un nouvel itinéraire</button>
         </Link>
       )}
     </div>
