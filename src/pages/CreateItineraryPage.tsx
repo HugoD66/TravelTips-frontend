@@ -42,7 +42,7 @@ const CreateItineraryPage = () => {
   const fetchCategories = async () => {
     try {
       if (token) {
-        const categoriesList = await getCategoryList(token);
+        const categoriesList = await getCategoryList();
         setCategories(categoriesList);
       }
     } catch (error) {
