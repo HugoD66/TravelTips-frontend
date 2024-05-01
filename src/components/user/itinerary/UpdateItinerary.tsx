@@ -3,7 +3,7 @@ import {ItineraryModel} from "../../../models/ItineraryModel";
 import Datetime from "react-datetime";
 import moment from "moment/moment";
 import {CountryModel} from "../../../models/CountryModel";
-import {getCountryList} from "../../../services/countryService";
+import {fetchCountryList, getCountryList} from "../../../services/countryService";
 import {getCategoryList} from "../../../services/categoryService";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {updateItinerary} from "../../../services/itineraryService";
@@ -12,6 +12,12 @@ import {deleteDayInItinerary, getDayInItineraryByItineraryId} from "../../../ser
 import {Link} from "react-router-dom";
 import Map, {TipLocation} from "../../Map";
 import {TipModel} from "../../../models/TipModel";
+import {CityModel} from "../../../models/CityModel";
+import {getCityList} from "../../../services/cityService";
+import {getTipList} from "../../../services/tipService";
+import tipsList from "../../addItinerary/TipsList";
+import Calendar from "react-calendar";
+import AgendaPage from "../../addItinerary/Agenda";
 
 interface UpdateItineraryProps {
   selectedItinerary: ItineraryModel | undefined;
@@ -32,7 +38,15 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
   const [selectedCategory, setSelectedCategory] = useState("");
   const [categories, setCategories] = useState<CategoryModel[]>([]);
   const [dayItinerary, setDayItinerary] = useState<DayItineraryModel[]>([]);
-  const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
+
+  const [selectedCities, setSelectedCities] = useState<string[]>([]);
+  const [citiesList, setCitiesList] = useState<CityModel[]>([]);
+  const [tipList, setTipsList] = useState<TipModel[]>([]);
+  const [tipSelected, setTipSelected] = useState<TipModel | null>(null);
+
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [agendaVisible, setAgendaVisible] = useState(false);
+
 
   useEffect(() => {
     fetchCategories();
@@ -49,6 +63,8 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
     console.log(selectedItinerary)
 
     fetchDayItinerary();
+    fetchCityList();
+    fetchTipsList();
   }, [selectedItinerary]);
 
   const fetchCategories = async () => {
@@ -61,6 +77,17 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
       console.error("Error fetching categories", error);
     }
   };
+  const fetchCityList = async () => {
+    try {
+      if (token) {
+        const cityList = await getCityList();
+        setCitiesList(cityList);
+        console.log(cityList);
+      }
+    } catch (error) {
+      console.error("Error fetching cities", error);
+    }
+  }
   const fetchDayItinerary = async () => {
     try {
       if (token && selectedItinerary) {
@@ -70,6 +97,17 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
       }
     } catch (error) {
       console.error("Error fetching day itinerary", error);
+    }
+  }
+  const fetchTipsList = async () => {
+    try {
+      if (token) {
+        const tipsList = await getTipList();
+        setTipsList(tipsList);
+        console.log(tipsList)
+      }
+    } catch (error) {
+      console.error("Error fetching tips", error);
     }
   }
 
@@ -92,12 +130,33 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
 
   };
 
+  const addNewTips = async (tip: TipModel) => {
+    setTipSelected(tip)
+  }
+
+
   const removeDayItinerary = async (dayId: string) => {
     console.log(dayId)
     //TODO Remove du dayItinerary dans le onSubmit
     await deleteDayInItinerary(dayId, token!);
 
     fetchDayItinerary();
+  }
+
+  const handleCitySelect = (cityId: string) => {
+    setSelectedCities(prevCities => {
+      const isAlreadySelected = prevCities.includes(cityId);
+      if (isAlreadySelected) {
+        return prevCities.filter(id => id !== cityId);
+      } else {
+        return [...prevCities, cityId];
+      }
+    });
+  };
+
+
+  const handleDateClick = () => {
+
   }
 
   return (
@@ -156,6 +215,7 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
             Public :
           </label>
         </div>
+        <h3>Mes itinéraires déjà ajoutés</h3>
         {dayItinerary.length > 0 ? (
           dayItinerary.map((day: DayItineraryModel) => (
             <>
@@ -193,7 +253,77 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
         ) : (
           <p>Vous n'avez pas encore d'étape dans votre itinéraire, veuillez en rajouter.</p>
         )}
-        <button type="button" className="button-add-step">Ajouter des étapes</button>
+
+        <h3>Réorganiser mon itinéraire</h3>
+        <p>Choisir une ou plusieurs villes : </p>
+        <div className="content-city-list-update">
+          <div className="content-city-update">
+            {citiesList.map((city: CityModel) => (
+              <div key={city?.id} className="content-city">
+                <input
+                  type="checkbox"
+                  id={city.id}
+                  value={city.name}
+                  checked={selectedCities.includes(city.id!)}
+                  onChange={() => handleCitySelect(city.id!)}
+                />
+                <label htmlFor={city.id}>{city.name}</label>
+              </div>
+            ))}
+          </div>
+          <div className="map-tips">
+            <h4>Les tips de la ville</h4>
+            {selectedCities.length > 0 && tipList.filter(tip =>
+              selectedCities.includes(
+                typeof tip.idCity === 'object' ? tip.idCity.id! : tip.idCity
+              )
+            ).map((tip: TipModel) => (
+              <div key={tip.id} className="content-map-container">
+                <div className="tip-selection-update-itinerary">
+                  <div className="tip-desc">
+                    <h4>{tip.name}</h4>
+                    <p>Adresse: {tip.address}</p>
+                    <p>Ville: {typeof tip.idCity === "object" ? tip.idCity.name : ""}</p>
+                    <p>Code postal: {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}</p>
+                    <p>Pays:
+                      {tip.idCity &&
+                        typeof tip.idCity === "object" &&
+                        tip.idCity.idCountry &&
+                        typeof tip.idCity.idCountry === "object" &&
+                        tip.idCity.idCountry.name}
+                    </p>
+                    <p>Prix: {tip.price}</p>
+                  </div>
+                  <Map
+                    isOnItinaryPanel={true}
+                    isInteractive={false}
+                    initialPosition={{lat: parseFloat(tip.lat), lng: parseFloat(tip.lng)}}
+                    markers={[{
+                      lat: tip.lat,
+                      lng: tip.lng,
+                      tipSelected: tip
+                    }]}
+                  />
+                </div>
+                <p className="add-button-tip button-add-step" onClick={() => addNewTips(tip)}> Ajouter</p>
+                <div className="divider"></div>
+
+              </div>
+            ))}
+          </div>
+        </div>
+        {tipSelected && (
+          <div className="tip-selected">
+            <h4>{tipSelected.name}</h4>
+            <Calendar
+              onClickDay={handleDateClick}
+              value={selectedDate}
+
+            />
+
+          </div>
+        )}
+        {/*<button type="button" className="button-add-step ">Ajouter des étapes</button>*/}
         <button type="submit">Enregistrer les modifications</button>
       </form>
     </div>
