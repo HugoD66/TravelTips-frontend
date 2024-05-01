@@ -20,7 +20,6 @@ const UserItineraryTable: React.FC<UserItineraryTableProps> = ({ itineraries, ti
             <th>Dernier jour</th>
             <th>Durée</th>
             <th>Catégorie</th>
-            <th>Fait par</th>
           </tr>
           </thead>
           <tbody>
@@ -31,7 +30,6 @@ const UserItineraryTable: React.FC<UserItineraryTableProps> = ({ itineraries, ti
               <td>{itinerary.lastDay}</td>
               <td>{itinerary.numberDay}</td>
               <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}</td>
-              <td>{typeof itinerary.idUser === "object" ? itinerary.idUser.firstName : ""}</td>
             </tr>
           ))}
           </tbody>

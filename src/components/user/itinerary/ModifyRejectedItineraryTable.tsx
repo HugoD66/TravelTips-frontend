@@ -1,18 +1,22 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import { UserItineraryTableProps } from './UserItineraryTable';
 import {ItineraryModel} from "../../../models/ItineraryModel";
 import Modal from "../../Modal";
+import UpdateItinerary from "./UpdateItinerary";
 
 const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itineraries, title }) => {
-  const [selectedItinerary, setSelectedItinerary] = useState<ItineraryModel | null>(null);
+  const [selectedItinerary, setSelectedItinerary] = useState<ItineraryModel | undefined>();
   const [showModal, setShowModal] = useState(false);
   
   const handleModify = (itineraryId: string) => {
     const selected = itineraries.find((itinerary) => itinerary.id === itineraryId);
-    setSelectedItinerary(selected || null);
+    setSelectedItinerary(selected);
     setShowModal(true);
   }
-  
+  useEffect(() => {
+    console.log(itineraries);
+  }, []);
+
   return (
     <>
       <div className="admin-table-container">
@@ -22,19 +26,32 @@ const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itine
         <thead>
         <tr>
           <th>Nom</th>
-          <th>Adresse</th>
-          <th>Ville</th>
-          <th>Code Postal</th>
-          <th>Pays</th>
-          <th>Prix</th>
+          <th>Premier jour</th>
+          <th>Dernier jour</th>
+          <th>Durée</th>
+          <th>Catégorie</th>
           <th>Action</th>
         </tr>
         </thead>
         <tbody>
         {itineraries.map((itinerary: ItineraryModel) => (
           <tr key={itinerary.id}>
-            {/*<td>{itinerary.name}</td>
-            <td>{itinerary.address}</td>
+            <td>{itinerary.name}</td>
+            <td>{itinerary.dayOne}</td>
+            <td>{itinerary.lastDay}</td>
+            <td>{itinerary.numberDay}</td>
+            <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}</td>
+
+            <button onClick={() => itinerary.id && handleModify(itinerary.id)}>
+              Modifier
+            </button>
+            {showModal && (
+              <Modal onClose={() => setShowModal(false)}>
+                <UpdateItinerary selectedItinerary={selectedItinerary} />
+              </Modal>
+            )}
+            {/*
+
             <td>{typeof itinerary.idCity === "object" ? itinerary.idCity.name : ""}</td>
             <td>
               {typeof itinerary.idCity === "object" ? itinerary.idCity.zipCode : ""}
@@ -49,14 +66,7 @@ const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itine
             <td>{itinerary.price}</td>
             <td>
               {" "}
-              <button onClick={() => itinerary.id && handleModify(itinerary.id)}>
-                Modifier
-              </button>
-              {showModal && (
-                <Modal onClose={() => setShowModal(false)}>
-                  <Updateitinerarys selecteditinerarys={selecteditinerary}/>
-                </Modal>
-              )}
+
             </td>*/}
           </tr>
         ))}

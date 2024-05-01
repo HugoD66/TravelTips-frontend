@@ -36,10 +36,10 @@ const UserItinerary: React.FC = () => {
           title={"Mes itinéraires validés"}
         />
         <ModifyRejectedItineraryTable
-          itineraries={itineraries.filter((itinerary) => itinerary.approvate === "false" && itinerary.nbApprobation > 0)}
+          itineraries={itineraries.filter((itinerary) => itinerary.approvate === "false" && itinerary.nbApprobation! > 0)}
           title={"Mes tips rejetés modifiables"}/>
         <UserItineraryTable
-          itineraries={itineraries.filter((itinerary) => itinerary.approvate === "true")}
+          itineraries={itineraries.filter((itinerary) => itinerary.approvate === "false"  && itinerary.nbApprobation === 0)}
           title={"Mes itinéraires rejetés non modifiables"}
         />
       </div>

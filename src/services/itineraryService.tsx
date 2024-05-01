@@ -79,12 +79,13 @@ export const getItineraryById = (id: string, token: string) => {
     });
 };
 
-export const updateItinerary = (itinerary: ItineraryModel) => {
-  return fetch(`http://localhost:4000/itinerary/${itinerary.id}`, {
-    method: "PUT",
+export const updateItinerary = (itineraryId: string, itinerary: ItineraryModel, token: string) => {
+  return fetch(`http://localhost:4000/itinerary/${itineraryId}`, {
+    method: "PATCH",
     body: JSON.stringify(itinerary),
     headers: {
       "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
     },
   })
     .then((response) => {
