@@ -11,5 +11,5 @@ export class ItineraryModel {
   idUser?: UserModel | string;
   public?: boolean;
   approvate?: string;
-  nbApprobation?: number;
+  nbApprobation!: number;
 }

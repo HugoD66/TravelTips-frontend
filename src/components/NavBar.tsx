@@ -61,7 +61,7 @@ const NavBar = ({
         className="fixture-generation"
         onClick={() => generationFixtures()}
       >
-        Generation fixtures
+        Fixtures
       </button>
       <div className="nav-logo">
         <Link to="/">

@@ -21,6 +21,25 @@ export const createItinerary = (itinerary: ItineraryModel, token: string) => {
     });
 };
 
+export const getItineraryUser = (id: string, token: string) => {
+  return fetch(`http://localhost:4000/itinerary/users/${id}`, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des itinéraires:", error);
+      throw error;
+    });
+};
+
 export const getItineraryList = () => {
   return fetch(`http://localhost:4000/itinerary`, {
     method: "GET",

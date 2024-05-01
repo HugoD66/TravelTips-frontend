@@ -7,6 +7,7 @@ import UserForm from "../components/forms/UserForm";
 import { getMe, updateMe } from "../services/userService";
 import "../styles/profilepage.css";
 import UserTips from "../components/user/tips/UserTips";
+import UserItinerary from "../components/user/itinerary/UserItinerary";
 
 const ProfilePage = ({
   handleLogin,
@@ -87,6 +88,11 @@ const ProfilePage = ({
           {selectedComponent === "userTips" && (
             <div className="user-info-container">
               <UserTips></UserTips>
+            </div>
+          )}
+          {selectedComponent === "userItinerary" && (
+            <div className="user-info-container">
+              <UserItinerary></UserItinerary>
             </div>
           )}
         </div>
