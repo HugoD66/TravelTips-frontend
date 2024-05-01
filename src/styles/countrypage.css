@@ -211,6 +211,7 @@ body, html {
 }
 .tips-container {
   text-align: center;
+    height: 90%;
 }
 
 .tips-carousel {
@@ -276,7 +277,12 @@ body, html {
 .tip-card:hover .tip-card-content {
   background-color: rgba(249, 249, 249, 0.8);
 }
-
+.tip-card-content-custom {
+    width: 50%;
+}
+.tip-card-content-map {
+    width: 40%;
+}
 .tip-card-title {
   font-size: 1.2rem;
   font-weight: bold;
@@ -297,4 +303,18 @@ body, html {
   .tip-card:hover .tip-card-image {
     transform: scale(1.05);
   }
+}
+.tip-card-custom {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+}
+.remove-day-itinerary {
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+    text-align: end;
+    cursor: pointer;
 }

@@ -9,6 +9,7 @@ interface MapProps {
   isInteractive: boolean;
   initialPosition: { lat: number; lng: number };
   markers?: TipLocation[];
+  isOnItinaryPanel?: boolean;
   onLocationSelect?: (location: {
     lat: number;
     lng: number;
@@ -31,6 +32,7 @@ const Map: React.FC<MapProps> = ({
                                    initialPosition,
                                    markers,
                                    onMarkerClick,
+                                   isOnItinaryPanel
 }: MapProps) => {
   const { cityDetails, setCityDetails } = useCity();
   const { tipDetail, setTipDetail } = useTip();
@@ -61,7 +63,7 @@ const Map: React.FC<MapProps> = ({
     }
 
     return () => map.current?.remove();
-  }, [isInteractive, markers]);
+  }, [isInteractive]);
 
   useEffect(() => {
     if (!map.current || !markers ) return;
@@ -133,8 +135,15 @@ const Map: React.FC<MapProps> = ({
 
 
   return (
-    <div className="map-wrap">
-      <div ref={mapContainer} className="map" />
+    <div className="map-wrap" style={{
+      width: isOnItinaryPanel ? '250px' : '400px',
+      height: isOnItinaryPanel ? '250px' : '400px',
+    }}>
+      <div ref={mapContainer} className="map"
+           style={{
+             width: isOnItinaryPanel ? '250px' : '400px',
+             height: isOnItinaryPanel ? '250px' : '400px',
+           }}/>
     </div>
   );
 };

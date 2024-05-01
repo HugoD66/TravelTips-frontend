@@ -75,7 +75,21 @@ export const getDayInItineraryById = (id: string) => {
       throw error;
     });
 };
-
+export const getDayInItineraryByItineraryId = (id: string) => {
+  return fetch(`http://localhost:4000/day-itinerary/by-itinerary/${id}`, {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+    .catch((error) => {
+      console.error("Erreur lors de la récupération du dayInItinerary:", error);
+      throw error;
+    });
+};
 export const updateDayInItinerary = (dayInItinerary: DayItineraryModel) => {
   return fetch(`http://localhost:4000/day-itinerary/${dayInItinerary.id}`, {
     method: "PUT",
@@ -96,9 +110,12 @@ export const updateDayInItinerary = (dayInItinerary: DayItineraryModel) => {
     });
 };
 
-export const deleteDayInItinerary = (id: string) => {
+export const deleteDayInItinerary = (id: string, token: string) => {
   return fetch(`http://localhost:4000/day-itinerary/${id}`, {
     method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) => {
       if (!response.ok) {

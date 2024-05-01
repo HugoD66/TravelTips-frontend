@@ -1,5 +1,6 @@
 import { CityModel } from "./CityModel";
 import { User } from "./UserData";
+import {PictureModel} from "./PictureModel";
 
 export class TipModel {
   public id?: string;
@@ -13,4 +14,5 @@ export class TipModel {
   public idUser!: User | string;
   public approvate!: string;
   public nbApprobation!: number;
+  public pictures?: PictureModel[];
 }

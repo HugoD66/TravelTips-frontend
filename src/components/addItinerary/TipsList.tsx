@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { TipModel } from "../../models/TipModel";
 import "../../styles/tiplist.css";
+import Map from "../Map";
+import ProgressBar from "../ProgressBar";
 
 interface TipsListComponentProps {
   tips: TipModel[];
@@ -37,18 +39,20 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
     <div>
       <div className="containerList">
         <h3>Choisir une ou plusieurs villes :</h3>
-        {cities.map((city) => (
-          <div key={city}>
-            <input
-              type="checkbox"
-              id={city}
-              value={city}
-              checked={selectedCities.includes(city)}
-              onChange={() => handleCitySelect(city)}
-            />
-            <label htmlFor={city}>{city}</label>
-          </div>
-        ))}
+        <div className="content-city-list">
+          {cities.map((city) => (
+            <div key={city} className="content-city">
+              <input
+                type="checkbox"
+                id={city}
+                value={city}
+                checked={selectedCities.includes(city)}
+                onChange={() => handleCitySelect(city)}
+              />
+              <label htmlFor={city}>{city}</label>
+            </div>
+          ))}
+        </div>
       </div>
       <div className="containerList">
         {tips
@@ -60,20 +64,36 @@ const TipsListComponent: React.FC<TipsListComponentProps> = ({
               )
           )
           .map((tip) => (
-            <div key={tip.id}>
-              <h2>{tip.name}</h2>
-              <p>{tip.name}</p>
-              <p>{tip.address}</p>
-              <p>{typeof tip.idCity === "object" ? tip.idCity.name : ""}</p>
-              <p>{typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}</p>
-              <p>
-                {tip.idCity &&
-                  typeof tip.idCity === "object" &&
-                  tip.idCity.idCountry &&
-                  typeof tip.idCity.idCountry === "object" &&
-                  tip.idCity.idCountry.name}
-              </p>
-              <p>{tip.price}</p>
+            <div key={tip.id} className="content-map-container">
+              <div className="tip-selection-create-itinerary">
+                <div className="tip-desc">
+                  <h2>{tip.name}</h2>
+                  <p>Adresse: {tip.address}</p>
+                  <p>Ville: {typeof tip.idCity === "object" ? tip.idCity.name : ""}</p>
+                  <p>Code postal: {typeof tip.idCity === "object" ? tip.idCity.zipCode : ""}</p>
+                  <p> Pays:
+                     {tip.idCity &&
+                      typeof tip.idCity === "object" &&
+                      tip.idCity.idCountry &&
+                      typeof tip.idCity.idCountry === "object" &&
+                      tip.idCity.idCountry.name}
+                  </p>
+                  <p>
+                    Prix :
+                    <ProgressBar value={tip.price} max={100} />
+                  </p>
+                </div>
+                <Map
+                  isOnItinaryPanel={true}
+                  isInteractive={false}
+                  initialPosition={{lat: parseFloat(tip.lat), lng: parseFloat(tip.lng)}}
+                  markers={[{
+                    lat: tip.lat,
+                    lng: tip.lng,
+                    tipSelected: tip
+                  }]}
+                />
+                </div>
               {isTipSelected(tip) ? (
                 <>
                   <div>

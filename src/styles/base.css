@@ -78,7 +78,10 @@ button:hover,
   background-color: var(--color-primary);
   color: var(--color-dark);
 }
-
+.button-add-step {
+  color: var(--color-accent);
+  background-color: var(--color-tertiary);
+}
 /* Conteneur principal pour aligner les éléments au centre */
 .container {
   display: flex;
