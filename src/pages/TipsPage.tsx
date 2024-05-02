@@ -7,6 +7,8 @@ import { Link } from 'react-router-dom';
 import Map, {TipLocation} from "../components/Map";
 import {TipModel} from "../models/TipModel";
 import {useTip} from "../context/TipProvider";
+import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
+import {getPictures} from "../services/pictureService";
 
 
 interface Tip {
@@ -24,7 +26,6 @@ const TipsPage: React.FC = () => {
   const [tip, setTip] = useState<TipModel | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
- // const [tipDetail, setTipDetail] = useState<TipModel | null>(null);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
 
   useEffect(() => {
@@ -49,6 +50,12 @@ const TipsPage: React.FC = () => {
             lng: response.lng,
             tipSelected: response
           }]);
+
+          const pictureResponses = await getPictures(response.id);
+
+          setPictureList(pictureResponses);
+
+
         } catch (error) {
           console.error("Error fetching tip details:", error);
           setError('Failed to fetch tip details. Please check the console for more information.');
@@ -91,13 +98,12 @@ const TipsPage: React.FC = () => {
           />
           <div className="tip-img">
             {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-            pictureList.map((picture: PictureModel) =>
+              pictureList.map((picture: PictureModel) =>
                 picture.idTips!.id === tip.id ?
-                <img src={"http://localhost:4000/" + picture.url}  className="tip-image" alt="tip"/> : null
-            ) :
-            Array.from({ length: 6 }).map((_, index) =>
-                <img src={`https://picsum.photos/400/200?random=${index}`} className="tip-image" alt="Default view"/>
-            )
+                  <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
+                       alt="représentation de l'image"/> : null
+              ) :
+              <img src={defaultPicture} alt="Image par défaut"/>
             }
         </div>
         </>

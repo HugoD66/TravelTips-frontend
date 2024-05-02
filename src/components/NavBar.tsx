@@ -44,26 +44,8 @@ const NavBar = ({
     });
     navigation("/home");
   };
-
-  const generationFixtures = () => {
-    return fetch(`http://localhost:4000/fixtures/mockups`, {
-      method: "POST",
-    }).then((response) => {
-      if (!response.ok) {
-        //throw new Error("Réponse réseau non OK");
-        return;
-      }
-      return response.json();
-    });
-  };
   return (
     <nav className="navbar">
-      <button
-        className="fixture-generation"
-        onClick={() => generationFixtures()}
-      >
-        Fixtures
-      </button>
       <div className="nav-logo">
         <Link to="/">
           <img src="/images/logoSide.png" alt="Logo" />

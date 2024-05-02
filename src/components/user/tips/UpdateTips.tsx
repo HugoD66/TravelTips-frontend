@@ -73,7 +73,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
 
       const selectedCountry = countriesList.find((c) => c.name === country);
       const newCountry = selectedCountry
-        ? await createCountry({ name: selectedCountry.name })
+        ? await createCountry({ name: selectedCountry.name }, token!)
         : null;
       const newCity = await createCity({
         name: cityDetails.city,

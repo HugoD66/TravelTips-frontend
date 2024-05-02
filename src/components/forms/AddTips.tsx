@@ -17,8 +17,6 @@ const AddTips = () => {
   const [name, setName] = useState<string>("");
   const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
-  const [error, setError] = useState<string>("");
-  const [success, setSuccess] = useState<string>("");
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -45,7 +43,7 @@ const AddTips = () => {
     event.preventDefault();
     try {
       const selectedCountry = countriesList.find((c) => c.name === country);
-      const newCountry = await createCountry({ name: selectedCountry!.name });
+      const newCountry = await createCountry({ name: selectedCountry!.name }, token!);
       const newCity = await createCity({
         name: cityDetails.city,
         idCountry: newCountry.id,
@@ -53,7 +51,6 @@ const AddTips = () => {
       });
       const userId = localStorage.getItem("id");
       if (!userId) {
-        setError("Il faut etre connecté pour ajouter un tips");
         return;
       }
       const tips: TipModel = {
@@ -69,16 +66,13 @@ const AddTips = () => {
       };
 
       if (!tips.name || !tips.idCity || !tips.address) {
-        setError("Vous devez remplir tous les champs");
         return;
       }
       if (!token) {
-        setError("Erreur token");
         return;
       }
       const tipsResponse = await createTip(tips, token);
       if (!tipsResponse || !tipsResponse.id) {
-        setError("Erreur pendant la création du tips");
         return;
       }
       for (const file of pictureFiles) {
@@ -104,7 +98,11 @@ const AddTips = () => {
       });
     } catch (error) {
       console.log("Erreur lors de l'ajout du tips:", error);
-      toast.error("Erreur d'enregistrement du tips");
+      toast.error("Erreur d'enregistrement du tips", {
+        position: "top-center",
+        autoClose: 3000,
+        className: "toast",
+      });
     }
   };
 
@@ -210,8 +208,6 @@ const AddTips = () => {
             </button>
         </form>
       </div>
-      {error && <div className="error">{error}</div>}
-      {success && <div className="success">{success}</div>}
     </div>
   );
 };

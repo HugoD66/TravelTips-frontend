@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import "../styles/destination.css";
-import { getLastestTips } from "../services/tipService";
+import {getLastestTips, getTipList} from "../services/tipService";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
 import { getPictures } from "../services/pictureService";
@@ -14,6 +14,7 @@ import Map, {TipLocation} from "../components/Map";
 import {getDayInItineraryList} from "../services/dayItineraryService";
 import {DayItineraryModel} from "../models/DayItineraryModel";
 import tipsList from "../components/addItinerary/TipsList";
+import {ItineraryModel} from "../models/ItineraryModel";
 
 interface Country {
   cca3: string;
@@ -31,12 +32,6 @@ interface Countries {
   [key: string]: Country[];
 }
 
-interface Tip {
-  id: string;
-  name: string;
-  adress: string;
-}
-
 interface Itinerary {
   idCategory: any;
   numberDay: any;
@@ -50,6 +45,8 @@ const DestinationPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [activeSubregion, setActiveSubregion] = useState<string | null>(null);
+  const [lastestTips, setLastestTips] = useState<TipModel[]>([]);
+  const [lastestItineraries, setLastestItineraries] = useState<ItineraryModel[]>([]);
   const [tips, setTips] = useState<TipModel[]>([]);
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const token = localStorage.getItem("token");
@@ -157,7 +154,7 @@ const DestinationPage = () => {
 
   const fetchTips = async () => {
     try {
-      const response = await getLastestTips();
+      const response = await getTipList();
       if (response) {
         const allPicturePromises = response.map(async (tip: TipModel) => {
           const pictureResponses = await getPictures(tip.id!);
@@ -169,7 +166,17 @@ const DestinationPage = () => {
         const picturesArrays = await Promise.all(allPicturePromises);
         const allPictures = picturesArrays.flat();
         setPictureList(allPictures);
-        setTips(response);
+        //TODO LATEST TIPS
+        console.log(response)
+        const filteredTips = response.filter((tip: { createdAt: any; }) => tip.createdAt);
+        filteredTips.sort((a: any, b: any) => {
+          const dateA = new Date(a.createdAt);
+          const dateB = new Date(b.createdAt);
+          return dateB.getTime() - dateA.getTime();
+        });
+
+        const lastSixTips = filteredTips.slice(-6);
+        setTips(lastSixTips);
 
       }
     } catch (error) {
@@ -182,6 +189,20 @@ const DestinationPage = () => {
       const response = await getItineraryList();
       setItineraries(response)
       console.log(response);
+
+      console.log('coucou')
+
+      const filteredItineraries = response.filter((itinerary: { dayOne: any; }) => itinerary.dayOne);
+      filteredItineraries.sort((a: any, b: any) => {
+        const dateA = new Date(a.dayOne);
+        const dateB = new Date(b.dayOne);
+        return dateB.getTime() - dateA.getTime();
+      });
+      const lastSixItineraries = filteredItineraries.slice(-6);
+      setLastestItineraries(lastSixItineraries);
+
+
+
     } catch (error) {
       console.error("Error fetching itineraries:", error);
     }
@@ -219,6 +240,18 @@ const DestinationPage = () => {
   const clearSearch = () => {
     setSearchTerm("");
     setFilteredCountries([]);
+  };
+
+  const generationFixtures = () => {
+    return fetch(`http://localhost:4000/fixtures/mockups`, {
+      method: "POST",
+    }).then((response) => {
+      if (!response.ok) {
+        //throw new Error("Réponse réseau non OK");
+        return;
+      }
+      return response.json();
+    });
   };
 
   return (
@@ -304,7 +337,7 @@ const DestinationPage = () => {
         </button>
         {isModalOpen && (
           <Modal onClose={() => setIsModalOpen(false)}>
-            <AddTips />
+            <AddTips/>
           </Modal>
         )}
         <div className="tips-destination">
@@ -321,7 +354,8 @@ const DestinationPage = () => {
               {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
                 pictureList.map((picture: PictureModel) =>
                   picture.idTips!.id === tip.id ?
-                    <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/> : null
+                    <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
+                         alt="représentation de l'image"/> : null
                 ) :
                 <img src={defaultPicture} alt="Image par défaut"/>
               }
@@ -339,16 +373,18 @@ const DestinationPage = () => {
           </button>
         </Link>
         <div className="itineraries-carousel">
-          {itineraries.map((itinerary) => (
-            <Link
-              key={itinerary.id}
-              to={`/itineraries/${itinerary.id}`}
-              className="card"
-            >
+          {lastestItineraries.map((itinerary) => (
+
               <div className="card-itinerary">
                 <div className="itineraries-card-content">
                   <h2 className="itineraries-card-title">{itinerary.name}</h2>
-                  <button className="itineraries-card-button-explore">Explorer</button>
+                  <p>Jour de départ {new Date(itinerary.dayOne!).toLocaleDateString()}</p>
+                  <Link
+                    key={itinerary.id}
+                    to={`/itineraries/${itinerary.id}`}
+                    className="card"
+                  ><button className="itineraries-card-button-explore">Explorer</button>
+                  </Link>
                   <div className="itineraries-card-footer">
                     <p>
                       <i>{itinerary.numberDay} jours</i>
@@ -360,12 +396,22 @@ const DestinationPage = () => {
                     </p>
                   </div>
                 </div>
-                <Map isInteractive={false} initialPosition={{ lat: 0, lng: 0 }} />
+                <Map
+                  isInteractive={false}
+                  isOnItinaryPanel={true}
+                  initialPosition={{lat: 0, lng: 0}}
+                  markers={markers}
+                />
               </div>
-            </Link>
           ))}
         </div>
       </div>
+      <button
+        className="fixture-generation"
+        onClick={() => generationFixtures()}
+      >
+        X
+      </button>
     </div>
   );
 };

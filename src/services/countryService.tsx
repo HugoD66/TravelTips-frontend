@@ -2,7 +2,7 @@ import { ApiResponse } from "../models/CountryData";
 import axios from "axios";
 const token = localStorage.getItem("token");
 
-export const createCountry = (country: any) => {
+export const createCountry = (country: any, token: string) => {
   return fetch(`http://localhost:4000/country`, {
     method: "POST",
     body: JSON.stringify(country),
