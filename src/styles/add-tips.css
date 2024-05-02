@@ -22,7 +22,13 @@ form {
 .form-group {
   display: flex;
   flex-direction: column;
-  width: 100%; 
+  width: 100%;
+}
+.picture-input-form-add-tips {
+    background-color: #D7BFACFF;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 5px auto auto;
 }
 
 .form-group label {
@@ -44,27 +50,15 @@ form {
 }
 
 .submit-button-form {
-  width: auto; 
-  padding: 10px 20px; 
-  margin-top: 10px; 
+    width: auto;
+    padding: 10px 20px;
+    margin: 10px auto auto;
 }
 
 .submit-button:hover {
   background-color: #7291f2;
 }
 
-.error {
-  margin-top: 3px;
-  color: red;
-  font-size: 0.8rem;
-  width: 100%;
-  text-align: center;
-}
+.picture-input-form-add-tips {
 
-.success {
-  margin-top: 3px;
-  color: green;
-  font-size: 0.8rem;
-  width: 100%;
-  text-align: center;
 }

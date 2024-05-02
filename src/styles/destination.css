@@ -184,6 +184,9 @@
     flex-direction: column;
     align-items: center;
     margin: 20px;
+    button {
+        margin: auto;
+    }
 }
 .carousel-container-destination h2 {
     font-size: 2rem;
@@ -254,8 +257,62 @@
 .tips-destination .card-button-destination:hover {
     background-color: var(--color-primary);
 }
+
 .card__footer {
     width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-direction: row;
+    margin-bottom: 0;
+    .category {
+        font-weight: 200;
+    }
+}
+
+.picture-tips-unit-card {
+    width: 100%;
+    max-height: 50%;
+    height: 50%;
+    background-size: cover;
+    background-position: center;
+}
+
+.itineraries-carousel {
+    margin: 10px auto auto;
+    background-color: #315d55;
+    width: 100%;
+
+}
+
+.card-itinerary {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
+    height: 400px;
+    margin: 6px auto;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    background-color: var(--color-background);
+    position: relative;
+    cursor: pointer;
+    transition: transform 500ms ease-in-out, box-shadow 500ms ease-in-out;
+}
+.itineraries-card-content {
+    width: 60%;
+    display: flex;
+    height: 50%;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+.itineraries-card-button-explore  {
+     width: 50%;
+    margin: auto;
+}
+.itineraries-card-footer {
+    width: 80%;
     display: flex;
     justify-content: space-between;
     align-items: center;

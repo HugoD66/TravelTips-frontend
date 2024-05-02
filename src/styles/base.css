@@ -133,3 +133,10 @@ footer {
     font-size: 3rem;
   }
 }
+
+.toast {
+  text-wrap: nowrap;
+}
+.input-form-add-tips{
+  width: 100%;
+}

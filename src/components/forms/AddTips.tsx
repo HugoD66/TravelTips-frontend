@@ -89,11 +89,19 @@ const AddTips = () => {
         } catch (error) {
           await deleteTip(tipsResponse.id, token);
           // @ts-ignore
-          toast.error(error.message);
+          toast.error(error.message, {
+            position: "top-center",
+            autoClose: 3000,
+            className: "toast",
+          });
           return;
         }
       }
-      toast.success("Tips ajouté avec succès !");
+      toast.success("Tips ajouté avec succès !", {
+        position: "top-center",
+        autoClose: 3000,
+        className: "toast",
+      });
     } catch (error) {
       console.log("Erreur lors de l'ajout du tips:", error);
       toast.error("Erreur d'enregistrement du tips");
@@ -151,15 +159,15 @@ const AddTips = () => {
           </div>
           <div className="form-group">
             <label>Adresse:</label>
-            <input type="text" value={cityDetails.address} readOnly />
+            <input type="text" className="input-form-add-tips" value={cityDetails.address} readOnly />
           </div>
           <div className="form-group">
             <label>Ville:</label>
-            <input type="text" value={cityDetails.city} readOnly />
+            <input type="text" className="input-form-add-tips" value={cityDetails.city}  />
           </div>
           <div className="form-group">
             <label>Code postal:</label>
-            <input type="text" value={cityDetails.postcode} readOnly />
+            <input type="text" className="input-form-add-tips" value={cityDetails.postcode} readOnly />
           </div>
           <div className="form-group">
             <label htmlFor="name">Nom du tips:</label>
@@ -187,12 +195,12 @@ const AddTips = () => {
             <input
               id="pictureList"
               type="file"
+              className="picture-input-form-add-tips"
               name="pictureList"
               multiple
               onChange={handleFileChange}
             />
           </div>
-          <div className="form-group">
             <button
               type="submit"
               value="Envoyer"
@@ -200,7 +208,6 @@ const AddTips = () => {
             >
               Envoyer
             </button>
-          </div>
         </form>
       </div>
       {error && <div className="error">{error}</div>}

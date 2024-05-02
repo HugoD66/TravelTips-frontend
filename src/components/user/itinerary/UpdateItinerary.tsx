@@ -255,7 +255,6 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
         )}
 
         <h3>Réorganiser mon itinéraire</h3>
-        <p>Choisir une ou plusieurs villes : </p>
         <div className="content-city-list-update">
           <div className="content-city-update">
             {citiesList.map((city: CityModel) => (
@@ -271,7 +270,7 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
               </div>
             ))}
           </div>
-          <div className="map-tips">
+          <div className="map-tips-itinerary">
             <h4>Les tips de la ville</h4>
             {selectedCities.length > 0 && tipList.filter(tip =>
               selectedCities.includes(

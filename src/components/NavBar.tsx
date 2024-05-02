@@ -40,6 +40,7 @@ const NavBar = ({
     toast.success("Déconnexion réussie", {
       position: "top-center",
       autoClose: 3000,
+      className: "toast",
     });
     navigation("/home");
   };

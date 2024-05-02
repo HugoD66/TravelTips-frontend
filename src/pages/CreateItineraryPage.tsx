@@ -99,7 +99,11 @@ const CreateItineraryPage = () => {
 
   const handleTipSelect = (tip: TipModel) => {
     setSelectedTips([...selectedTips, tip]);
-    toast.success("Ce tips a été ajouté à votre voyage");
+    toast.success("Ce tips a été ajouté à votre voyage", {
+      position: "top-center",
+      autoClose: 3000,
+      className: "toast",
+    });
   };
   const isTipSelected = (tip: TipModel) => {
     if (selectedTips.some((selectedTip) => selectedTip.id === tip.id)) {
@@ -113,7 +117,11 @@ const CreateItineraryPage = () => {
     setSelectedTips((prevSelectedTips) =>
       prevSelectedTips.filter((selectedTip) => selectedTip.id !== tip.id)
     );
-    toast.success("Ce tips a été supprimé de votre voyage");
+    toast.success("Ce tips a été supprimé de votre voyage", {
+      position: "top-center",
+      autoClose: 3000,
+      className: "toast",
+    });
   };
 
   const handleOrganizedDaysClick = () => {

@@ -118,3 +118,7 @@
 .countryCard a:hover, .countryCard button:hover {
   transform: scale(1.1); 
 }
+
+.buttoncontainer {
+  text-align: center;
+}

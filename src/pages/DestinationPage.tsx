@@ -10,6 +10,10 @@ import { PictureModel } from "../models/PictureModel";
 import { TipModel } from "../models/TipModel";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 import { getItineraryList } from "../services/itineraryService";
+import Map, {TipLocation} from "../components/Map";
+import {getDayInItineraryList} from "../services/dayItineraryService";
+import {DayItineraryModel} from "../models/DayItineraryModel";
+import tipsList from "../components/addItinerary/TipsList";
 
 interface Country {
   cca3: string;
@@ -46,18 +50,73 @@ const DestinationPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredCountries, setFilteredCountries] = useState<Country[]>([]);
   const [activeSubregion, setActiveSubregion] = useState<string | null>(null);
-  const [tips, setTips] = useState<Tip[]>([]);
+  const [tips, setTips] = useState<TipModel[]>([]);
   const [itineraries, setItineraries] = useState<Itinerary[]>([]);
   const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const navigate = useNavigate();
+  const [dayItineraryList, setDayItineraryList] = useState<DayItineraryModel[]>([]);
+  const [markers, setMarkers] = useState<TipLocation[]>([]);
+
 
   useEffect(() => {
-    fetchAllCountries();
-    fetchTips();
-    fetchItineraries();
+    fetchTips()
   }, []);
+  useEffect(() => {
+    fetchAllCountries();
+    fetchDayItineraries();
+    fetchItineraries();
+
+   /* dayItineraryList.forEach((step: DayItineraryModel) => {
+      console.log("coucou")
+
+      itineraries.forEach((itinerary: Itinerary) => {
+         if(step.idItinerary === itinerary.id) {
+
+           tips.forEach((tip: TipModel) => {
+             if(step.idTips === tip.id) {
+               console.log("coucou")
+               setMarkers((prev: TipLocation[]) => [...prev, {
+                 lat: tip.lat,
+                 lng: tip.lng,
+                 tipSelected: tip,
+               }])
+               console.log(markers);
+             }
+           })
+         }
+       })
+    })*/
+
+  }, [tips]);
+
+  useEffect(() => {
+    if (itineraries.length > 0 && dayItineraryList.length > 0 && tips.length > 0) {
+      processMarkers();
+    }
+  }, [itineraries, dayItineraryList, tips]);
+
+
+  const processMarkers = () => {
+    const newMarkers: TipLocation[] = [];
+    dayItineraryList.forEach((step) => {
+      const itinerary = itineraries.find(it => it.id === step.idItinerary);
+      if (itinerary) {
+        const tip = tips.find(t => t.id === step.idTips);
+        if (tip) {
+          console.log('coucou')
+          newMarkers.push({
+            lat: tip.lat,
+            lng: tip.lng,
+            tipSelected: tip,
+          });
+        }
+      }
+    });
+    setMarkers(newMarkers);
+  };
+
 
   const fetchAllCountries = async () => {
     try {
@@ -111,6 +170,7 @@ const DestinationPage = () => {
         const allPictures = picturesArrays.flat();
         setPictureList(allPictures);
         setTips(response);
+
       }
     } catch (error) {
       console.error("Error fetching tips:", error);
@@ -120,12 +180,22 @@ const DestinationPage = () => {
   const fetchItineraries = async () => {
     try {
       const response = await getItineraryList();
-      setItineraries(response);
-      console.log(itineraries);
+      setItineraries(response)
+      console.log(response);
     } catch (error) {
-      console.error("Error fetching tips:", error);
+      console.error("Error fetching itineraries:", error);
     }
   };
+  const fetchDayItineraries = async () => {
+    try {
+      const response = await getDayInItineraryList();
+
+      console.log(response)
+    }catch (error) {
+      console.error("Error fetching day itineraries:", error);
+    }
+  }
+
   const handleSubregionClick = (subregion: string) => {
     setActiveSubregion(activeSubregion === subregion ? null : subregion);
   };
@@ -248,25 +318,13 @@ const DestinationPage = () => {
                 <h3 className="card-title-destination">{tip.name}</h3>
                 <button className="card-button-destination">Voir plus</button>
               </div>
-              {pictureList.find((picture) => picture.idTips!.id === tip.id) ? (
-                <div
-                  className="card-destination-image"
-                  style={{
-                    backgroundImage: `url(http://localhost:4000/${
-                      pictureList.find(
-                        (picture) => picture.idTips!.id === tip.id
-                      )?.url
-                    })`,
-                  }}
-                ></div>
-              ) : (
-                <div
-                  className="card-destination-image"
-                  style={{
-                    backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`,
-                  }}
-                ></div>
-              )}
+              {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                pictureList.map((picture: PictureModel) =>
+                  picture.idTips!.id === tip.id ?
+                    <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/> : null
+                ) :
+                <img src={defaultPicture} alt="Image par défaut"/>
+              }
             </Link>
           ))}
         </div>
@@ -287,20 +345,22 @@ const DestinationPage = () => {
               to={`/itineraries/${itinerary.id}`}
               className="card"
             >
-              <div className="card__content">
-                <div className="card__background"></div>
-                <h2 className="card__title">{itinerary.name}</h2>
-                <button className="card__button">Explorer</button>
-                <div className="card__footer">
-                  <p>
-                    <i>{itinerary.numberDay} jours</i>
-                  </p>
-                  <p className="category">
-                    {typeof itinerary.idCategory === "object"
-                      ? itinerary.idCategory.name
-                      : ""}
-                  </p>
+              <div className="card-itinerary">
+                <div className="itineraries-card-content">
+                  <h2 className="itineraries-card-title">{itinerary.name}</h2>
+                  <button className="itineraries-card-button-explore">Explorer</button>
+                  <div className="itineraries-card-footer">
+                    <p>
+                      <i>{itinerary.numberDay} jours</i>
+                    </p>
+                    <p className="category">
+                      {typeof itinerary.idCategory === "object"
+                        ? itinerary.idCategory.name
+                        : ""}
+                    </p>
+                  </div>
                 </div>
+                <Map isInteractive={false} initialPosition={{ lat: 0, lng: 0 }} />
               </div>
             </Link>
           ))}
