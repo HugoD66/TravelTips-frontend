@@ -9,6 +9,7 @@ import {PictureModel} from "../models/PictureModel";
 import {useTip} from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
 import {findAllByItineraryId} from "../services/dayItineraryService";
+import {DayItineraryModel} from "../models/DayItineraryModel";
 
 const ItineraryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -25,14 +26,13 @@ const ItineraryDetail = () => {
 
   const fetchItinerary = async () => {
     try {
-      if(!token || !id) {
+      if (!token || !id) {
         return;
       }
       const response = await getItineraryById(id, token);
       setItinerary(response);
-      const responseDayItinerary = await findAllByItineraryId(response.id)
-      console.log(responseDayItinerary)
-      const tips = responseDayItinerary.map((dayItinerary: any) => dayItinerary.idTips);
+      const responseDayItinerary = await findAllByItineraryId(response.id);
+      const tips = responseDayItinerary.map((dayItinerary: DayItineraryModel) => dayItinerary.idTips);
       setTipList(tips);
 
       const allPicturePromises = tips.map(async (tip: TipModel) => {
@@ -55,12 +55,24 @@ const ItineraryDetail = () => {
       setPictureList(allPictures);
 
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'itinéraire:', error)
+      console.error('Erreur lors de la récupération de l\'itinéraire:', error);
     }
+  };
+
+  let initialPosition = { lat: 47, lng: -2 };
+  if (geoTips.length > 0) {
+    const sumPos = geoTips.reduce((acc, curr: TipLocation) => ({
+      lat: acc.lat + parseFloat(curr.lat),
+      lng: acc.lng + parseFloat(curr.lng)
+    }), { lat: 0, lng: 0 });
+    initialPosition = {
+      lat: sumPos.lat / geoTips.length,
+      lng: sumPos.lng / geoTips.length
+    };
   }
 
-  const handleTipSelect = useCallback((tipDetail: any) => {
-    setTipDetail(tipDetail);
+  const handleTipSelect = useCallback((tip: TipModel) => {
+    setTipDetail(tip);
   }, [setTipDetail]);
 
   return (
@@ -114,8 +126,9 @@ const ItineraryDetail = () => {
         </div>
         <Map
           isInteractive={false}
-          initialPosition={{ lat: 47, lng: -2 }}
+          initialPosition={initialPosition}
           markers={geoTips}
+          zoom={4}
           onMarkerClick={handleTipSelect}
         />
       </div>

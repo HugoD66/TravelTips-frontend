@@ -48,13 +48,9 @@ const DestinationPage = () => {
   const [lastestTips, setLastestTips] = useState<TipModel[]>([]);
   const [lastestItineraries, setLastestItineraries] = useState<ItineraryModel[]>([]);
   const [tips, setTips] = useState<TipModel[]>([]);
-  const [itineraries, setItineraries] = useState<Itinerary[]>([]);
-  const token = localStorage.getItem("token");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const navigate = useNavigate();
-  const [dayItineraryList, setDayItineraryList] = useState<DayItineraryModel[]>([]);
-  const [markers, setMarkers] = useState<TipLocation[]>([]);
   const [itineraryMarkers, setItineraryMarkers] = useState<{ [itineraryId: string]: TipLocation[] }>({});
 
 
@@ -156,30 +152,34 @@ const DestinationPage = () => {
   const fetchDayItineraries = async () => {
     try {
       const dayItineraryList = await getDayInItineraryList();
-      const newMarkers: TipLocation[] = [];
+      const newItineraryMarkers: { [itineraryId: string]: TipLocation[] } = {};
+
       dayItineraryList.forEach((dayItinerary: DayItineraryModel) => {
-        if(typeof dayItinerary.idItinerary === "object") {
-          lastestItineraries.map((itinerary: ItineraryModel) => {
-            const dayItineraryId = (dayItinerary.idItinerary as ItineraryModel).id;
-            if (itinerary.id === dayItineraryId) {
-              if(typeof dayItinerary.idTips === "object") {
-                const tipsLat = (dayItinerary.idTips as TipModel).lat;
-                const tipsLng = (dayItinerary.idTips as TipModel).lng;
-                const tip = (dayItinerary.idTips as TipModel);
-                  newMarkers.push({
-                    lat: tipsLat,
-                    lng: tipsLng,
-                    tipSelected: tip,
-                  });
-              }
-              setMarkers(newMarkers)}
-          })
+        if (typeof dayItinerary.idItinerary === "object" && typeof dayItinerary.idTips === "object") {
+          const itineraryId = (dayItinerary.idItinerary as ItineraryModel).id;
+          const tip = (dayItinerary.idTips as TipModel);
+
+          const marker = {
+            lat: tip.lat,
+            lng: tip.lng,
+            tipSelected: tip,
+          };
+
+          if (!newItineraryMarkers[itineraryId!]) {
+            newItineraryMarkers[itineraryId!] = [];
+          }
+
+          newItineraryMarkers[itineraryId!].push(marker);
+          console.log(newItineraryMarkers[itineraryId!])
         }
-      })
-    }catch (error) {
+      });
+
+      setItineraryMarkers(newItineraryMarkers);
+    } catch (error) {
       console.error("Error fetching day itineraries:", error);
     }
-  }
+  };
+
 
   const handleSubregionClick = (subregion: string) => {
     setActiveSubregion(activeSubregion === subregion ? null : subregion);
@@ -337,22 +337,22 @@ const DestinationPage = () => {
           </button>
         </Link>
         <div className="itineraries-carousel">
-          {lastestItineraries.map((itinerary) => (
-              <div className="card-itinerary">
+          {lastestItineraries.map((itinerary) => {
+            let initialPosition = {lat: 8, lng: -55}; // Valeur par défaut
+            if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
+              const firstMarker = itineraryMarkers[itinerary.id!][0];
+              initialPosition = {lat: parseFloat(firstMarker.lat), lng: parseFloat(firstMarker.lng)};
+            }
+            return (
+              <div className="card-itinerary" key={itinerary.id}>
                 <div className="itineraries-card-content">
                   <h2 className="itineraries-card-title">{itinerary.name}</h2>
                   <p>Jour de départ {new Date(itinerary.dayOne!).toLocaleDateString()}</p>
-                  <Link
-                    key={itinerary.id}
-                    to={`/itineraries/${itinerary.id}`}
-                    className="card"
-                  >
+                  <Link to={`/itineraries/${itinerary.id}`} className="card">
                     <button className="itineraries-card-button-explore">Explorer</button>
                   </Link>
                   <div className="itineraries-card-footer">
-                    <p>
-                      <i>{itinerary.numberDay} jours</i>
-                    </p>
+                    <p><i>{itinerary.numberDay} jours</i></p>
                     <p className="category">
                       {typeof itinerary.idCategory === "object"
                         ? itinerary.idCategory.name
@@ -364,13 +364,15 @@ const DestinationPage = () => {
                 <Map
                   isInteractive={false}
                   isOnItinaryPanel={true}
-                  initialPosition={{lat: 8, lng: -55}}
-                  markers={markers}
+                  initialPosition={initialPosition}
+                  markers={itineraryMarkers[itinerary.id!] || []}
                   zoom={0.0000000001}
                 />
               </div>
-          ))}
+            );
+          })}
         </div>
+
       </div>
       <button
         className="fixture-generation"

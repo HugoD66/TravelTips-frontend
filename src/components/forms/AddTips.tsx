@@ -147,6 +147,7 @@ const AddTips = () => {
                   lat: selectedCountry?.latlgn?.[0],
                   lng: selectedCountry?.latlgn?.[1],
                 }}
+                zoom={5}
                 onLocationSelect={(location) => {
                   console.log("Nouvelle position sélectionnée:", location);
                 }}
