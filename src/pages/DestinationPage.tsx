@@ -55,6 +55,7 @@ const DestinationPage = () => {
   const navigate = useNavigate();
   const [dayItineraryList, setDayItineraryList] = useState<DayItineraryModel[]>([]);
   const [markers, setMarkers] = useState<TipLocation[]>([]);
+  const [itineraryMarkers, setItineraryMarkers] = useState<{ [itineraryId: string]: TipLocation[] }>({});
 
 
   useEffect(() => {
@@ -64,35 +65,17 @@ const DestinationPage = () => {
 
   useEffect(() => {
     fetchAllCountries();
-    fetchDayItineraries();
     fetchLastestItineraries()
   }, [tips]);
 
   useEffect(() => {
-    if (itineraries.length > 0 && dayItineraryList.length > 0 && tips.length > 0) {
-      processMarkers();
-    }
-  }, [itineraries, dayItineraryList, tips]);
+    fetchDayItineraries();
+  }, [lastestItineraries, tips]);
 
 
-  const processMarkers = () => {
-    const newMarkers: TipLocation[] = [];
-    console.log('azeaze')
-    dayItineraryList.forEach((step) => {
-      const itinerary = itineraries.find(it => it.id === step.idItinerary);
-      if (itinerary) {
-        const tip = tips.find(t => t.id === step.idTips);
-        if (tip) {
-          newMarkers.push({
-            lat: tip.lat,
-            lng: tip.lng,
-            tipSelected: tip,
-          });
-        }
-      }
-    });
-    setMarkers(newMarkers);
-  };
+
+
+
 
 
   const fetchAllCountries = async () => {
@@ -154,7 +137,7 @@ const DestinationPage = () => {
         });
 
         const lastSixTips = filteredTips.slice(-6).reverse();
-        setTips(tips);
+        setTips(response);
         setLastestTips(lastSixTips);
       }
     } catch (error) {
@@ -164,17 +147,35 @@ const DestinationPage = () => {
 
   const fetchLastestItineraries = async () => {
     try {
-      const response = await getLastestItinerary();
+      const response = await getLastestItinerary() ;
       setLastestItineraries(response);
-      console.log('response', response)
     } catch (error) {
       console.error("Error fetching itineraries:", error);
     }
   };
   const fetchDayItineraries = async () => {
     try {
-      const response = await getDayInItineraryList();
-      console.log(response)
+      const dayItineraryList = await getDayInItineraryList();
+      const newMarkers: TipLocation[] = [];
+      dayItineraryList.forEach((dayItinerary: DayItineraryModel) => {
+        if(typeof dayItinerary.idItinerary === "object") {
+          lastestItineraries.map((itinerary: ItineraryModel) => {
+            const dayItineraryId = (dayItinerary.idItinerary as ItineraryModel).id;
+            if (itinerary.id === dayItineraryId) {
+              if(typeof dayItinerary.idTips === "object") {
+                const tipsLat = (dayItinerary.idTips as TipModel).lat;
+                const tipsLng = (dayItinerary.idTips as TipModel).lng;
+                const tip = (dayItinerary.idTips as TipModel);
+                  newMarkers.push({
+                    lat: tipsLat,
+                    lng: tipsLng,
+                    tipSelected: tip,
+                  });
+              }
+              setMarkers(newMarkers)}
+          })
+        }
+      })
     }catch (error) {
       console.error("Error fetching day itineraries:", error);
     }
