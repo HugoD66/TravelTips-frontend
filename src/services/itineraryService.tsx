@@ -21,6 +21,23 @@ export const createItinerary = (itinerary: ItineraryModel, token: string) => {
     });
 };
 
+export const getLastestItinerary = async () => {
+  return fetch("http://localhost:4000/itinerary/latest", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error("Réponse réseau non OK");
+      }
+      return response.json();
+    })
+
+    .catch((error) => {
+      console.error("Erreur lors de la récupération des tips:", error);
+      throw error;
+    });
+};
+
 export const getItineraryUser = (id: string, token: string) => {
   return fetch(`http://localhost:4000/itinerary/users/${id}`, {
     method: "GET",

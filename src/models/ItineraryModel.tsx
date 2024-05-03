@@ -12,4 +12,5 @@ export class ItineraryModel {
   public?: boolean;
   approvate?: string;
   nbApprobation?: number;
+  createdAt?: string;
 }

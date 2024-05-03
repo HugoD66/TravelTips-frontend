@@ -4,10 +4,8 @@ import React, {useCallback, useEffect, useState} from "react";
 import {getItineraryById} from "../services/itineraryService";
 import Map, {TipLocation} from "../components/Map";
 import {TipModel} from "../models/TipModel";
-import {getLastestTips} from "../services/tipService";
 import {getPictures} from "../services/pictureService";
 import {PictureModel} from "../models/PictureModel";
-import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 import {useTip} from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
 import {findAllByItineraryId} from "../services/dayItineraryService";
@@ -20,6 +18,7 @@ const ItineraryDetail = () => {
   const [listTip, setTipList] = useState<TipModel[]>([]);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
+
   useEffect(() => {
     fetchItinerary();
   }, []);

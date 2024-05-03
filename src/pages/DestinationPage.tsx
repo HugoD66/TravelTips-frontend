@@ -9,7 +9,7 @@ import { getPictures } from "../services/pictureService";
 import { PictureModel } from "../models/PictureModel";
 import { TipModel } from "../models/TipModel";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
-import { getItineraryList } from "../services/itineraryService";
+import {getItineraryList, getLastestItinerary} from "../services/itineraryService";
 import Map, {TipLocation} from "../components/Map";
 import {getDayInItineraryList} from "../services/dayItineraryService";
 import {DayItineraryModel} from "../models/DayItineraryModel";
@@ -65,7 +65,7 @@ const DestinationPage = () => {
   useEffect(() => {
     fetchAllCountries();
     fetchDayItineraries();
-    fetchItineraries();
+    fetchLastestItineraries()
   }, [tips]);
 
   useEffect(() => {
@@ -77,6 +77,7 @@ const DestinationPage = () => {
 
   const processMarkers = () => {
     const newMarkers: TipLocation[] = [];
+    console.log('azeaze')
     dayItineraryList.forEach((step) => {
       const itinerary = itineraries.find(it => it.id === step.idItinerary);
       if (itinerary) {
@@ -161,28 +162,11 @@ const DestinationPage = () => {
     }
   };
 
-  const fetchItineraries = async () => {
+  const fetchLastestItineraries = async () => {
     try {
-      const response = await getItineraryList();
-      console.log(response);
-
-
-      const filteredItineraries = response.filter((itinerary: { dayOne: any; }) => itinerary.dayOne);
-      filteredItineraries.sort((a: any, b: any) => {
-        const dateA = new Date(a.dayOne);
-        const dateB = new Date(b.dayOne);
-        console.log(dateB.getTime() - dateA.getTime())
-        return dateB.getTime() - dateA.getTime();
-      });
-      const lastSixItineraries = filteredItineraries.slice(-3).reverse();
-
-      console.log('coucou')
-
-      setItineraries(response)
-      setLastestItineraries(lastSixItineraries);
-
-
-
+      const response = await getLastestItinerary();
+      setLastestItineraries(response);
+      console.log('response', response)
     } catch (error) {
       console.error("Error fetching itineraries:", error);
     }
@@ -190,7 +174,6 @@ const DestinationPage = () => {
   const fetchDayItineraries = async () => {
     try {
       const response = await getDayInItineraryList();
-
       console.log(response)
     }catch (error) {
       console.error("Error fetching day itineraries:", error);
@@ -362,7 +345,8 @@ const DestinationPage = () => {
                     key={itinerary.id}
                     to={`/itineraries/${itinerary.id}`}
                     className="card"
-                  ><button className="itineraries-card-button-explore">Explorer</button>
+                  >
+                    <button className="itineraries-card-button-explore">Explorer</button>
                   </Link>
                   <div className="itineraries-card-footer">
                     <p>
@@ -374,6 +358,7 @@ const DestinationPage = () => {
                         : ""}
                     </p>
                   </div>
+                  <p className="created-at-initerarie">{new Date(itinerary.createdAt!).toLocaleDateString()}</p>
                 </div>
                 <Map
                   isInteractive={false}
