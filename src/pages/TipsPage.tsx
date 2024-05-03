@@ -9,6 +9,7 @@ import {TipModel} from "../models/TipModel";
 import {useTip} from "../context/TipProvider";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 import {getPictures} from "../services/pictureService";
+import ProgressBar from "../components/ProgressBar";
 
 
 interface Tip {
@@ -82,21 +83,26 @@ const TipsPage: React.FC = () => {
     <div className="tip-page">
       {tip ? (
         <>
-        <div className="tip-header">
-            <h3 className="tip-title">{tip.name}</h3>
-            <p className="tip-description">{tip.address}</p>
-            <p className="tip-price">Prix : {tip.price}</p>
-          {tip.createdAt && (
-            <p className="tip-creation-date">Créé le : {new Date(tip.createdAt).toLocaleDateString()}</p>
-          )}
-        </div>
-          <Map
-            isInteractive={false}
-            initialPosition={{lat: parseInt(tip.lat), lng: parseInt(tip.lng)}}
-            markers={geoTips}
-            onMarkerClick={handleTipSelect}
-          />
-          <div className="tip-img">
+          <div className="tip-info">
+            <div className="tip-header">
+              <h3 className="tip-title">{tip.name}</h3>
+              <p className="tip-description">{tip.address}</p>
+              <p className="tip-price">Prix</p>
+              <ProgressBar value={tip.price} max={100} />
+              {tip.createdAt && (
+                <p className="tip-creation-date">Créé le : {new Date(tip.createdAt).toLocaleDateString()}</p>
+              )}
+            </div>
+            <Map
+              isInteractive={false}
+              initialPosition={{lat: parseInt(tip.lat), lng: parseInt(tip.lng)}}
+              markers={geoTips}
+              onMarkerClick={handleTipSelect}
+              zoom={5}
+            />
+          </div>
+          <div className="vertical-divider"></div>
+          <div className="tip-img-list">
             {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
               pictureList.map((picture: PictureModel) =>
                 picture.idTips!.id === tip.id ?
@@ -105,7 +111,7 @@ const TipsPage: React.FC = () => {
               ) :
               <img src={defaultPicture} alt="Image par défaut"/>
             }
-        </div>
+          </div>
         </>
       ) : (
         <p>Aucune information sur le tips...</p>

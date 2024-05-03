@@ -18,6 +18,7 @@ interface MapProps {
     address: string;
   }) => void;
   onMarkerClick?: (tip: any) => void;
+  zoom?: number;
 }
 
 export interface TipLocation {
@@ -32,7 +33,8 @@ const Map: React.FC<MapProps> = ({
                                    initialPosition,
                                    markers,
                                    onMarkerClick,
-                                   isOnItinaryPanel
+                                   isOnItinaryPanel,
+  zoom
 }: MapProps) => {
   const { cityDetails, setCityDetails } = useCity();
   const { tipDetail, setTipDetail } = useTip();
@@ -48,7 +50,8 @@ const Map: React.FC<MapProps> = ({
       container: mapContainer.current,
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=1bYmKrc8pg0FSu8GXalV`,
       center: [initialPosition.lng, initialPosition.lat],
-      zoom: 4,
+      zoom: zoom || 0,
+      attributionControl: false,
     });
 
     if (markers && map.current) {

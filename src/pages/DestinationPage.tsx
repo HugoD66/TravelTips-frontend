@@ -60,32 +60,12 @@ const DestinationPage = () => {
   useEffect(() => {
     fetchTips()
   }, []);
+
+
   useEffect(() => {
     fetchAllCountries();
     fetchDayItineraries();
     fetchItineraries();
-
-   /* dayItineraryList.forEach((step: DayItineraryModel) => {
-      console.log("coucou")
-
-      itineraries.forEach((itinerary: Itinerary) => {
-         if(step.idItinerary === itinerary.id) {
-
-           tips.forEach((tip: TipModel) => {
-             if(step.idTips === tip.id) {
-               console.log("coucou")
-               setMarkers((prev: TipLocation[]) => [...prev, {
-                 lat: tip.lat,
-                 lng: tip.lng,
-                 tipSelected: tip,
-               }])
-               console.log(markers);
-             }
-           })
-         }
-       })
-    })*/
-
   }, [tips]);
 
   useEffect(() => {
@@ -102,7 +82,6 @@ const DestinationPage = () => {
       if (itinerary) {
         const tip = tips.find(t => t.id === step.idTips);
         if (tip) {
-          console.log('coucou')
           newMarkers.push({
             lat: tip.lat,
             lng: tip.lng,
@@ -132,7 +111,6 @@ const DestinationPage = () => {
       }));
       setRegions(regionsWithSubregions);
 
-      // Fetch countries for each subregion
       regionsWithSubregions.forEach((region) => {
         region.subregions.forEach(fetchCountriesByRegion);
       });
@@ -166,18 +144,17 @@ const DestinationPage = () => {
         const picturesArrays = await Promise.all(allPicturePromises);
         const allPictures = picturesArrays.flat();
         setPictureList(allPictures);
-        //TODO LATEST TIPS
-        console.log(response)
+
         const filteredTips = response.filter((tip: { createdAt: any; }) => tip.createdAt);
         filteredTips.sort((a: any, b: any) => {
           const dateA = new Date(a.createdAt);
           const dateB = new Date(b.createdAt);
-          return dateB.getTime() - dateA.getTime();
+          return dateA.getTime() - dateB.getTime();
         });
 
-        const lastSixTips = filteredTips.slice(-6);
-        setTips(lastSixTips);
-
+        const lastSixTips = filteredTips.slice(-6).reverse();
+        setTips(tips);
+        setLastestTips(lastSixTips);
       }
     } catch (error) {
       console.error("Error fetching tips:", error);
@@ -187,18 +164,21 @@ const DestinationPage = () => {
   const fetchItineraries = async () => {
     try {
       const response = await getItineraryList();
-      setItineraries(response)
       console.log(response);
 
-      console.log('coucou')
 
       const filteredItineraries = response.filter((itinerary: { dayOne: any; }) => itinerary.dayOne);
       filteredItineraries.sort((a: any, b: any) => {
         const dateA = new Date(a.dayOne);
         const dateB = new Date(b.dayOne);
+        console.log(dateB.getTime() - dateA.getTime())
         return dateB.getTime() - dateA.getTime();
       });
-      const lastSixItineraries = filteredItineraries.slice(-6);
+      const lastSixItineraries = filteredItineraries.slice(-3).reverse();
+
+      console.log('coucou')
+
+      setItineraries(response)
       setLastestItineraries(lastSixItineraries);
 
 
@@ -341,7 +321,7 @@ const DestinationPage = () => {
           </Modal>
         )}
         <div className="tips-destination">
-          {tips.map((tip) => (
+          {lastestTips.map((tip: TipModel) => (
             <Link
               key={tip.id}
               to={`/tips/${tip.id}`}
@@ -374,7 +354,6 @@ const DestinationPage = () => {
         </Link>
         <div className="itineraries-carousel">
           {lastestItineraries.map((itinerary) => (
-
               <div className="card-itinerary">
                 <div className="itineraries-card-content">
                   <h2 className="itineraries-card-title">{itinerary.name}</h2>
@@ -399,8 +378,9 @@ const DestinationPage = () => {
                 <Map
                   isInteractive={false}
                   isOnItinaryPanel={true}
-                  initialPosition={{lat: 0, lng: 0}}
+                  initialPosition={{lat: 8, lng: -55}}
                   markers={markers}
+                  zoom={0.0000000001}
                 />
               </div>
           ))}

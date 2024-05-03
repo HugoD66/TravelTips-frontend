@@ -1,17 +1,20 @@
 import { useParams } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Map, { TipLocation } from "../components/Map";
 import Modal from "../components/Modal";
 import AddTips from "../components/forms/AddTips";
 import "../styles/countrypage.css";
 import axios from "axios";
 import { getCountryByName } from "../services/countryService";
-import { getTipsByCityId } from "../services/tipService";
+import {getTipList, getTipsByCityId} from "../services/tipService";
 import { useTip } from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
 import { getTipsByCountry } from "../services/tipService";
 import { PictureModel } from "../models/PictureModel";
 import { Link } from "react-router-dom";
+import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
+import {TipModel} from "../models/TipModel";
+import {getPictures} from "../services/pictureService";
 
 interface Country {
   name: {
@@ -153,6 +156,21 @@ const CountryPage = () => {
       try {
         const fetchedTips = await getTipsByCountry(countryName, token);
         setTips(fetchedTips);
+
+        if (fetchedTips) {
+          const allPicturePromises = fetchedTips.map(async (tip: TipModel) => {
+            const pictureResponses = await getPictures(tip.id!);
+            return pictureResponses.map((picture: PictureModel) => ({
+              ...picture,
+              tipId: tip.id,
+            }));
+          });
+          const picturesArrays = await Promise.all(allPicturePromises);
+          const allPictures = picturesArrays.flat();
+          setPictureList(allPictures);
+        }
+
+        console.log(fetchedTips)
       } catch (error) {
         console.error("Failed to fetch tips:", error);
       }
@@ -239,6 +257,7 @@ const CountryPage = () => {
                 lng: country.latlng[1],
               }}
               markers={geoTips}
+              zoom={2.5}
             />
             {tipDetail.id ? (
               <div className="detail-content">
@@ -253,10 +272,11 @@ const CountryPage = () => {
                 ) : (
                   <p>Date de création inconnue</p>
                 )}
-                <p>
-                  Prix :
-                  <ProgressBar value={tipDetail.price} max={100} />
-                </p>
+                <p>Prix :</p>
+                <ProgressBar value={tipDetail.price} max={100} />
+                <Link key={tipDetail.id} to={`/tips/${tipDetail.id}`}>
+                  <button className="redirect-to-tips">Aller voir ! </button>
+                </Link>
               </div>
             ) : (
               <div className="detail-content">
@@ -278,25 +298,14 @@ const CountryPage = () => {
             <div className="tips-carousel">
               {tips.map((tip) => (
                 <Link key={tip.id} to={`/tips/${tip.id}`} className="tip-card">
-                  {pictureList.filter(
-                    (picture) => picture.idTips!.id === tip.id
-                  ).length > 0 ? (
+                  {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
                     pictureList.map((picture: PictureModel) =>
-                      picture.idTips!.id === tip.id ? (
-                        <img
-                          src={"http://localhost:4000/" + picture.url}
-                          className="tip-card-image"
-                          alt="représentation de l'image"
-                        />
-                      ) : null
-                    )
-                  ) : (
-                    <img
-                      src={`https://picsum.photos/400/200?random=${tip.id}`}
-                      className="tip-card-image"
-                      alt="Default view"
-                    />
-                  )}
+                      picture.idTips!.id === tip.id ?
+                        <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
+                             alt="représentation de l'image"/> : null
+                    ) :
+                    <img src={defaultPicture} alt="Image par défaut"/>
+                  }
                   <div className="tip-card-content">
                     <h3 className="tip-card-title">{tip.name}</h3>
                     <p className="tip-card-description">{tip.address}</p>

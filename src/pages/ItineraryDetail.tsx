@@ -82,7 +82,7 @@ const ItineraryDetail = () => {
                 <p> Arrivé le : {itinerary?.lastDay}</p>
               </div>
               <div className="count-tips">
-                <p>Nombre de Tips : 6</p>
+                <p>Nombre de Tips : {listTip.length}</p>
                 <i>
                   <p>{itinerary?.numberDay} Jours</p>
                 </i>
@@ -92,11 +92,11 @@ const ItineraryDetail = () => {
           <div className="click-detail-tip">
             {tipDetail.id ? (
               <>
-                <h3 className="title-tips">Information sur le Tip:</h3>
-                <div className="detail-content">
+                <h3 className="title-tips">{tipDetail.name}</h3>
+                <div className="detail-content-itineraries">
                   <div className="name-adress">
-                    <p>Nom: {tipDetail.name}</p>
-                    <p>Adresse: {tipDetail.address}</p>
+                    <p>Adresse</p>
+                    <p>{tipDetail.address}</p>
                   </div>
                   <div className="price-created-at">
                     {tipDetail.createdAt ? (
