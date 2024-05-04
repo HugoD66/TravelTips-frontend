@@ -140,3 +140,54 @@ footer {
 .input-form-add-tips{
   width: 100%;
 }
+
+
+.itineraries-carousel {
+  margin: 10px auto auto;
+  width: 100%;
+
+}
+
+.card-itinerary {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 270px;
+  margin: 6px auto;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  background-color: var(--color-background);
+  position: relative;
+  cursor: pointer;
+  transition: transform 500ms ease-in-out, box-shadow 500ms ease-in-out;
+}
+.itineraries-card-content {
+  width: 60%;
+  display: flex;
+  height: 80%;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.itineraries-card-button-explore  {
+  width: 150px;
+  margin: auto;
+}
+.itineraries-card-footer {
+  width: 80%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row;
+  margin-bottom: 0;
+  .category {
+    font-weight: 200;
+  }
+}
+.created-at-initerarie {
+  font-size: 0.8rem;
+  color: var(--color-dark);
+  font-weight: 200;
+  margin: 0;
+}

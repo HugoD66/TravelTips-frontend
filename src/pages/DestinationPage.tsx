@@ -355,7 +355,7 @@ const DestinationPage = () => {
                   isOnItinaryPanel={true}
                   initialPosition={initialPosition}
                   markers={itineraryMarkers[itinerary.id!] || []}
-                  zoom={0.0000000001}
+                  zoom={3}
                 />
               </div>
             );

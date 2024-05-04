@@ -1,89 +1,101 @@
-import React, { useEffect, useState } from "react";
+import React, {useEffect, useState} from "react";
 import { getDayInItineraryList } from "../services/dayItineraryService";
-import { ItineraryModel } from "../models/ItineraryModel";
-import { DayItineraryModel } from "../models/DayItineraryModel";
-import { TipModel } from "../models/TipModel";
-import { Link } from "react-router-dom";
+import {ItineraryModel} from "../models/ItineraryModel";
+import {getItineraryList} from "../services/itineraryService";
+import {DayItineraryModel} from "../models/DayItineraryModel";
+import '../styles/itineratiesScreen.css';
+import {Link} from "react-router-dom";
+import Map, {TipLocation} from "../components/Map";
 const ItineraryPage = () => {
-  const [dayItineraries, setDayItineraries] = useState<DayItineraryModel[]>([]);
-  const token = localStorage.getItem("token") || null;
-  const dayItinerariesByItinerary: { [key: string]: DayItineraryModel[] } = {};
+  const [itineraryList, setItineraryList] = useState<ItineraryModel[]>([]);
+  const [dayItineraryList, setDayItineraryList] = useState<DayItineraryModel[]>([]);
+  const [itineraryMarkers, setItineraryMarkers] = useState<{ [itineraryId: string]: TipLocation[] }>({});
 
   useEffect(() => {
-    getDayInItineraryList()
-      .then((data) => {
-        setDayItineraries(data);
-      })
-      .catch((error) => {
-        console.error(
-          "Erreur lors de la récupération des itinéraires :",
-          error
-        );
-      });
+    fetchItinerariesList().then(() => {
+      fetchDayInItineraryList();
+    })
   }, []);
 
-  // Objet pour stocker les itinéraires uniques et leurs tips associés
-  const uniqueItineraries: {
-    [key: string]: { itinerary: ItineraryModel; tips: TipModel[] };
-  } = {};
 
-  // Traitement des dayItineraries pour obtenir les itinéraires uniques
-  dayItineraries.forEach((dayItinerary) => {
-    const itinerary = dayItinerary.idItinerary;
-    if (itinerary && typeof itinerary === "object") {
-      const itineraryId = itinerary.id;
-      if (itineraryId) {
-        // Vérification de la définition de itineraryId
-        if (!(itineraryId in uniqueItineraries)) {
-          uniqueItineraries[itineraryId] = { itinerary, tips: [] };
-        }
-        if (Array.isArray(dayItinerary.idTips)) {
-          uniqueItineraries[itineraryId].tips.push(...dayItinerary.idTips);
-        }
-      }
+  const fetchItinerariesList = async () => {
+    try {
+      const response = await getItineraryList();
+      console.log('Itineraries');
+      console.log(response);
+      setItineraryList(response);
+    } catch (error) {
+      console.error(error);
     }
-  });
+  }
+
+  const fetchDayInItineraryList = async () => {
+    try {
+      const response = await getDayInItineraryList();
+      setDayItineraryList(response);
+
+      const markers: { [itineraryId: string]: TipLocation[] } = {};
+      response.forEach((dayItinerary: any) => {
+        const { idItinerary, idTips } = dayItinerary;
+        if (idItinerary && idTips) {
+          const itineraryId = typeof idItinerary === "string" ? idItinerary : idItinerary.id;
+          const tipLocation: TipLocation = {
+            lat: idTips.lat,
+            lng: idTips.lng,
+            tipSelected: idTips
+          };
+          if (markers[itineraryId]) {
+            markers[itineraryId].push(tipLocation);
+          } else {
+            markers[itineraryId] = [tipLocation];
+          }
+        }
+      });
+      setItineraryMarkers(markers);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
-    <div>
-      <h2>Tous les itinéraires</h2>
-      <ul>
-        {Object.values(uniqueItineraries).map(({ itinerary, tips }) => (
-          <li key={itinerary.id}>
-            <div>
-              <h3>{itinerary.name}</h3>
-              <p>
-                Date de début :{" "}
-                {itinerary.dayOne && new Date(itinerary.dayOne).toISOString()}
-              </p>
-              <p>
-                Date de fin :{" "}
-                {itinerary.lastDay && new Date(itinerary.lastDay).toISOString()}
-              </p>
-              {Object.entries(dayItinerariesByItinerary).map(
-                ([itineraryId, dayItineraries]) => (
-                  <div key={itineraryId}>
-                    <h4>Day Itineraries for Itinerary {itineraryId}</h4>
-                    <ul>
-                      {dayItineraries.map((dayItinerary) => (
-                        <li key={dayItinerary.id}>{dayItinerary.slot}</li>
-                      ))}
-                    </ul>
-                  </div>
-                )
-              )}
+    <div className="itineraries-carousel">
+      {itineraryList.map((itinerary) => {
+        let initialPosition = {lat: 8, lng: -55};
+        if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
+          const firstMarker = itineraryMarkers[itinerary.id!][0];
+          initialPosition = {lat: parseFloat(firstMarker.lat), lng: parseFloat(firstMarker.lng)};
+        }
+        return (
+          <div className="card-itinerary" key={itinerary.id}>
+            <div className="itineraries-card-content">
+              <h2 className="itineraries-card-title">{itinerary.name}</h2>
+              <p>Jour de départ {new Date(itinerary.dayOne!).toLocaleDateString()}</p>
+              <Link to={`/itineraries/${itinerary.id}`} className="card">
+                <button className="itineraries-card-button-explore">Explorer</button>
+              </Link>
+              <div className="itineraries-card-footer">
+                <p><i>{itinerary.numberDay} jours</i></p>
+                <p className="category">
+                  {typeof itinerary.idCategory === "object"
+                    ? itinerary.idCategory.name
+                    : ""}
+                </p>
+              </div>
+              <p className="created-at-initerarie">{new Date(itinerary.createdAt!).toLocaleDateString()}</p>
             </div>
-          </li>
-        ))}
-      </ul>
-
-      {token && (
-        <Link to={"/add-itinerary"}>
-          <button>Créer un nouvel itinéraire</button>
-        </Link>
-      )}
+            <Map
+              isInteractive={false}
+              isOnItinaryPanel={true}
+              initialPosition={initialPosition}
+              markers={itineraryMarkers[itinerary.id!] || []}
+              zoom={2}
+            />
+          </div>
+        );
+      })}
     </div>
-  );
+  )
 };
 
 export default ItineraryPage;
+
