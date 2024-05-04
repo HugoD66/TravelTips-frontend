@@ -10,3 +10,6 @@
 .app-content {
     min-height: 100vh;
 }
+.react-calendar__navigation {
+    width: 200px !important;
+}

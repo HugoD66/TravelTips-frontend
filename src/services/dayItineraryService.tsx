@@ -32,7 +32,6 @@ export const createDayItinerary = (
       if (!response.ok) {
         throw new Error("Réponse réseau non OK");
       }
-      console.log(JSON.stringify(response));
       return response.json();
     })
     .catch((error) => {

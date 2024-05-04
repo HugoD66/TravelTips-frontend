@@ -61,7 +61,6 @@ const AddItinerary = ({
     <div className="container">
       <form onSubmit={handleSubmit}>
         <h1>Créer mon itinéraire</h1>
-
         <select value={country} onChange={(e) => setCountry(e.target.value)}>
           <option value="">Sélectionner un pays</option>
           {listCountry.map((country) => (

@@ -2,22 +2,24 @@ import React, {useEffect, useState} from "react";
 import {ItineraryModel} from "../../../models/ItineraryModel";
 import Datetime from "react-datetime";
 import moment from "moment/moment";
-import {CountryModel} from "../../../models/CountryModel";
-import {fetchCountryList, getCountryList} from "../../../services/countryService";
 import {getCategoryList} from "../../../services/categoryService";
 import {CategoryModel} from "../../../models/CategoryModel";
 import {updateItinerary} from "../../../services/itineraryService";
 import {DayItineraryModel} from "../../../models/DayItineraryModel";
-import {deleteDayInItinerary, getDayInItineraryByItineraryId} from "../../../services/dayItineraryService";
+import {
+  createDayItinerary,
+  deleteDayInItinerary,
+  getDayInItineraryByItineraryId
+} from "../../../services/dayItineraryService";
 import {Link} from "react-router-dom";
-import Map, {TipLocation} from "../../Map";
+import Map from "../../Map";
 import {TipModel} from "../../../models/TipModel";
 import {CityModel} from "../../../models/CityModel";
 import {getCityList} from "../../../services/cityService";
 import {getTipList} from "../../../services/tipService";
-import tipsList from "../../addItinerary/TipsList";
 import Calendar from "react-calendar";
-import AgendaPage from "../../addItinerary/Agenda";
+import AgendaUpdateTips from "../../AgendaUpdateTips";
+import {toast} from "react-toastify";
 
 interface UpdateItineraryProps {
   selectedItinerary: ItineraryModel | undefined;
@@ -46,7 +48,6 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
 
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [agendaVisible, setAgendaVisible] = useState(false);
-
 
   useEffect(() => {
     fetchCategories();
@@ -113,14 +114,15 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(e)
+
+    const categoryID = categories.find(categ => categ.name === selectedCategory)?.id;
 
     const updatedItinerary = {
       name,
       dayOne: dateDebut?.toISOString(),
       lastDay: dateFin?.toISOString(),
       public: isPublic,
-      idCategory: categories.find((categ) => categ.name === selectedCategory)?.id,
+      idCategory: categoryID,
       numberDay: dateDebut && dateFin ? moment(dateFin).diff(moment(dateDebut), 'days') : 0,
     };
     if (!selectedItinerary?.id || !updatedItinerary || !token) {
@@ -128,20 +130,12 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
     }
     await updateItinerary(selectedItinerary?.id, updatedItinerary, token);
 
+    toast.success(`Itinéraire modifié`, {
+      position: "top-center",
+      autoClose: 3000,
+      className: "toast",
+    });
   };
-
-  const addNewTips = async (tip: TipModel) => {
-    setTipSelected(tip)
-  }
-
-
-  const removeDayItinerary = async (dayId: string) => {
-    console.log(dayId)
-    //TODO Remove du dayItinerary dans le onSubmit
-    await deleteDayInItinerary(dayId, token!);
-
-    fetchDayItinerary();
-  }
 
   const handleCitySelect = (cityId: string) => {
     setSelectedCities(prevCities => {
@@ -154,10 +148,42 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
     });
   };
 
+  const removeDayItinerary = async (dayId: string) => {
+    await deleteDayInItinerary(dayId, token!);
+    fetchDayItinerary();
+  }
 
   const handleDateClick = () => {
-
+    setAgendaVisible(true);
   }
+  const addNewTips = async (tip: TipModel) => {
+    setTipSelected(tip)
+  }
+
+  function handleAddTip(tip: TipModel, slot: string, date: Date) {
+    console.warn(tip, slot, date)
+    const updatedDayItinerary = [...dayItinerary];
+    const newDayItinerary: DayItineraryModel = {
+      slot: slot,
+      date: date,
+      idTips: tip,
+      idItinerary: selectedItinerary?.id,
+      };
+    updatedDayItinerary.push(newDayItinerary);
+    setDayItinerary(updatedDayItinerary);
+
+    createDayItinerary(newDayItinerary, token!).then(() => {
+      toast.success(`Etape ajoutée`, {
+        position: "top-center",
+        autoClose: 3000,
+        className: "toast",
+      });
+    })
+
+
+    console.log(updatedDayItinerary);
+    }
+
 
   return (
     <div>
@@ -312,17 +338,22 @@ const UpdateItinerary: React.FC<UpdateItineraryProps> = ({selectedItinerary}) =>
           </div>
         </div>
         {tipSelected && (
-          <div className="tip-selected">
-            <h4>{tipSelected.name}</h4>
+          <div>
+            <h4 className="tip-selected">{tipSelected.name}</h4>
             <Calendar
               onClickDay={handleDateClick}
               value={selectedDate}
-
+              className="calendar-component"
             />
-
+            {agendaVisible && (
+              <AgendaUpdateTips
+                date={selectedDate}
+                tip={tipSelected}
+                onAddTipClick={handleAddTip}
+                />
+            )}
           </div>
         )}
-        {/*<button type="button" className="button-add-step ">Ajouter des étapes</button>*/}
         <button type="submit">Enregistrer les modifications</button>
       </form>
     </div>

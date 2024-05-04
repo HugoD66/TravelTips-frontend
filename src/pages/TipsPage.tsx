@@ -47,7 +47,6 @@ const TipsPage: React.FC = () => {
 
         try {
           const response = await getTipById(tipId, token);
-          console.log(response);
           setTip(response);
           setGeoTips([{
             lat: response.lat,

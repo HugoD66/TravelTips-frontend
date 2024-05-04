@@ -3,6 +3,7 @@ import { UserItineraryTableProps } from './UserItineraryTable';
 import {ItineraryModel} from "../../../models/ItineraryModel";
 import Modal from "../../Modal";
 import UpdateItinerary from "./UpdateItinerary";
+import moment from "moment";
 
 const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itineraries, title }) => {
   const [selectedItinerary, setSelectedItinerary] = useState<ItineraryModel | undefined>();
@@ -14,7 +15,6 @@ const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itine
     setShowModal(true);
   }
   useEffect(() => {
-    console.log(itineraries);
   }, []);
 
   return (
@@ -37,8 +37,8 @@ const ModifyRejectedItineraryTable: React.FC<UserItineraryTableProps> = ({ itine
         {itineraries.map((itinerary: ItineraryModel) => (
           <tr key={itinerary.id}>
             <td>{itinerary.name}</td>
-            <td>{itinerary.dayOne}</td>
-            <td>{itinerary.lastDay}</td>
+            <td>{moment(itinerary.dayOne).format('DD/MM/YYYY')}</td>
+            <td>{moment(itinerary.lastDay).format('DD/MM/YYYY')}</td>
             <td>{itinerary.numberDay}</td>
             <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}</td>
 

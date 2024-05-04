@@ -3,6 +3,7 @@ import {
   approveItinerary, disapproveItinerary, getPendingItinerary,
 } from "../../../services/itineraryService";
 import {ItineraryModel} from "../../../models/ItineraryModel";
+import moment from "moment/moment";
 
 const PendingItineraryTable: React.FC = () => {
   const [pendingItinerary, setPendingItinerary] = useState<ItineraryModel[]>([]);
@@ -10,14 +11,13 @@ const PendingItineraryTable: React.FC = () => {
 
   useEffect(() => {
     fetchPendingItinerary();
-  }, []);
+  }, [pendingItinerary]);
 
   const fetchPendingItinerary = async () => {
     try {
       if (token !== null) {
         const itinerarys = await getPendingItinerary(token);
         setPendingItinerary(itinerarys);
-        console.log(itinerarys);
       }
     } catch (error) {
       console.error("Error fetching pending itinerarys:", error);
@@ -68,8 +68,8 @@ const PendingItineraryTable: React.FC = () => {
             <tr key={itinerary.id}>
               <td>{itinerary.name}</td>
               <td>{itinerary.numberDay}</td>
-              <td>{itinerary.dayOne}</td>
-              <td>{itinerary.lastDay}</td>
+              <td>{moment(itinerary.dayOne).format('DD/MM/YYYY')}</td>
+              <td>{moment(itinerary.lastDay).format('DD/MM/YYYY')}</td>
               <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : "Non disponible"}</td>
               <td>{typeof itinerary.idUser === "object" ? itinerary.idUser.firstName : "Non disponible"}</td>
               <td>

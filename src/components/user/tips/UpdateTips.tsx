@@ -11,6 +11,7 @@ import { useCity } from "../../../context/CityProvider";
 import { updateTip } from "../../../services/tipService";
 import { TipModel } from "../../../models/TipModel";
 import '../../../styles/user.css'
+import {toast} from "react-toastify";
 
 interface AddTipsProps {
   selectedTips: TipModel | null;
@@ -126,9 +127,17 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
 
       await updateTip(updatedTips, token);
 
-      setSuccess("Tips modifié avec succès !");
+      toast.success("Tips modifé avec succès !", {
+        position: "top-center",
+        autoClose: 1500,
+        className: "toast",
+      });
     } catch (error) {
-      setError("Une erreur est survenue lors de la modification du tips");
+      toast.error("Erreur de modification du tips", {
+        position: "top-center",
+        autoClose: 3000,
+        className: "toast",
+      });
     }
   };
   const handleLocationSelect = (location: any) => {

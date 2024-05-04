@@ -1,5 +1,6 @@
 import {ItineraryModel} from "../../../models/ItineraryModel";
 import React from "react";
+import moment from "moment/moment";
 
 export interface UserItineraryTableProps {
   itineraries: ItineraryModel[];
@@ -26,8 +27,8 @@ const UserItineraryTable: React.FC<UserItineraryTableProps> = ({ itineraries, ti
           {itineraries.map((itinerary: ItineraryModel) => (
             <tr key={itinerary.id}>
               <td>{itinerary.name}</td>
-              <td>{itinerary.dayOne}</td>
-              <td>{itinerary.lastDay}</td>
+              <td>{moment(itinerary.dayOne).format('DD/MM/YYYY')}</td>
+              <td>{moment(itinerary.lastDay).format('DD/MM/YYYY')}</td>
               <td>{itinerary.numberDay}</td>
               <td>{typeof itinerary.idCategory === "object" ? itinerary.idCategory.name : ""}</td>
             </tr>

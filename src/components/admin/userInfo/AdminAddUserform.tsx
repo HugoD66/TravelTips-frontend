@@ -36,7 +36,6 @@ const AddUserForm: React.FC<{ onUserAdded: (user: User) => void }> = ({
       user.role
     )
       .then((response) => {
-        console.log("Utilisateur enregistré avec succès :", response);
         onUserAdded(response);
       })
 

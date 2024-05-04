@@ -22,8 +22,6 @@ const ItineraryPage = () => {
   const fetchItinerariesList = async () => {
     try {
       const response = await getItineraryList();
-      console.log('Itineraries');
-      console.log(response);
       setItineraryList(response);
     } catch (error) {
       console.error(error);
@@ -61,7 +59,7 @@ const ItineraryPage = () => {
   return (
     <>
       <div className="title-add-itinerarie">
-        <h1>Tous nos itinéraires</h1>
+        <h1>Tous nos itinéraires ! </h1>
         <button
           onClick={() => navigate("/add-itinerary")}
           className="add-itinerary-button-destination"
@@ -70,45 +68,47 @@ const ItineraryPage = () => {
         </button>
       </div>
       <div className="itineraries-carousel">
-
-        {itineraryList.map((itinerary) => {
-          let initialPosition = {lat: 8, lng: -55};
-          if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
-            const firstMarker = itineraryMarkers[itinerary.id!][0];
-            initialPosition = {lat: parseFloat(firstMarker.lat), lng: parseFloat(firstMarker.lng)};
-          }
-          return (
-            <div className="card-itinerary" key={itinerary.id}>
-              <div className="itineraries-card-content">
-                <h2 className="itineraries-card-title">{itinerary.name}</h2>
-                <p>Jour de départ {new Date(itinerary.dayOne!).toLocaleDateString()}</p>
-                <Link to={`/itineraries/${itinerary.id}`} className="card">
-                  <button className="itineraries-card-button-explore">Explorer</button>
-                </Link>
-                <div className="itineraries-card-footer">
-                  <p><i>{itinerary.numberDay} jours</i></p>
-                  <p className="category">
-                    {typeof itinerary.idCategory === "object"
-                      ? itinerary.idCategory.name
-                      : ""}
-                  </p>
+        {itineraryList.length === 0 ? (
+          <p className="itineraryList-empty">Il semble que vous n'ayez pas encore créé d'itinéraire. Pourquoi ne pas commencer dès maintenant à planifier votre prochaine aventure ?</p>
+        ) : (
+          itineraryList.map((itinerary) => {
+            let initialPosition = {lat: 8, lng: -55};
+            if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
+              const firstMarker = itineraryMarkers[itinerary.id!][0];
+              initialPosition = {lat: parseFloat(firstMarker.lat), lng: parseFloat(firstMarker.lng)};
+            }
+            return (
+              <div className="card-itinerary" key={itinerary.id}>
+                <div className="itineraries-card-content">
+                  <h2 className="itineraries-card-title">{itinerary.name}</h2>
+                  <p>Jour de départ {new Date(itinerary.dayOne!).toLocaleDateString()}</p>
+                  <Link to={`/itineraries/${itinerary.id}`} className="card">
+                    <button className="itineraries-card-button-explore">Explorer</button>
+                  </Link>
+                  <div className="itineraries-card-footer">
+                    <p><i>{itinerary.numberDay} jours</i></p>
+                    <p className="category">
+                      {typeof itinerary.idCategory === "object"
+                        ? itinerary.idCategory.name
+                        : ""}
+                    </p>
+                  </div>
+                  <p className="created-at-initerarie">{new Date(itinerary.createdAt!).toLocaleDateString()}</p>
                 </div>
-                <p className="created-at-initerarie">{new Date(itinerary.createdAt!).toLocaleDateString()}</p>
+                <Map
+                  isInteractive={false}
+                  isOnItinaryPanel={true}
+                  initialPosition={initialPosition}
+                  markers={itineraryMarkers[itinerary.id!] || []}
+                  zoom={2}
+                />
               </div>
-              <Map
-                isInteractive={false}
-                isOnItinaryPanel={true}
-                initialPosition={initialPosition}
-                markers={itineraryMarkers[itinerary.id!] || []}
-                zoom={2}
-              />
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
-
     </>
-  )
+  );
 };
 
 export default ItineraryPage;

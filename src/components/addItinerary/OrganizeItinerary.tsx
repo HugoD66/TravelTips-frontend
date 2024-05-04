@@ -49,8 +49,6 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
     updatedDayItinerary.push(newDayItinerary);
 
     setDayItinerary(updatedDayItinerary);
-
-    console.log(JSON.stringify(updatedDayItinerary));
   };
 
   const handleSubmit = () => {
@@ -59,11 +57,6 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
         if (token !== null) {
           createDayItinerary(day, token)
             .then((response) => {
-              // Traitement en cas de succès
-              console.log(
-                "DayItinerary ajouté à la base de données :",
-                response
-              );
               setShowModal(false);
               setDayItinerary([]);
               toast.success("Votre itinéraire a été créé avec succès", {
@@ -84,7 +77,6 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
         }
       });
     } else {
-      console.log("Aucun DayItinerary à ajouter à la base de données.");
     }
   };
 

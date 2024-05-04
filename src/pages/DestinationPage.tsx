@@ -297,23 +297,27 @@ const DestinationPage = () => {
             <AddTips/>
           </Modal>
         )}
-        <div className="tips-destination">
-          {lastestTips.map((tip: TipModel) => (
-            <Link
-              key={tip.id}
-              to={`/tips/${tip.id}`}
-              className="card-destination"
-            >
-              <div className="card-content-destination">
-                <h3 className="card-title-destination">{tip.name}</h3>
-                <button className="card-button-destination">Voir plus</button>
-              </div>
-              {pictureList.filter(picture => picture.idTips!.id === tip.id).slice(0, 1).map((picture: PictureModel) =>
-                <img key={picture.id} src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
-              )}
-            </Link>
-          ))}
-        </div>
+        {lastestTips.length === 0 ? (
+          <p className="empty-tips">Il semble que vous n'ayez pas encore ajouté de tips à votre application. Pourquoi ne pas commencer dès maintenant en partageant vos conseils et recommandations ?</p>
+        ): (
+          <div className="tips-destination">
+            {lastestTips.map((tip: TipModel) => (
+              <Link
+                key={tip.id}
+                to={`/tips/${tip.id}`}
+                className="card-destination"
+              >
+                <div className="card-content-destination">
+                  <h3 className="card-title-destination">{tip.name}</h3>
+                  <button className="card-button-destination">Voir plus</button>
+                </div>
+                {pictureList.filter(picture => picture.idTips!.id === tip.id).slice(0, 1).map((picture: PictureModel) =>
+                  <img key={picture.id} src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
+                )}
+              </Link>
+            ))}
+          </div>
+        )}
 
         <h2>Derniers Itinéraires</h2>
         <Link to="/itinerary">
@@ -324,6 +328,9 @@ const DestinationPage = () => {
             Ajouter un Itinéraire
           </button>
         </Link>
+        {lastestItineraries.length === 0 ? (
+          <p className="empty-itineraries">Il semble que vous n'ayez pas encore ajouté d'itinéraire à votre application. Pourquoi ne pas commencer dès maintenant en planifiant votre prochain voyage ?</p>
+        ) : (
         <div className="itineraries-carousel">
           {lastestItineraries.map((itinerary) => {
             let initialPosition = {lat: 8, lng: -55}; // Valeur par défaut
@@ -360,8 +367,9 @@ const DestinationPage = () => {
             );
           })}
         </div>
-
+        )}
       </div>
+
       <button
         className="fixture-generation"
         onClick={() => generationFixtures()}

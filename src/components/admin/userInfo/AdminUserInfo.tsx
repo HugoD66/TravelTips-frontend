@@ -16,7 +16,6 @@ const AdminUserInfo: React.FC = () => {
     if (token) {
       getUserList(token)
         .then((response) => {
-          console.log(JSON.stringify(response));
           setUsers(response);
         })
         .catch((error) => {});

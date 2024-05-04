@@ -204,3 +204,8 @@ footer {
     width: 20%;
   }
 }
+.itineraryList-empty {
+  width: 100%;
+  text-align: center;
+  margin-top: 200px;
+}

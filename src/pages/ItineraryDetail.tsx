@@ -36,7 +36,6 @@ const ItineraryDetail = () => {
       const responseDayItinerary = await findAllByItineraryId(response.id);
       const tips = responseDayItinerary.map((dayItinerary: DayItineraryModel) => dayItinerary.idTips);
       setTipList(tips);
-      console.log(tips)
       const allPicturePromises = tips.map(async (tip: TipModel) => {
         const pictureResponses = await getPictures(tip.id!);
         return pictureResponses.map((picture: PictureModel) => ({
@@ -51,12 +50,9 @@ const ItineraryDetail = () => {
         tipSelected: tip
       }));
       setGeoTips(allGeoTips);
-
       const picturesArrays = await Promise.all(allPicturePromises);
       const allPictures = picturesArrays.flat();
       setPictureList(allPictures);
-      console.log(allPictures)
-
     } catch (error) {
       console.error('Erreur lors de la récupération de l\'itinéraire:', error);
     }

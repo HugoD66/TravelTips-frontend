@@ -169,8 +169,6 @@ const CountryPage = () => {
           const allPictures = picturesArrays.flat();
           setPictureList(allPictures);
         }
-
-        console.log(fetchedTips)
       } catch (error) {
         console.error("Failed to fetch tips:", error);
       }

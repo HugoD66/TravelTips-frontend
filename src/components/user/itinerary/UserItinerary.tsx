@@ -18,7 +18,6 @@ const UserItinerary: React.FC = () => {
       if (token && userId) {
         const userItineraries = await getItineraryUser(userId, token);
         setItineraries(userItineraries);
-        console.log(itineraries)
       }
     } catch (error) {
       console.error("Error fetching user itinerary:", error);
