@@ -7,3 +7,6 @@
     max-width: 300px;
     max-height: 220px;
 }
+.app-content {
+    min-height: 100vh;
+}

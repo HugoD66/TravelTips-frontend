@@ -1,7 +1,7 @@
 @import 'base.css';
 
 .footer {
-  position: static;
+  position: absolute;
   width: 100%;
   background-color: var(--color-accent); 
   color: var(--color-title); 
