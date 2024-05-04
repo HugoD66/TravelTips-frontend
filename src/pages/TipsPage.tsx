@@ -10,6 +10,8 @@ import {useTip} from "../context/TipProvider";
 import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 import {getPictures} from "../services/pictureService";
 import ProgressBar from "../components/ProgressBar";
+import Modal from "../components/Modal";
+import AddTips from "../components/forms/AddTips";
 
 
 interface Tip {
@@ -28,6 +30,7 @@ const TipsPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchTipDetails = async () => {
@@ -101,7 +104,18 @@ const TipsPage: React.FC = () => {
               zoom={5}
             />
           </div>
-          <div className="vertical-divider"></div>
+          <div className="vertical-divider">
+            <span className="add-tips-button"
+              onClick={() => setIsModalOpen(true)}
+            >
+              +
+            </span>
+            {isModalOpen && (
+              <Modal onClose={() => setIsModalOpen(false)}>
+                <AddTips/>
+              </Modal>
+            )}
+          </div>
           <div className="tip-img-list">
             {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
               pictureList.map((picture: PictureModel) =>

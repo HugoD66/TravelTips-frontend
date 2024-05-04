@@ -9,6 +9,7 @@ import {createTip, deleteTip} from "../../services/tipService";
 import { TipModel } from "../../models/TipModel";
 import { createPicture } from "../../services/pictureService";
 import { toast } from "react-toastify";
+import {redirect, useNavigate} from "react-router-dom";
 
 const AddTips = () => {
   const { cityDetails, setCityDetails } = useCity();
@@ -18,6 +19,7 @@ const AddTips = () => {
   const [price, setPrice] = useState<number>(0);
   const [pictureFiles, setPictureFiles] = useState<File[]>([]);
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -91,9 +93,10 @@ const AddTips = () => {
           return;
         }
       }
+      navigate(`/tips/${tipsResponse.id}`);
       toast.success("Tips ajouté avec succès !", {
         position: "top-center",
-        autoClose: 3000,
+        autoClose: 1500,
         className: "toast",
       });
     } catch (error) {

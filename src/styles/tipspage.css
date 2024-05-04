@@ -39,7 +39,29 @@
     margin: 10px;
   }
 .vertical-divider {
-  width: 1px;
+    width: 1px;
     height: 500px;
-    background-color: #8e8e8e;
+    background-color: var(--color-accent);
+    display: flex;
+    align-items: start;
+    justify-content: center;
+    margin: auto;
+}
+
+.add-tips-button {
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  background-color: var(--color-accent);
+  border-radius: 90%;
+  padding: 15px;
+  font-size: 1.5em;
+  font-weight: 800;
+  transition: font-size 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  padding-bottom: 25px;
+  &:hover {
+    font-size: 2em;
+    box-shadow: 0 14px 8px rgba(0, 0, 0, 0.1);
+    transition: font-size 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+  }
 }
