@@ -10,6 +10,7 @@ import {useTip} from "../context/TipProvider";
 import ProgressBar from "../components/ProgressBar";
 import {findAllByItineraryId} from "../services/dayItineraryService";
 import {DayItineraryModel} from "../models/DayItineraryModel";
+import defaultPicture from "../styles/pictures/defaultTipsPIcture.jpg";
 
 const ItineraryDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -34,7 +35,7 @@ const ItineraryDetail = () => {
       const responseDayItinerary = await findAllByItineraryId(response.id);
       const tips = responseDayItinerary.map((dayItinerary: DayItineraryModel) => dayItinerary.idTips);
       setTipList(tips);
-
+      console.log(tips)
       const allPicturePromises = tips.map(async (tip: TipModel) => {
         const pictureResponses = await getPictures(tip.id!);
         return pictureResponses.map((picture: PictureModel) => ({
@@ -53,6 +54,7 @@ const ItineraryDetail = () => {
       const picturesArrays = await Promise.all(allPicturePromises);
       const allPictures = picturesArrays.flat();
       setPictureList(allPictures);
+      console.log(allPictures)
 
     } catch (error) {
       console.error('Erreur lors de la récupération de l\'itinéraire:', error);
@@ -141,16 +143,8 @@ const ItineraryDetail = () => {
                 <h3 className="card-title-destination">{tip.name}</h3>
                 <button className="card-button-destination">Voir plus</button>
               </div>
-              {pictureList.find(picture => picture.idTips!.id === tip.id) ? (
-                <div
-                  className="card-destination-image"
-                  style={{backgroundImage: `url(http://localhost:4000/${pictureList.find(picture => picture.idTips!.id === tip.id)?.url})`}}
-                ></div>
-              ) : (
-                <div
-                  className="card-destination-image"
-                  style={{backgroundImage: `url(https://picsum.photos/400/200?random=${tip.id})`}}
-                ></div>
+              {pictureList.filter(picture => picture.idTips!.id === tip.id).slice(0, 1).map((picture: PictureModel) =>
+                <img key={picture.id} src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
               )}
             </Link>
           ))}

@@ -68,12 +68,6 @@ const DestinationPage = () => {
     fetchDayItineraries();
   }, [lastestItineraries, tips]);
 
-
-
-
-
-
-
   const fetchAllCountries = async () => {
     try {
       const { data } = await axios.get("https://restcountries.com/v3.1/all");
@@ -315,14 +309,9 @@ const DestinationPage = () => {
                 <h3 className="card-title-destination">{tip.name}</h3>
                 <button className="card-button-destination">Voir plus</button>
               </div>
-              {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-                pictureList.map((picture: PictureModel) =>
-                  picture.idTips!.id === tip.id ?
-                    <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
-                         alt="représentation de l'image"/> : null
-                ) :
-                <img src={defaultPicture} alt="Image par défaut"/>
-              }
+              {pictureList.filter(picture => picture.idTips!.id === tip.id).slice(0, 1).map((picture: PictureModel) =>
+                <img key={picture.id} src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
+              )}
             </Link>
           ))}
         </div>
