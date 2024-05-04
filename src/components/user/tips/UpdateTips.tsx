@@ -1,6 +1,6 @@
 import { CountryName } from "../../../models/CountryData";
 import React, { useEffect, useState } from "react";
-import Map from "../../Map";
+import Map, {TipLocation} from "../../Map";
 import Loading from "../../Loading";
 import {
   createCountry,
@@ -29,24 +29,25 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
   const [error, setError] = useState<string>("");
   const [success, setSuccess] = useState<string>("");
   const token = localStorage.getItem("token");
+  const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const fetchedCountries = await fetchCountryList();
-        const countryName = fetchedCountries.map((country) => ({
-          name: country.name,
-          alpha3Code: country.alpha3Code,
-          latlgn: country.latlgn,
-        }));
-        setCountriesList(countryName);
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
     fetchData();
   }, []);
 
+  const fetchData = async () => {
+    try {
+      const fetchedCountries = await fetchCountryList();
+      const countryName = fetchedCountries.map((country) => ({
+        name: country.name,
+        alpha3Code: country.alpha3Code,
+        latlgn: country.latlgn,
+      }));
+      setCountriesList(countryName);
+    } catch (error) {
+      console.error("Error fetching countries:", error);
+    }
+  };
   useEffect(() => {
     if (selectedTips) {
       const idCity = selectedTips.idCity;
@@ -59,6 +60,11 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
         setAddress(selectedTips.address || "");
       }
     }
+    setGeoTips([{
+      lat: selectedTips!.lat,
+      lng: selectedTips!.lng,
+      tipSelected: selectedTips
+    }]);
   }, [selectedTips]);
 
   const handleUpdateTipsSubmit = async (
@@ -180,6 +186,7 @@ const UpdateTips: React.FC<AddTipsProps> = ({ selectedTips }) => {
                   lat: selectedCountry?.latlgn?.[0],
                   lng: selectedCountry?.latlgn?.[1],
                 }}
+                markers={geoTips}
                 onLocationSelect={handleLocationSelect}
               />
             ) : (

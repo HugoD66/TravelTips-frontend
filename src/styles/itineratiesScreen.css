@@ -7,9 +7,9 @@
 .card-itinerary {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    width: 70%;
     height: 270px;
-    margin: 6px auto;
+    margin: 15px auto;
     border-radius: 10px;
     overflow: hidden;
     box-shadow: 0 4px 10px rgba(0,0,0,0.2);

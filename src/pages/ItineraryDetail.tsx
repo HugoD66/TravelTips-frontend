@@ -22,6 +22,7 @@ const ItineraryDetail = () => {
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
 
   useEffect(() => {
+    setTipDetail({} as TipModel)
     fetchItinerary();
   }, []);
 

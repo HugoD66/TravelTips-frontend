@@ -41,7 +41,7 @@ const ProfilePage = ({
     } else {
       setIsLogged(false);
     }
-  }, [token, idUser, params]);
+  }, [token, idUser]);
 
   const goChangeForm = () => {
     setIsRegistered(!isRegistered);
