@@ -209,3 +209,8 @@ footer {
   text-align: center;
   margin-top: 200px;
 }
+.pending-tips-count {
+  margin: auto;
+  width: 100%;
+  text-align: center;
+}

@@ -8,6 +8,8 @@ import {Link, useNavigate} from "react-router-dom";
 import Map, {TipLocation} from "../components/Map";
 const ItineraryPage = () => {
   const [itineraryList, setItineraryList] = useState<ItineraryModel[]>([]);
+  const [pendingItineraryCount, setPendingItineraryCount] = useState<number>(0);
+  const [itineraryListApproved, setItineraryListApproved] = useState<ItineraryModel[]>([]);
   const [dayItineraryList, setDayItineraryList] = useState<DayItineraryModel[]>([]);
   const [itineraryMarkers, setItineraryMarkers] = useState<{ [itineraryId: string]: TipLocation[] }>({});
   const navigate = useNavigate();
@@ -23,6 +25,14 @@ const ItineraryPage = () => {
     try {
       const response = await getItineraryList();
       setItineraryList(response);
+
+      const approvedItineraries = response.filter((itinerary: ItineraryModel) => itinerary.approvate === 'true');
+      setItineraryListApproved(approvedItineraries);
+
+      const pendingItineraries = response.filter((itinerary: ItineraryModel) => itinerary.approvate === 'pending');
+      setPendingItineraryCount(pendingItineraries.length);
+
+
     } catch (error) {
       console.error(error);
     }
@@ -67,11 +77,12 @@ const ItineraryPage = () => {
           Ajouter un Itinéraire
         </button>
       </div>
+      <h3 className="pending-tips-count">Itinéraire en attente d'approvation : {pendingItineraryCount}</h3>
       <div className="itineraries-carousel">
-        {itineraryList.length === 0 ? (
+        {itineraryListApproved.length === 0 ? (
           <p className="itineraryList-empty">Il semble que vous n'ayez pas encore créé d'itinéraire. Pourquoi ne pas commencer dès maintenant à planifier votre prochaine aventure ?</p>
         ) : (
-          itineraryList.map((itinerary) => {
+          itineraryListApproved.map((itinerary) => {
             let initialPosition = {lat: 8, lng: -55};
             if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
               const firstMarker = itineraryMarkers[itinerary.id!][0];

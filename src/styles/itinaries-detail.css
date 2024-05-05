@@ -111,7 +111,8 @@ h1 {
 
 }
 
-
-/*
-background: rgba(255, 255, 255, 0.8);
- */
+.pending-itinary {
+    margin: 150px auto auto;
+    width: 100%;
+    text-align: center;
+}

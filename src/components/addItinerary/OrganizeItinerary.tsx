@@ -59,12 +59,6 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
             .then((response) => {
               setShowModal(false);
               setDayItinerary([]);
-              toast.success("Votre itinéraire a été créé avec succès", {
-                position: "top-center",
-                autoClose: 3000,
-                className: "toast",
-              });
-
               navigation("/itinerary");
             })
             .catch((error) => {
@@ -75,6 +69,11 @@ const OrganizeItinerary: React.FC<OrganizeItineraryProps> = ({
               );
             });
         }
+      });
+      toast.success("Votre itinéraire a été créé avec succès", {
+        position: "top-center",
+        autoClose: 3000,
+        className: "toast",
       });
     } else {
     }

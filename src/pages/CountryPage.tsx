@@ -329,10 +329,15 @@ const CountryPage = () => {
           </div>
         </>
       ) : (
-        <p>Pas d'information sur le pays...</p>
-      )}
+        <>
+          <p>Pas d'information sur le pays...</p>
+          <h3>Tips en attente d'approbation: {pendingTips}</h3>
+        </>
+      )
+      }
     </div>
-  );
+  )
+    ;
 };
 
 export default CountryPage;

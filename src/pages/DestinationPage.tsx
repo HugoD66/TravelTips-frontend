@@ -339,7 +339,7 @@ const DestinationPage = () => {
         ) : (
         <div className="itineraries-carousel">
           {lastestItineraries.map((itinerary) => {
-            let initialPosition = {lat: 8, lng: -55}; // Valeur par défaut
+            let initialPosition = {lat: 8, lng: -55};
             if (itineraryMarkers[itinerary.id!] && itineraryMarkers[itinerary.id!].length > 0) {
               const firstMarker = itineraryMarkers[itinerary.id!][0];
               initialPosition = {lat: parseFloat(firstMarker.lat), lng: parseFloat(firstMarker.lng)};
