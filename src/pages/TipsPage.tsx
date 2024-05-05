@@ -31,7 +31,7 @@ const TipsPage: React.FC = () => {
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
   const [geoTips, setGeoTips] = useState<TipLocation[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [isValidate, setIsValidate] = useState(false);
   useEffect(() => {
     const fetchTipDetails = async () => {
         const token = localStorage.getItem('token');
@@ -53,7 +53,7 @@ const TipsPage: React.FC = () => {
             lng: response.lng,
             tipSelected: response
           }]);
-
+          setIsValidate(response.approvate === 'true');
           const pictureResponses = await getPictures(response.id);
 
           setPictureList(pictureResponses);
@@ -83,51 +83,57 @@ const TipsPage: React.FC = () => {
   }
   return (
     <div className="tip-page">
-      {tip ? (
+      {isValidate ? (
         <>
-          <div className="tip-info">
-            <div className="tip-header">
-              <h3 className="tip-title">{tip.name}</h3>
-              <p className="tip-description">{tip.address}</p>
-              <p className="tip-price">Prix</p>
-              <ProgressBar value={tip.price} max={100} />
-              {tip.createdAt && (
-                <p className="tip-creation-date">Créé le : {new Date(tip.createdAt).toLocaleDateString()}</p>
-              )}
-            </div>
-            <Map
-              isInteractive={false}
-              initialPosition={{lat: parseInt(tip.lat), lng: parseInt(tip.lng)}}
-              markers={geoTips}
-              onMarkerClick={handleTipSelect}
-              zoom={5}
-            />
-          </div>
-          <div className="vertical-divider">
+          {tip ? (
+            <>
+              <div className="tip-info">
+                <div className="tip-header">
+                  <h3 className="tip-title">{tip.name}</h3>
+                  <p className="tip-description">{tip.address}</p>
+                  <p className="tip-price">Prix</p>
+                  <ProgressBar value={tip.price} max={100} />
+                  {tip.createdAt && (
+                    <p className="tip-creation-date">Créé le : {new Date(tip.createdAt).toLocaleDateString()}</p>
+                  )}
+                </div>
+                <Map
+                  isInteractive={false}
+                  initialPosition={{lat: parseInt(tip.lat), lng: parseInt(tip.lng)}}
+                  markers={geoTips}
+                  onMarkerClick={handleTipSelect}
+                  zoom={5}
+                />
+              </div>
+              <div className="vertical-divider">
             <span className="add-tips-button"
-              onClick={() => setIsModalOpen(true)}
+                  onClick={() => setIsModalOpen(true)}
             >
               +
             </span>
-            {isModalOpen && (
-              <Modal onClose={() => setIsModalOpen(false)}>
-                <AddTips/>
-              </Modal>
-            )}
-          </div>
-          <div className="tip-img-list">
-            {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
-              pictureList.map((picture: PictureModel) =>
-                picture.idTips!.id === tip.id ?
-                  <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
-                       alt="représentation de l'image"/> : null
-              ) :
-              <img src={defaultPicture} alt="Image par défaut"/>
-            }
-          </div>
+                {isModalOpen && (
+                  <Modal onClose={() => setIsModalOpen(false)}>
+                    <AddTips/>
+                  </Modal>
+                )}
+              </div>
+              <div className="tip-img-list">
+                {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
+                  pictureList.map((picture: PictureModel) =>
+                    picture.idTips!.id === tip.id ?
+                      <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
+                           alt="représentation de l'image"/> : null
+                  ) :
+                  <img src={defaultPicture} alt="Image par défaut"/>
+                }
+              </div>
+            </>
+          ) : (
+            <p>Aucune information sur le tips...</p>
+          )}
         </>
       ) : (
-        <p>Aucune information sur le tips...</p>
+        <p className="pending-tips">Ce tips est en attente de validation  !</p>
       )}
     </div>
   );

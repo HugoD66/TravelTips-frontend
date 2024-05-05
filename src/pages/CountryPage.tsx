@@ -83,7 +83,8 @@ const CountryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [tips, setTips] = useState<Tip[]>([]);
   const [pictureList, setPictureList] = useState<PictureModel[]>([]);
-
+  const [pendingTips, setPendingTips] = useState<number>(0);
+  const [approvedTips, setApprovedTips] = useState<Tip[]>([]);
   const token = localStorage.getItem("token");
   useEffect(() => {
     if (countryName) {
@@ -139,9 +140,13 @@ const CountryPage = () => {
         const citiesWithTips = await Promise.all(tipsList);
         const flatTips = citiesWithTips.flat();
 
-        const tipsLocations = flatTips.map((tip: any) => {
-          return { lat: tip.lat, lng: tip.lng, tipSelected: tip };
-        });
+        const tipsLocations = flatTips.reduce((acc: TipLocation[], tip: any) => {
+          if (tip.approvate === "true") {
+            acc.push({ lat: tip.lat, lng: tip.lng, tipSelected: tip });
+          }
+          return acc;
+        }, []);
+
         setGeoTips(tipsLocations);
       } else {
         console.log("No cities found for the given country name:", countryName);
@@ -155,7 +160,16 @@ const CountryPage = () => {
     if (token && countryName) {
       try {
         const fetchedTips = await getTipsByCountry(countryName, token);
-        setTips(fetchedTips);
+
+        const pendingTipsCount = fetchedTips.reduce((count: number, tip: TipModel) => {
+          return count + (tip.approvate === "pending" ? 1 : 0);
+        }, 0);
+        setPendingTips(pendingTipsCount);
+
+        const approvedTips = fetchedTips.filter((tip: TipModel) => tip.approvate === "true");
+
+        setApprovedTips(approvedTips)
+
 
         if (fetchedTips) {
           const allPicturePromises = fetchedTips.map(async (tip: TipModel) => {
@@ -271,9 +285,9 @@ const CountryPage = () => {
                   <p>Date de création inconnue</p>
                 )}
                 <p>Prix :</p>
-                <ProgressBar value={tipDetail.price} max={100} />
+                <ProgressBar value={tipDetail.price} max={100}/>
                 <Link key={tipDetail.id} to={`/tips/${tipDetail.id}`}>
-                  <button className="redirect-to-tips">Aller voir ! </button>
+                  <button className="redirect-to-tips">Aller voir !</button>
                 </Link>
               </div>
             ) : (
@@ -281,7 +295,7 @@ const CountryPage = () => {
                 <p>Cliquez sur un tips pour voir plus de détails.</p>
                 {isModalOpen && (
                   <Modal onClose={() => setIsModalOpen(false)}>
-                    <AddTips />
+                    <AddTips/>
                   </Modal>
                 )}
                 <button onClick={() => setIsModalOpen(true)}>
@@ -294,7 +308,7 @@ const CountryPage = () => {
           <div className="tips-container">
             <h2>La liste des tips pour le pays: {countryName}</h2>
             <div className="tips-carousel">
-              {tips.map((tip) => (
+              {approvedTips.map((tip) => (
                 <Link key={tip.id} to={`/tips/${tip.id}`} className="tip-card">
                   {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
                     pictureList.map((picture: PictureModel) =>
@@ -311,6 +325,7 @@ const CountryPage = () => {
                 </Link>
               ))}
             </div>
+            <h3>Tips en attente d'approbation: {pendingTips}</h3>
           </div>
         </>
       ) : (

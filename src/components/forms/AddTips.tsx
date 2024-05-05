@@ -93,7 +93,8 @@ const AddTips = () => {
           return;
         }
       }
-      navigate(`/tips/${tipsResponse.id}`);
+      //      navigate(`/tips/${tipsResponse.id}`);
+      navigate(`/destinations`);
       toast.success("Tips ajouté avec succès !", {
         position: "top-center",
         autoClose: 1500,

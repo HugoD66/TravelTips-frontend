@@ -60,6 +60,7 @@ const DestinationPage = () => {
 
 
   useEffect(() => {
+    fetchLastestTips();
     fetchAllCountries();
     fetchLastestItineraries()
   }, [tips]);
@@ -125,10 +126,7 @@ const DestinationPage = () => {
           const dateB = new Date(b.createdAt);
           return dateA.getTime() - dateB.getTime();
         });
-
-        const lastSixTips = filteredTips.slice(-6).reverse();
         setTips(response);
-        setLastestTips(lastSixTips);
       }
     } catch (error) {
       console.error("Error fetching tips:", error);
@@ -143,6 +141,15 @@ const DestinationPage = () => {
       console.error("Error fetching itineraries:", error);
     }
   };
+
+  const fetchLastestTips = async () => {
+    try {
+      const response = await getLastestTips();
+      setLastestTips(response);
+    } catch (error) {
+      console.error("Error fetching tips:", error);
+    }
+  }
   const fetchDayItineraries = async () => {
     try {
       const dayItineraryList = await getDayInItineraryList();
@@ -164,7 +171,6 @@ const DestinationPage = () => {
           }
 
           newItineraryMarkers[itineraryId!].push(marker);
-          console.log(newItineraryMarkers[itineraryId!])
         }
       });
 

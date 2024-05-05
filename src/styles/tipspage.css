@@ -65,3 +65,9 @@
     transition: font-size 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
   }
 }
+
+.pending-tips {
+  width: 100%;
+  margin: auto;
+  text-align: center;
+}
