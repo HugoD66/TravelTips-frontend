@@ -1,6 +1,6 @@
-import React, {FormEvent, useState} from "react";
-import {loginUser} from "../../services/userService";
-import '../../styles/form.css';
+import React, { FormEvent, useState } from "react";
+import { loginUser } from "../../services/userService";
+import "../../styles/form.css";
 import { Navigate, useNavigate } from "react-router-dom";
 
 const Login = ({
@@ -48,12 +48,12 @@ const Login = ({
   const loginAsAdmin = () => {
     setEmail("admin@gmail.com");
     setPassword("Azeaze.11");
-  }
+  };
 
   const loginAsUser = () => {
     setEmail("dessauw.hugo@gmail.com");
-    setPassword("Azeaze.11");
-  }
+    setPassword("Azertyuiop!1111");
+  };
   return (
     <div className="container-form">
       <h2>Formulaire de connexion</h2>
@@ -83,8 +83,8 @@ const Login = ({
       <p onClick={() => goChangeForm()}>Vous n'avez pas de compte ? </p>
       <>{error && <p className="error-message">{error.message}</p>}</>
       <div className="login-forms-pre-filled">
-        <span onClick={()=> loginAsAdmin()}>Login admin</span>
-        <span onClick={()=> loginAsUser()}>Login user</span>
+        <span onClick={() => loginAsAdmin()}>Login admin</span>
+        <span onClick={() => loginAsUser()}>Login user</span>
       </div>
     </div>
   );

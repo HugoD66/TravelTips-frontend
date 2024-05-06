@@ -52,10 +52,6 @@ public/ : Contient les fichiers statiques publics, comme le index.html.
 
 Dockerfile : Définit l'environnement Docker pour l'application.
 
-## Contribuer
-
-Nous accueillons les contributions. N'hésitez pas à soumettre des pull requests ou à ouvrir des issues pour suggérer des améliorations.
-
 ## Developpeurs
 
 Mélina MITTERRAND
