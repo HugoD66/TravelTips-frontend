@@ -206,17 +206,6 @@ const DestinationPage = () => {
     setFilteredCountries([]);
   };
 
-  const generationFixtures = () => {
-    return fetch(`http://172.16.70.192:4000/fixtures/mockups`, {
-      method: "POST",
-    }).then((response) => {
-      if (!response.ok) {
-        return;
-      }
-      return response.json();
-    });
-  };
-
   return (
     <div className="destination-container">
       <div className="title-banner">
@@ -376,12 +365,7 @@ const DestinationPage = () => {
         )}
       </div>
 
-      <button
-        className="fixture-generation"
-        onClick={() => generationFixtures()}
-      >
-        X
-      </button>
+
     </div>
   );
 };
