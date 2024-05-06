@@ -313,7 +313,7 @@ const CountryPage = () => {
                   {pictureList.filter(picture => picture.idTips!.id === tip.id).length > 0 ?
                     pictureList.map((picture: PictureModel) =>
                       picture.idTips!.id === tip.id ?
-                        <img src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card"
+                        <img src={"http://172.16.70.192:4000/" + picture.url} className="picture-tips-unit-card"
                              alt="représentation de l'image"/> : null
                     ) :
                     <img src={defaultPicture} alt="Image par défaut"/>

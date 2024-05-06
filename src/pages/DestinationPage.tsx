@@ -207,7 +207,7 @@ const DestinationPage = () => {
   };
 
   const generationFixtures = () => {
-    return fetch(`http://localhost:4000/fixtures/mockups`, {
+    return fetch(`http://172.16.70.192:4000/fixtures/mockups`, {
       method: "POST",
     }).then((response) => {
       if (!response.ok) {
@@ -318,7 +318,7 @@ const DestinationPage = () => {
                   <button className="card-button-destination">Voir plus</button>
                 </div>
                 {pictureList.filter(picture => picture.idTips!.id === tip.id).slice(0, 1).map((picture: PictureModel) =>
-                  <img key={picture.id} src={"http://localhost:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
+                  <img key={picture.id} src={"http://172.16.70.192:4000/" + picture.url} className="picture-tips-unit-card" alt="représentation de l'image"/>
                 )}
               </Link>
             ))}

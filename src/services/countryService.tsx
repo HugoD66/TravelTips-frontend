@@ -3,7 +3,7 @@ import axios from "axios";
 const token = localStorage.getItem("token");
 
 export const createCountry = (country: any, token: string) => {
-  return fetch(`http://localhost:4000/country`, {
+  return fetch(`http://172.16.70.192:4000/country`, {
     method: "POST",
     body: JSON.stringify(country),
     headers: {
@@ -24,7 +24,7 @@ export const createCountry = (country: any, token: string) => {
 };
 
 export const getCountryList = (token: string) => {
-  return fetch(`http://localhost:4000/country`, {
+  return fetch(`http://172.16.70.192:4000/country`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -44,7 +44,7 @@ export const getCountryList = (token: string) => {
 };
 
 export const getCountriesById = (id: string) => {
-  return fetch(`http://localhost:4000/country/${id}`, {
+  return fetch(`http://172.16.70.192:4000/country/${id}`, {
     method: "GET",
   })
     .then((response) => {
@@ -59,7 +59,7 @@ export const getCountriesById = (id: string) => {
     });
 };
 export const getCountryByName = (countryName: string) => {
-  return fetch(`http://localhost:4000/country/get-by-name/${countryName}`, {
+  return fetch(`http://172.16.70.192:4000/country/get-by-name/${countryName}`, {
     method: "GET",
     headers: {
       Authorization: `Bearer ${token}`,
@@ -87,7 +87,7 @@ export const getCountryByName = (countryName: string) => {
     });
 };
 export const updateCountry = (country: any) => {
-  return fetch(`http://localhost:4000/country/${country.id}`, {
+  return fetch(`http://172.16.70.192:4000/country/${country.id}`, {
     method: "PUT",
     body: JSON.stringify(country),
     headers: {
@@ -107,7 +107,7 @@ export const updateCountry = (country: any) => {
 };
 
 export const deleteCountry = (id: string) => {
-  return fetch(`http://localhost:4000/country/${id}`, {
+  return fetch(`http://172.16.70.192:4000/country/${id}`, {
     method: "DELETE",
   })
     .then((response) => {
