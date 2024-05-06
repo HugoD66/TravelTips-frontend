@@ -1,10 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "../../../styles/burgermenu.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const UserMenu = ({ deco }: { deco: () => void }) => {
   const [isOpen, setIsOpen] = useState(false);
   const navigation = useNavigate();
+  const location = useLocation();
+
+  useEffect(() => {
+    // Mettre à jour l'état isOpen à false chaque fois que l'emplacement change
+    setIsOpen(false);
+  }, [location]);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -12,15 +18,18 @@ const UserMenu = ({ deco }: { deco: () => void }) => {
 
   const handleUserInfoClick = () => {
     navigation(`/profile?parametre=${"userInfo"}`);
+    setIsOpen(false); // Mettre à jour l'état de isOpen
   };
 
   const handleUserTipsClick = () => {
     navigation(`/profile?parametre=${"userTips"}`);
+    setIsOpen(false); // Mettre à jour l'état de isOpen
   };
 
   const handleUserItineraryClick = () => {
     navigation(`/profile?parametre=${"userItinerary"}`);
-  }
+    setIsOpen(false); // Mettre à jour l'état de isOpen
+  };
 
   return (
     <div className="burger-menu">
